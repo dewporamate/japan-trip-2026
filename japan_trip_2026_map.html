@@ -1,0 +1,825 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🌸 Japan Trip 2026 — Friend Group Itinerary</title>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&family=Public+Sans:wght@300;400;600;700&family=Inter:wght@400;500;600;700&family=Noto+Sans+Thai:wght@300;400;600;700&family=Kanit:wght@300;400;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<style>
+  /* ─── MATERIAL SYMBOLS ─── */
+  .material-symbols-outlined {
+    font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+    vertical-align: middle;
+  }
+
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{
+    font-family:'Public Sans','Noto Sans Thai','Kanit',sans-serif;
+    background:#09090b; /* zinc-950 */
+    color:#f4f4f5; /* zinc-100 */
+    height:100vh;overflow:hidden;display:flex;flex-direction:column;
+  }
+
+  /* ─── HEADER ─── */
+  #header{
+    background:rgba(9,9,11,0.75);
+    backdrop-filter:blur(20px);
+    -webkit-backdrop-filter:blur(20px);
+    border-bottom:none;
+    padding:0 28px;
+    height:68px;
+    display:flex;align-items:center;justify-content:space-between;
+    z-index:100;flex-shrink:0;
+  }
+  #header h1{
+    font-family:'Manrope',sans-serif;
+    font-size:1.35rem;font-weight:800;font-style:italic;
+    color:#f4f4f5;
+    background:none;-webkit-text-fill-color:initial;
+    animation:none;letter-spacing:-0.02em;
+  }
+  .header-meta{
+    font-size:0.65rem;color:#71717a;
+    margin-top:3px;
+    font-family:'Inter',sans-serif;
+    letter-spacing:0.08em;text-transform:uppercase;
+  }
+  #budget-badge{
+    background:transparent;border:none;
+    padding:0;text-align:right;min-width:auto;
+  }
+  #budget-badge .label{
+    font-size:0.6rem;color:#ff6b9d;
+    letter-spacing:0.12em;text-transform:uppercase;
+    font-family:'Inter',sans-serif;font-weight:700;
+  }
+  #budget-badge .amount{
+    font-size:1.05rem;font-weight:800;
+    color:#f4f4f5;font-family:'Manrope',sans-serif;
+  }
+  #budget-badge .thb{font-size:0.62rem;color:#52525b}
+
+  /* ─── DAY TABS ─── */
+  #day-tabs{
+    display:flex;gap:6px;padding:10px 20px;
+    background:#09090b;
+    border-bottom:none;
+    overflow-x:auto;flex-shrink:0;z-index:99;
+  }
+  #day-tabs::-webkit-scrollbar{display:none}
+  .day-tab{
+    padding:6px 16px;border-radius:9999px;
+    border:1px solid transparent;
+    cursor:pointer;
+    font-size:0.7rem;font-weight:700;
+    font-family:'Inter',sans-serif;
+    letter-spacing:0.04em;
+    white-space:nowrap;transition:all .2s;
+    background:rgba(255,255,255,0.05);
+    color:#52525b;
+  }
+  .day-tab:hover{background:rgba(255,255,255,0.08);color:#a1a1aa;transform:translateY(-1px)}
+  .day-tab.active{
+    background:rgba(172,42,93,0.15);
+    color:#ff6b9d;
+    border-color:rgba(172,42,93,0.35);
+  }
+  .day-tab[data-day="0"].active{
+    background:rgba(255,255,255,0.1);
+    color:#f4f4f5;
+    border-color:rgba(255,255,255,0.2);
+  }
+
+  /* ─── LAYOUT ─── */
+  #main{display:flex;flex:1;overflow:hidden}
+  #map{flex:1;z-index:10}
+  #sidebar{
+    width:380px;
+    background:#18181b; /* zinc-900 */
+    border-left:none;
+    overflow-y:auto;display:flex;flex-direction:column;
+  }
+  #sidebar::-webkit-scrollbar{width:4px}
+  #sidebar::-webkit-scrollbar-track{background:#18181b}
+  #sidebar::-webkit-scrollbar-thumb{background:rgba(172,42,93,0.3);border-radius:4px}
+
+  /* ─── DAY SECTION ─── */
+  .day-section{margin-bottom:4px}
+  .day-header{
+    padding:12px 16px;cursor:pointer;
+    display:flex;align-items:center;gap:10px;
+    position:sticky;top:0;z-index:50;
+    transition:background .2s;
+    background:#09090b;
+  }
+  .day-header:hover{background:rgba(255,255,255,0.025)}
+  .day-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+  .day-title{
+    font-size:0.82rem;font-weight:800;flex:1;
+    font-family:'Manrope',sans-serif;
+  }
+  .day-date{
+    font-size:0.62rem;color:#3f3f46;
+    font-family:'Inter',sans-serif;
+    letter-spacing:0.06em;text-transform:uppercase;
+  }
+  .day-cost{font-size:0.68rem;font-weight:700;white-space:nowrap;font-family:'Inter',sans-serif}
+  .day-chevron{font-size:0.62rem;color:#3f3f46;transition:transform .2s;margin-left:4px}
+  .day-chevron.open{transform:rotate(90deg)}
+  .day-cards{display:none}
+  .day-cards.open{display:block}
+
+  /* ─── ACTIVITY CARD ─── */
+  .card{
+    padding:11px 14px;
+    cursor:pointer;transition:all .2s;
+    display:flex;gap:10px;align-items:flex-start;
+    position:relative;
+    margin:3px 10px;
+    border-radius:14px;
+    background:rgba(255,255,255,0.03);
+  }
+  .card:hover{background:rgba(255,255,255,0.07)}
+  .card:hover .card-actions{opacity:1}
+  .card.active{background:rgba(172,42,93,0.1)}
+  .card.drag-over{background:rgba(255,107,157,0.07);outline:1px dashed rgba(255,107,157,0.3)}
+  .card[draggable]{cursor:grab}
+  .card[draggable]:active{cursor:grabbing}
+  .card-icon{font-size:1.15rem;flex-shrink:0;margin-top:2px}
+  .card-body{flex:1;min-width:0}
+  .card-time{
+    font-size:0.6rem;color:#52525b;margin-bottom:2px;
+    font-family:'Inter',sans-serif;
+    letter-spacing:0.06em;text-transform:uppercase;
+  }
+  .card-detail{
+    font-size:0.8rem;font-weight:700;line-height:1.35;margin-bottom:3px;
+    font-family:'Manrope',sans-serif;
+  }
+  .card-route{font-size:0.62rem;color:#52525b;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .card-meta{display:flex;gap:4px;margin-top:5px;flex-wrap:wrap}
+  .tag{
+    font-size:0.56rem;padding:2px 8px;border-radius:9999px;
+    font-weight:700;white-space:nowrap;
+    font-family:'Inter',sans-serif;letter-spacing:0.05em;text-transform:uppercase;
+  }
+  .tag-cost{background:rgba(172,42,93,0.15);color:#ff6b9d}
+  .tag-time{background:rgba(255,255,255,0.06);color:#52525b}
+  .tag-free{background:rgba(107,203,119,0.15);color:#6bcb77}
+  .tag-alert{background:rgba(255,107,157,0.15);color:#ff6b9d}
+
+  /* ─── CARD ACTIONS ─── */
+  .card-actions{position:absolute;top:8px;right:8px;display:flex;gap:4px;opacity:0;transition:opacity .2s}
+  .btn-icon{
+    width:26px;height:26px;border-radius:8px;
+    border:none;cursor:pointer;font-size:0.72rem;
+    display:flex;align-items:center;justify-content:center;transition:all .15s;
+  }
+  .btn-edit{background:rgba(77,150,255,0.12);color:#4d96ff}
+  .btn-edit:hover{background:rgba(77,150,255,0.28)}
+  .btn-delete{background:rgba(255,107,107,0.12);color:#ff6b6b}
+  .btn-delete:hover{background:rgba(255,107,107,0.28)}
+  .btn-drag{background:rgba(255,255,255,0.05);color:#3f3f46;cursor:grab}
+  .btn-drag:hover{background:rgba(255,255,255,0.1)}
+
+  /* ─── ADD BUTTON ─── */
+  .add-activity-btn{
+    margin:5px 10px 10px;padding:9px;
+    border:1px dashed rgba(255,255,255,0.1);
+    border-radius:12px;background:transparent;
+    color:#52525b;cursor:pointer;font-size:0.73rem;
+    font-family:'Inter',sans-serif;letter-spacing:0.04em;
+    width:calc(100% - 20px);transition:all .2s;text-align:center;
+  }
+  .add-activity-btn:hover{
+    border-color:rgba(172,42,93,0.4);
+    color:#ff6b9d;background:rgba(172,42,93,0.06);
+  }
+
+  /* ─── SIDEBAR FOOTER ─── */
+  #sidebar-footer{
+    padding:10px 16px;font-size:0.6rem;color:#27272a;
+    text-align:center;border-top:none;flex-shrink:0;
+    font-family:'Inter',sans-serif;letter-spacing:0.05em;
+  }
+
+  /* ─── RESPONSIVE ─── */
+  @media(max-width:768px){
+    #main{flex-direction:column}
+    #sidebar{width:100%;height:50vh;border-left:none;border-top:none}
+    #map{height:50vh;flex:none}
+    body{height:auto;overflow:auto}
+  }
+
+  /* ─── LEAFLET POPUP ─── */
+  .leaflet-popup-content-wrapper{
+    background:#27272a;border:none;
+    border-radius:16px;color:#f4f4f5;
+    box-shadow:0 20px 56px rgba(0,0,0,0.75);
+  }
+  .leaflet-popup-tip{background:#27272a}
+  .leaflet-popup-content{
+    margin:14px 18px;
+    font-family:'Public Sans','Noto Sans Thai',sans-serif;
+    font-size:0.78rem;line-height:1.6;
+  }
+  .popup-title{
+    font-weight:800;font-size:0.88rem;margin-bottom:4px;
+    font-family:'Manrope',sans-serif;
+  }
+  .popup-row{color:#71717a;font-size:0.72rem}
+  .popup-cost{
+    color:#ff6b9d;font-weight:700;margin-top:5px;
+    font-family:'Inter',sans-serif;font-size:0.7rem;
+    text-transform:uppercase;letter-spacing:0.06em;
+  }
+  .custom-marker{
+    width:32px;height:32px;border-radius:50%;
+    display:flex;align-items:center;justify-content:center;
+    font-size:15px;border:2px solid rgba(255,255,255,0.2);
+    box-shadow:0 4px 16px rgba(0,0,0,0.6);cursor:pointer;
+  }
+
+  /* ─── MODAL ─── */
+  #modal-overlay{
+    position:fixed;inset:0;background:rgba(0,0,0,0.72);
+    z-index:2000;display:none;align-items:center;justify-content:center;
+    backdrop-filter:blur(10px);
+  }
+  #modal-overlay.open{display:flex}
+  #modal{
+    background:#18181b;
+    border:none;
+    border-radius:24px;padding:28px;
+    width:min(480px,95vw);max-height:90vh;overflow-y:auto;
+    box-shadow:0 40px 80px rgba(0,0,0,0.85);
+    animation:modalIn .25s ease;
+  }
+  #modal::-webkit-scrollbar{width:4px}
+  #modal::-webkit-scrollbar-thumb{background:rgba(172,42,93,0.3);border-radius:4px}
+  @keyframes modalIn{from{opacity:0;transform:scale(.95) translateY(10px)}to{opacity:1;transform:scale(1) translateY(0)}}
+  .modal-title{
+    font-size:1.1rem;font-weight:800;margin-bottom:20px;
+    color:#f4f4f5;font-family:'Manrope',sans-serif;
+  }
+  .modal-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .modal-grid.full{grid-template-columns:1fr}
+  .form-group{display:flex;flex-direction:column;gap:5px}
+  .form-group label{
+    font-size:0.62rem;color:#52525b;
+    text-transform:uppercase;letter-spacing:0.08em;
+    font-weight:700;font-family:'Inter',sans-serif;
+  }
+  .form-group input,.form-group select,.form-group textarea{
+    background:rgba(255,255,255,0.05);border:none;
+    border-radius:10px;padding:9px 12px;
+    color:#f4f4f5;font-size:0.82rem;
+    font-family:'Public Sans','Noto Sans Thai',sans-serif;
+    transition:background .2s,box-shadow .2s;outline:none;
+  }
+  .form-group input:focus,.form-group select:focus,.form-group textarea:focus{
+    background:rgba(255,255,255,0.09);
+    box-shadow:0 0 0 2px rgba(172,42,93,0.35);
+  }
+  .form-group textarea{resize:vertical;min-height:60px}
+  .form-group select option{background:#18181b;color:#f4f4f5}
+  .emoji-row{display:flex;flex-wrap:wrap;gap:6px;margin-top:4px}
+  .emoji-opt{
+    width:34px;height:34px;border-radius:10px;border:none;
+    background:rgba(255,255,255,0.05);cursor:pointer;font-size:1.1rem;
+    display:flex;align-items:center;justify-content:center;transition:all .15s;
+  }
+  .emoji-opt:hover,.emoji-opt.selected{
+    background:rgba(172,42,93,0.2);
+    box-shadow:0 0 0 2px rgba(172,42,93,0.45);
+  }
+  .modal-sep{height:1px;background:rgba(255,255,255,0.06);margin:14px 0}
+  .modal-actions{display:flex;gap:10px;justify-content:flex-end;margin-top:20px}
+  .btn{
+    padding:10px 22px;border-radius:12px;border:none;cursor:pointer;
+    font-size:0.8rem;font-family:'Inter',sans-serif;font-weight:700;transition:all .2s;
+  }
+  .btn-primary{background:linear-gradient(135deg,#ac2a5d,#ff6b9d);color:#fff}
+  .btn-primary:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(172,42,93,0.45)}
+  .btn-secondary{background:rgba(255,255,255,0.07);color:#71717a}
+  .btn-secondary:hover{background:rgba(255,255,255,0.12);color:#f4f4f5}
+  .btn-danger{background:rgba(255,107,107,0.12);color:#ff6b6b}
+  .btn-danger:hover{background:rgba(255,107,107,0.28)}
+  .alert-toggle{
+    display:flex;align-items:center;gap:8px;cursor:pointer;
+    font-size:0.76rem;color:#52525b;margin-top:8px;
+    font-family:'Inter',sans-serif;
+  }
+  .alert-toggle input[type=checkbox]{accent-color:#ac2a5d;width:15px;height:15px;cursor:pointer}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div id="header">
+  <div style="display:flex;align-items:center;gap:20px">
+    <h1>🌸 Japan 2026</h1>
+    <div class="header-meta" style="border-left:1px solid #27272a;padding-left:20px">Oct 9–14 &nbsp;·&nbsp; 5 Days &nbsp;·&nbsp; Friend Group ✈️</div>
+  </div>
+  <div style="display:flex;align-items:center;gap:24px">
+    <div id="budget-badge">
+      <div class="label">Expense</div>
+      <div class="amount" id="total-jpy">—</div>
+      <div class="thb" id="total-thb"></div>
+    </div>
+    <div style="width:38px;height:38px;border-radius:50%;background:rgba(172,42,93,0.2);display:flex;align-items:center;justify-content:center;font-size:1.1rem;cursor:pointer;border:2px solid rgba(172,42,93,0.3)">🧳</div>
+  </div>
+</div>
+
+<!-- DAY TABS -->
+<div id="day-tabs">
+  <div class="day-tab active" data-day="0">🗺️ ทั้งหมด</div>
+  <div class="day-tab" data-day="1">01 &nbsp;✈️ เดินทาง</div>
+  <div class="day-tab" data-day="2">02 &nbsp;🗻 ฟูจิ</div>
+  <div class="day-tab" data-day="3">03 &nbsp;🛍️ Harajuku</div>
+  <div class="day-tab" data-day="4">04 &nbsp;🏖️ Kamakura</div>
+  <div class="day-tab" data-day="5">05 &nbsp;🛫 กลับบ้าน</div>
+</div>
+
+<!-- MAIN -->
+<div id="main">
+  <div id="map"></div>
+  <div id="sidebar">
+    <div id="sidebar-footer">คลิก ✏️ แก้ไข &nbsp;·&nbsp; ➕ เพิ่ม &nbsp;·&nbsp; ⠿ ลากเรียง</div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════ EDIT MODAL ═══════════════════════════════ -->
+<div id="modal-overlay">
+  <div id="modal">
+    <div class="modal-title" id="modal-title">แก้ไขกิจกรรม</div>
+
+    <!-- EMOJI PICKER -->
+    <div class="form-group modal-grid full" style="margin-bottom:4px">
+      <label>ไอคอน</label>
+      <div class="emoji-row" id="emoji-picker"></div>
+    </div>
+
+    <div class="modal-sep"></div>
+
+    <div class="modal-grid">
+      <div class="form-group">
+        <label>รายละเอียด *</label>
+        <input type="text" id="f-detail" placeholder="ชื่อกิจกรรม...">
+      </div>
+      <div class="form-group">
+        <label>เมือง / ย่าน</label>
+        <input type="text" id="f-city" placeholder="เช่น Tokyo, Ueno">
+      </div>
+      <div class="form-group">
+        <label>เวลาเริ่ม</label>
+        <input type="time" id="f-start">
+      </div>
+      <div class="form-group">
+        <label>เวลาสิ้นสุด</label>
+        <input type="time" id="f-end">
+      </div>
+      <div class="form-group">
+        <label>จาก (From)</label>
+        <input type="text" id="f-from" placeholder="จุดเริ่มต้น">
+      </div>
+      <div class="form-group">
+        <label>ถึง (To)</label>
+        <input type="text" id="f-to" placeholder="จุดปลายทาง">
+      </div>
+      <div class="form-group">
+        <label>ค่าใช้จ่าย (JPY)</label>
+        <input type="text" id="f-cost" placeholder="เช่น 2,310¥ / Free">
+      </div>
+      <div class="form-group">
+        <label>เวลาเปิด-ปิด</label>
+        <input type="text" id="f-open" placeholder="เช่น 09:00-17:00">
+      </div>
+    </div>
+
+    <div class="modal-grid full" style="margin-top:12px">
+      <div class="form-group">
+        <label>หมายเหตุ</label>
+        <textarea id="f-note" placeholder="ข้อมูลเพิ่มเติม..."></textarea>
+      </div>
+    </div>
+
+    <label class="alert-toggle">
+      <input type="checkbox" id="f-alert">
+      ⚠️ ต้องจองล่วงหน้า (แสดง badge เตือน)
+    </label>
+
+    <div class="modal-sep"></div>
+
+    <!-- LAT / LNG for map pin -->
+    <div class="modal-grid">
+      <div class="form-group">
+        <label>Latitude (สำหรับแผนที่)</label>
+        <input type="number" id="f-lat" step="0.0001" placeholder="เช่น 35.7131">
+      </div>
+      <div class="form-group">
+        <label>Longitude</label>
+        <input type="number" id="f-lng" step="0.0001" placeholder="เช่น 139.7778">
+      </div>
+    </div>
+
+    <div class="modal-actions">
+      <button class="btn btn-danger" id="modal-delete" style="display:none">ลบ</button>
+      <button class="btn btn-secondary" id="modal-cancel">ยกเลิก</button>
+      <button class="btn btn-primary" id="modal-save">บันทึก</button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ══════════════════════════════════════════
+   DEFAULT ITINERARY DATA
+══════════════════════════════════════════ */
+const DEFAULT_DATA = [
+  // DAY 1 — Bangkok Departure
+  {day:1,date:"9 ต.ค.",city:"Bangkok",emoji:"🚗",start:"18:00",end:"19:30",dur:"1h 30m",detail:"นัดเจอกันที่สนามบินสุวรรณภูมิ 🤝",from:"Home",to:"Bangkok Suvarnabhumi (BKK)",cost:"",lat:13.6811,lng:100.7476},
+  {day:1,date:"9 ต.ค.",city:"Bangkok",emoji:"🍽️",start:"19:30",end:"21:00",dur:"2h",detail:"หาอะไรกินกันที่สนามบิน 🍜",from:"Bangkok Suvarnabhumi (BKK)",to:"Magic Food Point",cost:"",lat:13.6820,lng:100.7490},
+  {day:1,date:"9 ต.ค.",city:"Bangkok",emoji:"🚶",start:"21:00",end:"22:30",dur:"1h 30m",detail:"Check-in ตรวจกระเป๋า + ตม. 🛂",from:"Bangkok Suvarnabhumi (BKK)",to:"Bangkok Suvarnabhumi (BKK)",cost:"",lat:13.6811,lng:100.7476},
+  {day:1,date:"9→10 ต.ค.",city:"Bangkok",emoji:"✈️",start:"23:40",end:"07:30",dur:"7h",detail:"เครื่องออกแล้ว! ✈️ BKK → NRT",from:"Bangkok Suvarnabhumi (BKK)",to:"Narita International Airport (NRT)",cost:"",lat:35.7720,lng:140.3929,isFlight:true,flightFrom:[13.6811,100.7476]},
+  // Japan Arrival (still day 1)
+  {day:1,date:"10 ต.ค.",city:"Narita",emoji:"🎮",start:"07:30",end:"08:30",dur:"1h",detail:"อาบน้ำที่สนามบินนาริตะ 🚿",from:"Narita International Airport",to:"Narita Airport Terminal 1",openClose:"07:00-20:00",cost:"730¥ (15 นาที) / 1,500¥ (30 นาที)",lat:35.7720,lng:140.3929},
+  {day:1,date:"10 ต.ค.",city:"Ueno",emoji:"🚅",start:"08:30",end:"10:30",dur:"2h",detail:"เดินทาง Keisei Skyliner 🚄",from:"Narita International Airport",to:"Ueno Station",cost:"2,310¥ (one-way) / 4,500¥ (round-trip)",lat:35.7131,lng:139.7778},
+  {day:1,date:"10 ต.ค.",city:"Ueno",emoji:"🚅",start:"10:30",end:"10:40",dur:"10m",detail:"รถไฟ Ueno → Oku Station",from:"Ueno Station",to:"Oku Station",openClose:"04:30-24:00",cost:"170¥ (34฿)",lat:35.7497,lng:139.7617},
+  {day:1,date:"10 ต.ค.",city:"Kita",emoji:"🚶",start:"10:40",end:"10:50",dur:"10m",detail:"เดินไปที่พักฝากกระเป๋า 🧳",from:"Oku Station",to:"KETA House OKU",openClose:"Check-in 16:00-23:00",cost:"",lat:35.7494,lng:139.7625},
+  {day:1,date:"10 ต.ค.",city:"Kita",emoji:"🍽️",start:"11:00",end:"12:00",dur:"1h",detail:"หาอะไรกินกันแถวที่พัก 🍜",from:"Kita area",to:"Kita area",cost:"max 5,000¥ (1,000฿)",lat:35.7490,lng:139.7630},
+  {day:1,date:"10 ต.ค.",city:"Kita",emoji:"🚅",start:"12:00",end:"12:10",dur:"10m",detail:"รถไฟ Kaminakazato → Ueno",from:"Oku Station",to:"Ueno Station",openClose:"04:30-24:00",cost:"¥170",lat:35.7141,lng:139.7774},
+  {day:1,date:"10 ต.ค.",city:"Ueno",emoji:"🚶",start:"12:10",end:"14:00",dur:"2h",detail:"Ameyoko Market + street food 🛍️🍢",from:"Ueno Station",to:"Ameyoko Market",cost:"max 1,500¥/person",lat:35.7085,lng:139.7746},
+  {day:1,date:"10 ต.ค.",city:"Asakusa",emoji:"⛩️",start:"14:00",end:"16:00",dur:"2h",detail:"Sensoji Temple + Nakamise-dori shopping ⛩️",from:"Ueno Station",to:"Sensoji Temple",openClose:"06:00-17:00",cost:"Free",lat:35.7148,lng:139.7967},
+  {day:1,date:"10 ต.ค.",city:"Kita",emoji:"🏠",start:"16:00",end:"17:00",dur:"1h",detail:"Check-in ที่พัก KETA House OKU 🏠",from:"Oku Station",to:"KETA House OKU",openClose:"Check-in 16:00-23:00",cost:"",lat:35.7494,lng:139.7625},
+  {day:1,date:"10 ต.ค.",city:"Kita",emoji:"🚶",start:"17:00",end:"17:20",dur:"20m",detail:"เดินไปสถานีรถไฟ Tabata",from:"KETA House OKU",to:"Tabata Station",cost:"",lat:35.7381,lng:139.7618},
+  {day:1,date:"10 ต.ค.",city:"Shinjuku",emoji:"🚅",start:"17:20",end:"17:40",dur:"20m",detail:"รถไฟ Tabata → Shinjuku",from:"Tabata Station",to:"Shinjuku Station",cost:"¥180",lat:35.6896,lng:139.7006},
+  {day:1,date:"10 ต.ค.",city:"Akihabara",emoji:"🎮",start:"17:40",end:"19:40",dur:"2h",detail:"Akihabara anime / game / claw machine zone 🎮🕹️",from:"Shinjuku Station",to:"Akihabara",cost:"",lat:35.7023,lng:139.7745},
+  {day:1,date:"10 ต.ค.",city:"Akihabara",emoji:"🍽️",start:"19:40",end:"21:00",dur:"1h 30m",detail:"Dinner: Yakiniku or Tonkatsu 🥩",from:"Akihabara",to:"Akihabara",cost:"max 2,000¥/person",lat:35.7023,lng:139.7750},
+  {day:1,date:"10 ต.ค.",city:"Kita",emoji:"🚅",start:"21:00",end:"21:30",dur:"30m",detail:"กลับ Oku + แวะ convenience store 🏪",from:"Akihabara Station",to:"Oku Station",cost:"170¥",lat:35.7497,lng:139.7617},
+  // DAY 2 — MT FUJI
+  {day:2,date:"11 ต.ค.",city:"Kita",emoji:"🚅",start:"07:00",end:"07:20",dur:"20m",detail:"Yamanote Line → Shinjuku",from:"Tabata Station",to:"Shinjuku Station",cost:"180¥",lat:35.6896,lng:139.7006},
+  {day:2,date:"11 ต.ค.",city:"Shinjuku",emoji:"🚌",start:"07:30",end:"09:30",dur:"2h",detail:"Highway Bus → Kawaguchiko 🚌",from:"Shinjuku Highway Bus Terminal",to:"Kawaguchiko Station",cost:"~2,000¥/person",alert:true,lat:35.5105,lng:138.7636},
+  {day:2,date:"11 ต.ค.",city:"Kawaguchiko",emoji:"🚲",start:"09:30",end:"10:00",dur:"30m",detail:"เช่าจักรยาน / ซื้อ Red Line Bus Pass 🚲",from:"Kawaguchiko Station",to:"Kawaguchiko Station",cost:"~500-1,000¥",lat:35.5105,lng:138.7636},
+  {day:2,date:"11 ต.ค.",city:"Kawaguchiko",emoji:"🗻",start:"10:00",end:"12:00",dur:"2h",detail:"Oishi Park: Kochia grass + Mt Fuji view 🗻📸",from:"Kawaguchiko Station",to:"Oishi Park",openClose:"09:00-17:30",cost:"Free",lat:35.5197,lng:138.8034},
+  {day:2,date:"11 ต.ค.",city:"Fujiyoshida",emoji:"⛩️",start:"12:00",end:"14:00",dur:"2h",detail:"Chureito Pagoda: เจดีย์แดง + วิว Fuji (400 ขั้น!) ⛩️🗻",from:"Oishi Park",to:"Chureito Pagoda",openClose:"08:30-17:00",cost:"Free",lat:35.4937,lng:138.7893},
+  {day:2,date:"11 ต.ค.",city:"Kawaguchiko",emoji:"📸",start:"14:00",end:"14:30",dur:"30m",detail:"Lawson Fuji view photo spot ☕📸",from:"Chureito Pagoda",to:"Lawson Fujikawaguchiko",cost:"Buy snacks",lat:35.5135,lng:138.7570},
+  {day:2,date:"11 ต.ค.",city:"Kawaguchiko",emoji:"🚌",start:"15:00",end:"17:00",dur:"2h",detail:"Highway Bus กลับ Shinjuku 🚌",from:"Kawaguchiko Station",to:"Shinjuku Bus Terminal",cost:"~2,000¥/person",lat:35.6896,lng:139.7006},
+  {day:2,date:"11 ต.ค.",city:"Shinjuku",emoji:"🍜",start:"17:30",end:"19:00",dur:"1h 30m",detail:"Dinner: Izakaya or Ichiran ramen 🍜🍺",from:"Shinjuku",to:"Shinjuku",cost:"max 1,500¥",lat:35.6896,lng:139.7010},
+  {day:2,date:"11 ต.ค.",city:"Kita",emoji:"🚅",start:"19:30",end:"20:00",dur:"30m",detail:"กลับที่พัก Oku 🌙",from:"Shinjuku Station",to:"Oku Station",cost:"180¥",lat:35.7497,lng:139.7617},
+  // DAY 3 — HARAJUKU · SHIBUYA
+  {day:3,date:"12 ต.ค.",city:"Kita",emoji:"🚅",start:"10:00",end:"10:20",dur:"20m",detail:"Yamanote Line → Harajuku",from:"Tabata Station",to:"Harajuku Station",cost:"220¥",lat:35.6702,lng:139.7027},
+  {day:3,date:"12 ต.ค.",city:"Harajuku",emoji:"👗",start:"10:30",end:"12:00",dur:"1h 30m",detail:"Omotesando + Takeshita St. + trendy cafe photos ☕📸",from:"Harajuku Station",to:"Omotesando",cost:"",lat:35.6654,lng:139.7128},
+  {day:3,date:"12 ต.ค.",city:"Harajuku",emoji:"🍚",start:"12:00",end:"13:00",dur:"1h",detail:"Lunch: Gyudon or Katsu rice 🍚",from:"Harajuku",to:"Harajuku",cost:"max 1,200¥",lat:35.6654,lng:139.7130},
+  {day:3,date:"12 ต.ค.",city:"Shibuya",emoji:"🛍️",start:"13:00",end:"16:30",dur:"3h 30m",detail:"Shibuya Crossing + shopping: Uniqlo/GU/Parco 🛍️",from:"Harajuku Station",to:"Shibuya",cost:"personal budget",lat:35.6595,lng:139.7004},
+  {day:3,date:"12 ต.ค.",city:"Shibuya",emoji:"🌆",start:"16:30",end:"18:00",dur:"1h 30m",detail:"Shibuya Sky rooftop: sunset + city lights 🌇",from:"Shibuya",to:"Shibuya Scramble Square",openClose:"09:00-23:00",cost:"2,200¥",alert:true,lat:35.6580,lng:139.7016},
+  {day:3,date:"12 ต.ค.",city:"Shimokitazawa",emoji:"🚅",start:"18:30",end:"18:45",dur:"15m",detail:"Keio Inokashira Line → Shimokitazawa",from:"Shibuya Station",to:"Shimokitazawa Station",cost:"130¥",lat:35.6614,lng:139.6682},
+  {day:3,date:"12 ต.ค.",city:"Shimokitazawa",emoji:"🎸",start:"19:00",end:"21:00",dur:"2h",detail:"Shimokitazawa indie vibe: vintage shops + dinner 🎸🧥",from:"Shimokitazawa Station",to:"Shimokitazawa",cost:"max 1,500¥ dinner",lat:35.6614,lng:139.6686},
+  {day:3,date:"12 ต.ค.",city:"Kita",emoji:"🚅",start:"21:30",end:"22:10",dur:"40m",detail:"กลับที่พัก Oku 🌙",from:"Shimokitazawa Station",to:"Oku Station",cost:"~300¥",lat:35.7497,lng:139.7617},
+  // DAY 4 — KAMAKURA · ENOSHIMA
+  {day:4,date:"13 ต.ค.",city:"Kita",emoji:"🚅",start:"08:00",end:"09:00",dur:"1h",detail:"รถไฟไป Kamakura (~1 ชม.)",from:"Kaminakazato Station",to:"Kamakura Station",cost:"~940¥",lat:35.3197,lng:139.5508},
+  {day:4,date:"13 ต.ค.",city:"Kamakura",emoji:"🎟️",start:"09:00",end:"09:30",dur:"30m",detail:"ซื้อ Enoshima-Kamakura Freepass 🎟️",from:"Kamakura Station",to:"Kamakura Station",cost:"1,520¥",lat:35.3197,lng:139.5508},
+  {day:4,date:"13 ต.ค.",city:"Kamakura",emoji:"🚃",start:"09:30",end:"10:00",dur:"30m",detail:"Enoden Line → Kamakurakoko-mae 🚃",from:"Kamakura Station",to:"Kamakurakoko-mae Station",cost:"Included in Freepass",lat:35.3012,lng:139.4987},
+  {day:4,date:"13 ต.ค.",city:"Kamakura",emoji:"🏀",start:"10:00",end:"11:00",dur:"1h",detail:"ทางรถไฟริมทะเล (Slam Dunk vibes! 🏀🌊)",from:"Kamakurakoko-mae Station",to:"Kamakurakoko-mae",cost:"Free",lat:35.3012,lng:139.4987},
+  {day:4,date:"13 ต.ค.",city:"Enoshima",emoji:"🦐",start:"11:00",end:"13:00",dur:"2h",detail:"Enoshima Island: Shirasu rice + grilled seafood 🦐🐟",from:"Kamakurakoko-mae Station",to:"Enoshima Island",cost:"max 1,500¥",lat:35.2990,lng:139.4804},
+  {day:4,date:"13 ต.ค.",city:"Kamakura",emoji:"🍡",start:"13:00",end:"15:00",dur:"2h",detail:"Komachi-dori: ขนม ของหวาน chic cafes ☕🍡",from:"Enoshima Station",to:"Komachi-dori",cost:"personal budget",lat:35.3225,lng:139.5540},
+  {day:4,date:"13 ต.ค.",city:"Tokyo",emoji:"🚅",start:"15:30",end:"17:00",dur:"1h 30m",detail:"Yokosuka Line กลับ Tokyo 🚅",from:"Kamakura Station",to:"Tokyo",cost:"~940¥",lat:35.6812,lng:139.7671},
+  {day:4,date:"13 ต.ค.",city:"Tokyo",emoji:"🍣",start:"17:30",end:"19:30",dur:"2h",detail:"🎉 Farewell dinner: Shabu-shabu OR Sushiro 🍣🥳",from:"Tokyo",to:"Tokyo",cost:"max 2,000¥",lat:35.6812,lng:139.7680},
+  {day:4,date:"13 ต.ค.",city:"Kita",emoji:"🚅",start:"20:00",end:"20:30",dur:"30m",detail:"กลับ Oku — คืนสุดท้าย! 🌙✨",from:"Tokyo Station",to:"Oku Station",cost:"~200¥",lat:35.7497,lng:139.7617},
+  // DAY 5 — DEPARTURE
+  {day:5,date:"14 ต.ค.",city:"Kita",emoji:"🧳",start:"09:00",end:"10:00",dur:"1h",detail:"Check-out KETA House OKU (ก่อน 10:00!) 🧳",from:"KETA House OKU",to:"KETA House OKU",openClose:"Checkout before 10:00",cost:"",alert:true,lat:35.7494,lng:139.7625},
+  {day:5,date:"14 ต.ค.",city:"Ueno",emoji:"🚅",start:"10:00",end:"10:10",dur:"10m",detail:"รถไฟ Oku → Ueno",from:"Oku Station",to:"Ueno Station",cost:"170¥",lat:35.7141,lng:139.7774},
+  {day:5,date:"14 ต.ค.",city:"Ueno",emoji:"🔒",start:"10:10",end:"10:30",dur:"20m",detail:"ฝากกระเป๋า coin locker ที่ Ueno (28 นิ้ว) 🔒",from:"Ueno Station",to:"Ueno Station",openClose:"07:00-21:00",cost:"~600-900¥/locker",lat:35.7141,lng:139.7774},
+  {day:5,date:"14 ต.ค.",city:"Ueno",emoji:"🛒",start:"10:30",end:"13:00",dur:"2h 30m",detail:"ช้อปของฝากรอบสุดท้าย: Takeya + Ameyoko 🛒🎁",from:"Ueno Station",to:"Ameyoko",cost:"remaining budget",lat:35.7085,lng:139.7746},
+  {day:5,date:"14 ต.ค.",city:"Ueno",emoji:"🚅",start:"13:30",end:"14:30",dur:"1h",detail:"Keisei Skyliner → Narita Airport ✈️",from:"Keisei Ueno Station",to:"Narita International Airport",cost:"2,520¥",lat:35.7720,lng:140.3929},
+  {day:5,date:"14 ต.ค.",city:"Narita",emoji:"⚖️",start:"14:30",end:"17:00",dur:"2h 30m",detail:"ZIPAIR check-in + ชั่งกระเป๋าถือ (max 7kg!) ⚖️",from:"NRT Terminal 1",to:"NRT Terminal 1",cost:"",alert:true,lat:35.7720,lng:140.3935},
+  {day:5,date:"14 ต.ค.",city:"Narita",emoji:"✈️",start:"17:00",end:"23:00",dur:"6h",detail:"ZG051: NRT → BKK — Safe flight home! 🛫👋",from:"Narita International Airport (NRT)",to:"Bangkok Suvarnabhumi (BKK)",cost:"",lat:13.6811,lng:100.7476,isFlight:true,flightFrom:[35.7720,140.3929]},
+];
+
+const EMOJI_LIST = ["🚗","🍽️","🚶","✈️","🚅","🚌","🎮","🏠","⛩️","🗻","📸","🛍️","🎸","🍜","🍣","🍡","🦐","🎟️","🚃","🏀","🌆","🔒","🛒","⚖️","🧳","🚲","🏖️","🌸","🎌","🗾","💴","🍱","☕","🎑","🎆"];
+const DAY_COLORS = {1:"#ff6b9d",2:"#a78bfa",3:"#fbbf24",4:"#34d399",5:"#60a5fa"};
+const DAY_NAMES  = {1:"✈️ เดินทาง + ถึงญี่ปุ่น",2:"🗻 ภูเขาไฟฟูจิ",3:"🛍️ Harajuku · Shibuya",4:"🏖️ Kamakura · Enoshima",5:"🛫 กลับบ้าน"};
+const DAY_DATES  = {1:"9-10 ต.ค. 2569",2:"11 ต.ค. 2569",3:"12 ต.ค. 2569",4:"13 ต.ค. 2569",5:"14 ต.ค. 2569"};
+
+/* ── localStorage ── */
+const LS_KEY = 'japan2026_v2';
+let itinerary = JSON.parse(localStorage.getItem(LS_KEY) || 'null') || DEFAULT_DATA.map((d,i)=>({...d,id:i}));
+function save(){ localStorage.setItem(LS_KEY, JSON.stringify(itinerary)); }
+function nextId(){ return Date.now(); }
+
+
+/* ── MAP ── */
+const map=L.map('map',{zoomControl:true}).setView([30,135],4);
+L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',{attribution:'© CartoDB',maxZoom:19,subdomains:'abcd'}).addTo(map);
+
+function makeIcon(emoji,color){
+  return L.divIcon({className:'',html:`<div class="custom-marker" style="background:${color}22;border-color:${color}99">${emoji}</div>`,iconSize:[32,32],iconAnchor:[16,16],popupAnchor:[0,-18]});
+}
+function flightArc(from,to,steps=80){
+  return Array.from({length:steps+1},(_,i)=>{const t=i/steps;return[(from[0]+(to[0]-from[0])*t+Math.sin(t*Math.PI)*0.2),(from[1]+(to[1]-from[1])*t)];});
+}
+
+let mapLayers=[], activeCardEl=null, currentFilter=0;
+
+function clearMap(){mapLayers.forEach(l=>map.removeLayer(l));mapLayers=[];}
+
+function drawMap(filter){
+  clearMap();
+  const items=filter===0?itinerary:itinerary.filter(d=>d.day===filter);
+  items.filter(d=>d.isFlight&&d.flightFrom).forEach(d=>{
+    const pl=L.polyline(flightArc(d.flightFrom,[d.lat,d.lng]),{color:DAY_COLORS[d.day],weight:2.5,dashArray:'7 5',opacity:.8}).addTo(map);
+    mapLayers.push(pl);
+  });
+  [...new Set(items.map(d=>d.day))].forEach(day=>{
+    const pts=items.filter(d=>d.day===day&&!d.isFlight&&d.lat).map(d=>[d.lat,d.lng]);
+    if(pts.length>1){const pl=L.polyline(pts,{color:DAY_COLORS[day],weight:2,opacity:.4}).addTo(map);mapLayers.push(pl);}
+  });
+  items.filter(d=>d.lat).forEach(d=>{
+    const col=DAY_COLORS[d.day];
+    const mk=L.marker([d.lat,d.lng],{icon:makeIcon(d.emoji||'📍',col)}).addTo(map);
+    const costHtml=d.cost?`<div class="popup-cost">💴 ${String(d.cost).replace(/\r\n/g,' · ')}</div>`:'';
+    const openHtml=d.openClose?`<div class="popup-row">🕐 ${String(d.openClose).replace(/\r\n/g,' ')}</div>`:'';
+    mk.bindPopup(`<div class="popup-title" style="color:${col}">Day ${d.day} — ${d.city}</div><div style="font-weight:700;margin-bottom:5px">${d.detail}</div>${d.start?`<div class="popup-row">⏱️ ${d.start} – ${d.end} (${d.dur||''})</div>`:''}${d.from&&d.to&&d.from!==d.to?`<div class="popup-row">📍 ${d.from} → ${d.to}</div>`:''}${openHtml}${costHtml}`);
+    mk._itemId=d.id; mapLayers.push(mk);
+  });
+}
+
+/* ── BUDGET ── */
+function updateBudget(filter){
+  const items=filter===0?itinerary:itinerary.filter(d=>d.day===filter);
+  let jpy=0;
+  items.forEach(d=>{const m=String(d.cost||'').match(/[\d,]+(?=¥|JPY)/g);if(m)m.forEach(n=>jpy+=parseInt(n.replace(/,/g,''))||0);});
+  document.getElementById('total-jpy').textContent=jpy>0?`¥${jpy.toLocaleString()} JPY`:'—';
+  document.getElementById('total-thb').textContent=jpy>0?`≈ ฿${Math.round(jpy*.22).toLocaleString()} บาท (ค่าเดินทาง)`:'ไม่รวมค่าช้อปปิ้ง';
+}
+
+/* ── CALC DURATION ── */
+function calcDur(start,end){
+  if(!start||!end)return'';
+  const [sh,sm]=start.split(':').map(Number);
+  let [eh,em]=end.split(':').map(Number);
+  let diff=(eh*60+em)-(sh*60+sm);
+  if(diff<0)diff+=24*60;
+  const h=Math.floor(diff/60),m=diff%60;
+  return (h?h+'h ':'')+(m?m+'m':'');
+}
+
+/* ══════════════════════════════════════════
+   MODAL
+══════════════════════════════════════════ */
+let editingId=null, editingDay=null;
+const overlay=document.getElementById('modal-overlay');
+
+// Build emoji picker
+const picker=document.getElementById('emoji-picker');
+EMOJI_LIST.forEach(em=>{
+  const b=document.createElement('button');
+  b.className='emoji-opt'; b.textContent=em; b.type='button';
+  b.onclick=()=>{picker.querySelectorAll('.emoji-opt').forEach(x=>x.classList.remove('selected'));b.classList.add('selected');};
+  picker.appendChild(b);
+});
+
+function getSelectedEmoji(){
+  const sel=picker.querySelector('.emoji-opt.selected');
+  return sel?sel.textContent:'📍';
+}
+function setSelectedEmoji(em){
+  picker.querySelectorAll('.emoji-opt').forEach(b=>{b.classList.toggle('selected',b.textContent===em);});
+}
+
+function openModal(item=null, dayNum=1){
+  editingId = item?item.id:null;
+  editingDay = dayNum;
+  document.getElementById('modal-title').textContent = item?'แก้ไขกิจกรรม':'เพิ่มกิจกรรมใหม่';
+  document.getElementById('f-detail').value  = item?.detail||'';
+  document.getElementById('f-city').value    = item?.city||'';
+  document.getElementById('f-start').value   = item?.start||'';
+  document.getElementById('f-end').value     = item?.end||'';
+  document.getElementById('f-from').value    = item?.from||'';
+  document.getElementById('f-to').value      = item?.to||'';
+  document.getElementById('f-cost').value    = item?.cost||'';
+  document.getElementById('f-open').value    = item?.openClose||'';
+  document.getElementById('f-note').value    = item?.note||'';
+  document.getElementById('f-alert').checked = item?.alert||false;
+  document.getElementById('f-lat').value     = item?.lat||'';
+  document.getElementById('f-lng').value     = item?.lng||'';
+  setSelectedEmoji(item?.emoji||'📍');
+  document.getElementById('modal-delete').style.display = item?'':'none';
+  overlay.classList.add('open');
+  document.getElementById('f-detail').focus();
+}
+
+function closeModal(){ overlay.classList.remove('open'); }
+
+document.getElementById('modal-cancel').onclick = closeModal;
+overlay.addEventListener('click',e=>{ if(e.target===overlay) closeModal(); });
+
+document.getElementById('modal-save').onclick = ()=>{
+  const detail = document.getElementById('f-detail').value.trim();
+  if(!detail){ document.getElementById('f-detail').focus(); return; }
+  const start=document.getElementById('f-start').value;
+  const end=document.getElementById('f-end').value;
+  const lat=parseFloat(document.getElementById('f-lat').value)||0;
+  const lng=parseFloat(document.getElementById('f-lng').value)||0;
+
+  if(editingId!==null){
+    const idx=itinerary.findIndex(d=>d.id===editingId);
+    if(idx>-1){
+      itinerary[idx]={...itinerary[idx],
+        emoji:getSelectedEmoji(), detail,
+        city:document.getElementById('f-city').value,
+        start, end, dur:calcDur(start,end),
+        from:document.getElementById('f-from').value,
+        to:document.getElementById('f-to').value,
+        cost:document.getElementById('f-cost').value,
+        openClose:document.getElementById('f-open').value,
+        note:document.getElementById('f-note').value,
+        alert:document.getElementById('f-alert').checked,
+        lat:lat||itinerary[idx].lat, lng:lng||itinerary[idx].lng,
+      };
+    }
+  } else {
+    itinerary.push({
+      id:nextId(), day:editingDay,
+      date: DAY_DATES[editingDay]||'',
+      emoji:getSelectedEmoji(), detail,
+      city:document.getElementById('f-city').value,
+      start, end, dur:calcDur(start,end),
+      from:document.getElementById('f-from').value,
+      to:document.getElementById('f-to').value,
+      cost:document.getElementById('f-cost').value,
+      openClose:document.getElementById('f-open').value,
+      note:document.getElementById('f-note').value,
+      alert:document.getElementById('f-alert').checked,
+      lat, lng,
+    });
+  }
+  save(); closeModal(); refresh();
+};
+
+document.getElementById('modal-delete').onclick = ()=>{
+  if(!confirm('ลบกิจกรรมนี้?')) return;
+  itinerary=itinerary.filter(d=>d.id!==editingId);
+  save(); closeModal(); refresh();
+};
+
+/* ══════════════════════════════════════════
+   SIDEBAR BUILD
+══════════════════════════════════════════ */
+function buildSidebar(filter){
+  const sidebar=document.getElementById('sidebar');
+  const footer=document.getElementById('sidebar-footer');
+  sidebar.querySelectorAll('.day-section').forEach(el=>el.remove());
+  const days=[1,2,3,4,5];
+  const activeDays=filter===0?days:days.filter(d=>d===filter);
+
+  activeDays.forEach(day=>{
+    const items=itinerary.filter(d=>d.day===day);
+    const col=DAY_COLORS[day];
+    let jpy=0;
+    items.forEach(d=>{const m=String(d.cost||'').match(/[\d,]+(?=¥|JPY)/g);if(m)m.forEach(n=>jpy+=parseInt(n.replace(/,/g,''))||0);});
+    const isOpen=filter!==0||(day===1);
+
+    const section=document.createElement('div');
+    section.className='day-section';
+    section.dataset.day=day;
+    section.innerHTML=`
+      <div class="day-header" style="background:${col}12">
+        <div class="day-dot" style="background:${col}"></div>
+        <div style="flex:1">
+          <div class="day-title" style="color:${col}">Day ${day} — ${DAY_NAMES[day]}</div>
+          <div class="day-date">${DAY_DATES[day]} · ${items.length} กิจกรรม</div>
+        </div>
+        ${jpy>0?`<div class="day-cost" style="color:${col}">~${jpy.toLocaleString()}¥</div>`:''}
+        <span class="day-chevron ${isOpen?'open':''}">▶</span>
+      </div>
+      <div class="day-cards ${isOpen?'open':''}">
+        <div class="cards-list"></div>
+        <button class="add-activity-btn" data-day="${day}">➕ เพิ่มกิจกรรม Day ${day}</button>
+      </div>
+    `;
+    sidebar.insertBefore(section, footer);
+
+    // Toggle collapse
+    section.querySelector('.day-header').addEventListener('click',function(){
+      section.querySelector('.day-cards').classList.toggle('open');
+      section.querySelector('.day-chevron').classList.toggle('open');
+    });
+
+    // Add button
+    section.querySelector('.add-activity-btn').addEventListener('click',e=>{
+      e.stopPropagation();
+      openModal(null, day);
+    });
+
+    // Render cards
+    renderCards(section.querySelector('.cards-list'), items, col);
+  });
+}
+
+function renderCards(container, items, col){
+  container.innerHTML='';
+  items.forEach((d)=>{
+    const el=document.createElement('div');
+    el.className='card';
+    el.dataset.id=d.id;
+    el.draggable=true;
+    el.style.borderLeftColor=col+'55';
+    const costStr=String(d.cost||'').replace(/\r\n/g,' · ');
+    const openStr=d.openClose?String(d.openClose).replace(/\r\n/g,' | '):'';
+    const costTag=d.cost?(d.cost==='Free'?`<span class="tag tag-free">✅ Free</span>`:`<span class="tag tag-cost">💴 ${costStr.substring(0,35)}</span>`):'';
+    const durTag=d.dur?`<span class="tag tag-time">⏱️ ${d.dur}</span>`:'';
+    const openTag=openStr?`<span class="tag tag-time">🕐 ${openStr.substring(0,25)}</span>`:'';
+    const alertTag=d.alert?`<span class="tag tag-alert">⚠️ จองล่วงหน้า</span>`:'';
+    el.innerHTML=`
+      <div class="card-icon">${d.emoji||'📍'}</div>
+      <div class="card-body">
+        <div class="card-time">${d.start||''}${d.end?' – '+d.end:''}</div>
+        <div class="card-detail">${d.detail}</div>
+        ${d.from&&d.to&&d.from!==d.to?`<div class="card-route">📍 ${d.from} → ${d.to}</div>`:''}
+        ${d.note?`<div class="card-route" style="color:#aaa;font-style:italic">${d.note}</div>`:''}
+        <div class="card-meta">${durTag}${openTag}${costTag}${alertTag}</div>
+      </div>
+      <div class="card-actions">
+        <button class="btn-icon btn-drag" title="ลากเพื่อเรียง">⠿</button>
+        <button class="btn-icon btn-edit" title="แก้ไข">✏️</button>
+        <button class="btn-icon btn-delete" title="ลบ">🗑️</button>
+      </div>
+    `;
+
+    // Map click (card body)
+    el.addEventListener('click',e=>{
+      if(e.target.closest('.card-actions')) return;
+      if(d.lat){
+        if(activeCardEl) activeCardEl.classList.remove('active');
+        el.classList.add('active'); activeCardEl=el;
+        map.flyTo([d.lat,d.lng],14,{duration:1.2});
+        mapLayers.forEach(l=>{ if(l._itemId===d.id&&l.openPopup) l.openPopup(); });
+      }
+    });
+
+    // Edit
+    el.querySelector('.btn-edit').addEventListener('click',e=>{ e.stopPropagation(); openModal(d, d.day); });
+    // Delete
+    el.querySelector('.btn-delete').addEventListener('click',e=>{
+      e.stopPropagation();
+      if(!confirm(`ลบ "${d.detail}"?`)) return;
+      itinerary=itinerary.filter(x=>x.id!==d.id);
+      save(); refresh();
+    });
+
+    // Drag to reorder
+    el.addEventListener('dragstart',e=>{ e.dataTransfer.setData('text/plain',d.id); el.style.opacity='.4'; });
+    el.addEventListener('dragend',()=>{ el.style.opacity=''; });
+    el.addEventListener('dragover',e=>{ e.preventDefault(); el.classList.add('drag-over'); });
+    el.addEventListener('dragleave',()=>{ el.classList.remove('drag-over'); });
+    el.addEventListener('drop',e=>{
+      e.preventDefault(); el.classList.remove('drag-over');
+      const fromId=parseInt(e.dataTransfer.getData('text/plain'));
+      const toId=d.id;
+      if(fromId===toId) return;
+      const fi=itinerary.findIndex(x=>x.id===fromId);
+      const ti=itinerary.findIndex(x=>x.id===toId);
+      if(fi<0||ti<0) return;
+      const [moved]=itinerary.splice(fi,1);
+      itinerary.splice(ti,0,moved);
+      save(); refresh();
+    });
+
+    container.appendChild(el);
+  });
+}
+
+/* ── REFRESH (re-draw everything) ── */
+function refresh(){
+  drawMap(currentFilter);
+  buildSidebar(currentFilter);
+  updateBudget(currentFilter);
+}
+
+/* ── DAY TABS ── */
+document.querySelectorAll('.day-tab').forEach(tab=>{
+  tab.addEventListener('click',function(){
+    document.querySelectorAll('.day-tab').forEach(t=>t.classList.remove('active'));
+    this.classList.add('active');
+    currentFilter=parseInt(this.dataset.day);
+    activeCardEl=null;
+    refresh();
+    const views={0:[30,135,4],1:[30,135,4],2:[35.52,138.78,11],3:[35.665,139.700,13],4:[35.31,139.52,12],5:[30,135,4]};
+    const v=views[currentFilter]||views[0];
+    map.flyTo([v[0],v[1]],v[2],{duration:1.5});
+  });
+});
+
+/* ── RESET to default (safety) ── */
+// Ensure all default items have IDs
+itinerary=itinerary.map((d,i)=>d.id!=null?d:{...d,id:i});
+save();
+
+// ── INIT ──
+refresh();
+</script>
+</body>
+</html>
