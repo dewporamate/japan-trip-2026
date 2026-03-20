@@ -575,20 +575,24 @@ function nextId(){ return Date.now(); }
 /* ── MAP ── */
 const DARK_MAP_STYLES=[
   {elementType:'geometry',stylers:[{color:'#212121'}]},
-  {elementType:'labels.icon',stylers:[{visibility:'off'}]},
-  {elementType:'labels.text.fill',stylers:[{color:'#757575'}]},
-  {elementType:'labels.text.stroke',stylers:[{color:'#212121'}]},
-  {featureType:'administrative.country',elementType:'labels.text.fill',stylers:[{color:'#9e9e9e'}]},
-  {featureType:'administrative.locality',elementType:'labels.text.fill',stylers:[{color:'#bdbdbd'}]},
-  {featureType:'poi',elementType:'labels.text.fill',stylers:[{color:'#757575'}]},
+  {elementType:'labels.text.fill',stylers:[{color:'#aaaaaa'}]},
+  {elementType:'labels.text.stroke',stylers:[{color:'#1a1a1a'}]},
+  {featureType:'administrative.country',elementType:'labels.text.fill',stylers:[{color:'#c0c0c0'}]},
+  {featureType:'administrative.locality',elementType:'labels.text.fill',stylers:[{color:'#e0e0e0'}]},
+  {featureType:'administrative.neighborhood',elementType:'labels.text.fill',stylers:[{color:'#c8c8c8'}]},
+  {featureType:'poi',elementType:'labels.text.fill',stylers:[{color:'#b0b0b0'}]},
+  {featureType:'poi',elementType:'labels.icon',stylers:[{visibility:'on'}]},
   {featureType:'poi.park',elementType:'geometry',stylers:[{color:'#181818'}]},
   {featureType:'road',elementType:'geometry.fill',stylers:[{color:'#2c2c2c'}]},
   {featureType:'road.arterial',elementType:'geometry',stylers:[{color:'#373737'}]},
+  {featureType:'road.arterial',elementType:'labels.text.fill',stylers:[{color:'#bbbbbb'}]},
   {featureType:'road.highway',elementType:'geometry',stylers:[{color:'#3c3c3c'}]},
-  {featureType:'road.local',elementType:'labels.text.fill',stylers:[{color:'#616161'}]},
-  {featureType:'transit',elementType:'labels.text.fill',stylers:[{color:'#757575'}]},
+  {featureType:'road.highway',elementType:'labels.text.fill',stylers:[{color:'#cccccc'}]},
+  {featureType:'road.local',elementType:'labels.text.fill',stylers:[{color:'#999999'}]},
+  {featureType:'transit',elementType:'labels.text.fill',stylers:[{color:'#aaaaaa'}]},
+  {featureType:'transit',elementType:'labels.icon',stylers:[{visibility:'on'}]},
   {featureType:'water',elementType:'geometry',stylers:[{color:'#000000'}]},
-  {featureType:'water',elementType:'labels.text.fill',stylers:[{color:'#3d3d3d'}]},
+  {featureType:'water',elementType:'labels.text.fill',stylers:[{color:'#5a5a5a'}]},
 ];
 
 let map, openInfoWindow=null;
