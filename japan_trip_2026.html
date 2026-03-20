@@ -236,17 +236,29 @@
   <div class="flex-1 overflow-y-auto" id="page-content">
 
     <!-- ── HERO SECTION ── -->
-    <section class="relative h-[300px] md:h-[360px] w-full overflow-hidden shrink-0 bg-zinc-950">
-      <div class="absolute inset-0" style="background:radial-gradient(ellipse at 25% 70%, rgba(172,42,93,0.18) 0%, transparent 55%), radial-gradient(ellipse at 80% 20%, rgba(100,50,100,0.12) 0%, transparent 50%), #09090b"></div>
-      <!-- Decorative grid lines -->
-      <div class="absolute inset-0 opacity-[0.03]" style="background-image:linear-gradient(rgba(255,255,255,1) 1px, transparent 1px),linear-gradient(90deg, rgba(255,255,255,1) 1px, transparent 1px);background-size:60px 60px"></div>
+    <section class="relative h-[300px] md:h-[400px] w-full overflow-hidden shrink-0 bg-zinc-950">
+      <!-- Background photo: Chureito Pagoda + Mt Fuji (in your actual itinerary!) -->
+      <img
+        src="https://images.unsplash.com/photo-1492571350019-22de64fcfd15?w=1800&q=85&fit=crop&crop=center"
+        alt="Chureito Pagoda with Mount Fuji"
+        class="absolute inset-0 w-full h-full object-cover object-center scale-[1.03] transition-transform duration-[8s] ease-out"
+        loading="eager"
+        id="hero-bg"
+        onload="setTimeout(()=>this.classList.add('scale-100'),100)"
+      >
+      <!-- Multi-layer dark overlay for readability -->
+      <div class="absolute inset-0" style="background:linear-gradient(to right, rgba(9,9,11,0.82) 0%, rgba(9,9,11,0.55) 55%, rgba(9,9,11,0.25) 100%)"></div>
+      <div class="absolute inset-0" style="background:linear-gradient(to top, rgba(9,9,11,0.80) 0%, rgba(9,9,11,0.15) 50%, transparent 100%)"></div>
+      <!-- Pink accent glow behind title -->
+      <div class="absolute bottom-0 left-0 w-96 h-48 opacity-20 pointer-events-none" style="background:radial-gradient(ellipse at 0% 100%, #ff6b9d 0%, transparent 70%)"></div>
+
       <div class="absolute bottom-10 left-8 md:left-14">
-        <span class="font-['Inter'] text-[0.65rem] text-primary uppercase tracking-[0.28em] font-bold block mb-4">OCT 9–14 · 2026 · TOKYO JAPAN</span>
-        <h2 class="font-['Manrope'] text-5xl md:text-6xl font-black leading-[0.88] tracking-tighter text-white">
+        <span class="font-['Inter'] text-[0.65rem] text-primary uppercase tracking-[0.28em] font-bold block mb-4 drop-shadow-lg">OCT 9–14 · 2026 · TOKYO JAPAN</span>
+        <h2 class="font-['Manrope'] text-5xl md:text-6xl font-black leading-[0.88] tracking-tighter text-white drop-shadow-2xl">
           Japan 🇯🇵 ครั้งที่1 !!!
         </h2>
       </div>
-      <div class="absolute bottom-10 right-8 md:right-14 bg-white/5 backdrop-blur-2xl p-5 rounded-2xl border border-white/10 shadow-2xl hidden sm:block">
+      <div class="absolute bottom-10 right-8 md:right-14 bg-black/30 backdrop-blur-2xl p-5 rounded-2xl border border-white/15 shadow-2xl hidden sm:block">
         <p class="font-['Inter'] text-[0.6rem] text-zinc-400 uppercase tracking-widest mb-1">Friend Group</p>
         <p class="font-['Manrope'] text-2xl font-black text-white">5 วัน 4 คืน</p>
         <p class="font-['Inter'] text-[0.6rem] text-primary mt-1.5 font-bold uppercase tracking-wide">✈️ BKK → NRT → BKK</p>
