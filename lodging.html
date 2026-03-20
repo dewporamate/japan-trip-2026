@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Kyoto Zen - Lodging</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200;400;700;800&family=Public+Sans:wght@300;400;600&family=Inter:wght@400;700&family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<style>
+  .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24; vertical-align: middle; }
+  body { font-family: 'Public Sans', sans-serif; }
+  h1, h2, h3 { font-family: 'Manrope', sans-serif; }
+  .editorial-shadow { box-shadow: 0 32px 64px -12px rgba(0, 0, 0, 0.4); }
+</style>
+</head>
+<body class="bg-zinc-950 text-zinc-100 min-h-screen">
+<div class="flex min-h-screen">
+<!-- SideNavBar -->
+<aside class="hidden md:flex flex-col h-screen w-72 fixed left-0 top-0 bg-zinc-900/50 border-r border-zinc-800/30 py-10 px-6 z-50">
+  <div class="mb-12 px-4">
+    <div class="flex items-center gap-3 mb-2">
+      <span class="material-symbols-outlined text-[#ff6b9d] text-3xl">filter_vintage</span>
+      <h1 class="text-xl font-bold text-[#ff6b9d]">Kyoto Zen</h1>
+    </div>
+    <p class="text-zinc-500 text-xs tracking-widest uppercase font-['Inter']">Sakura Drift Edition</p>
+  </div>
+  <nav class="flex-1 space-y-2">
+    <a class="flex items-center gap-4 text-zinc-500 hover:bg-zinc-800/50 transition-all py-3 pl-5 rounded-xl group" href="japan_trip_2026.html">
+      <span class="material-symbols-outlined group-hover:text-white">event_note</span><span>Itinerary</span>
+    </a>
+    <a class="flex items-center gap-4 text-zinc-500 hover:bg-zinc-800/50 transition-all py-3 pl-5 rounded-xl group" href="transportation.html">
+      <span class="material-symbols-outlined group-hover:text-white">train</span><span>Transportation</span>
+    </a>
+    <a class="flex items-center gap-4 text-zinc-500 hover:bg-zinc-800/50 transition-all py-3 pl-5 rounded-xl group" href="dining.html">
+      <span class="material-symbols-outlined group-hover:text-white">restaurant</span><span>Dining</span>
+    </a>
+    <a class="flex items-center gap-4 text-zinc-500 hover:bg-zinc-800/50 transition-all py-3 pl-5 rounded-xl group" href="#">
+      <span class="material-symbols-outlined group-hover:text-white">museum</span><span>Activities</span>
+    </a>
+    <a class="flex items-center gap-4 text-[#ff6b9d] font-bold border-l-4 border-[#ff6b9d] bg-[#ff6b9d]/5 py-3 pl-4 rounded-r-xl" href="lodging.html">
+      <span class="material-symbols-outlined" style="font-variation-settings:'FILL' 1;">hotel</span><span>Lodging</span>
+    </a>
+    <a class="flex items-center gap-4 text-zinc-500 hover:bg-zinc-800/50 transition-all py-3 pl-5 rounded-xl group" href="japan_trip_2026_map.html">
+      <span class="material-symbols-outlined group-hover:text-white">map</span><span>Map</span>
+    </a>
+    <a class="flex items-center gap-4 text-zinc-500 hover:bg-zinc-800/50 transition-all py-3 pl-5 rounded-xl group" href="budget.html">
+      <span class="material-symbols-outlined group-hover:text-white">payments</span><span>Budget</span>
+    </a>
+  </nav>
+  <button class="mt-auto bg-gradient-to-r from-[#ac2a5d] to-[#ff6b9d] text-white py-4 px-6 rounded-full flex items-center justify-center gap-2 font-bold transition-transform active:scale-95">
+    <span class="material-symbols-outlined">add</span><span>Add New Stop</span>
+  </button>
+</aside>
+
+<!-- Main Canvas -->
+<main class="flex-1 md:ml-72 bg-zinc-950 min-h-screen">
+<header class="flex justify-between items-center px-8 h-20 w-full fixed top-0 right-0 z-40 bg-zinc-950/70 backdrop-blur-xl md:pl-80">
+  <div class="text-2xl font-black text-zinc-100 italic">Zen Planner</div>
+  <div class="hidden lg:flex items-center gap-8">
+    <a class="text-zinc-400 hover:text-zinc-100 transition-colors" href="japan_trip_2026.html">Itinerary</a>
+    <a class="text-zinc-400 hover:text-zinc-100 transition-colors" href="japan_trip_2026_map.html">Map</a>
+    <a class="text-zinc-400 hover:text-zinc-100 transition-colors" href="budget.html">Budget</a>
+    <a class="text-zinc-400 hover:text-zinc-100 transition-colors" href="#">Explore</a>
+  </div>
+  <div class="flex items-center gap-4">
+    <button class="w-10 h-10 rounded-full flex items-center justify-center text-zinc-400 hover:bg-zinc-800/50"><span class="material-symbols-outlined">notifications</span></button>
+    <button class="w-10 h-10 rounded-full flex items-center justify-center text-zinc-400 hover:bg-zinc-800/50"><span class="material-symbols-outlined">settings</span></button>
+    <div class="w-10 h-10 rounded-full overflow-hidden border border-zinc-800 bg-zinc-800 flex items-center justify-center text-zinc-400 font-bold text-sm">ME</div>
+  </div>
+</header>
+
+<div class="pt-28 px-6 pb-24 md:px-12 max-w-7xl mx-auto">
+  <!-- Hero -->
+  <div class="relative w-full h-[500px] rounded-[2rem] overflow-hidden mb-16 editorial-shadow group bg-zinc-900">
+    <div class="absolute inset-0 flex items-center justify-center">
+      <div class="text-center">
+        <div class="text-[10rem] leading-none opacity-20">🏯</div>
+      </div>
+    </div>
+    <div class="absolute inset-0 bg-gradient-to-t from-zinc-950 via-zinc-950/20 to-transparent"></div>
+    <div class="absolute bottom-12 left-12 right-12 flex flex-col md:flex-row md:items-end justify-between gap-6">
+      <div>
+        <span class="bg-[#ff6b9d]/20 text-[#ff6b9d] px-4 py-1.5 rounded-full text-xs font-bold tracking-widest uppercase mb-4 inline-block font-['Inter']">Confirmed • Booking #882194</span>
+        <h2 class="text-5xl md:text-7xl font-extrabold font-['Manrope'] tracking-tighter text-white mb-2 italic">Hoshinoya Kyoto</h2>
+        <p class="text-zinc-300 flex items-center gap-2 text-lg">
+          <span class="material-symbols-outlined text-[#ff6b9d]">location_on</span>
+          Arashiyama District, Kyoto, Japan
+        </p>
+      </div>
+      <div class="flex gap-4">
+        <div class="bg-white/10 backdrop-blur-md px-6 py-4 rounded-2xl border border-white/5">
+          <p class="text-xs text-zinc-400 uppercase font-['Inter'] mb-1">Check-in</p>
+          <p class="text-xl font-bold">14 Oct, 15:00</p>
+        </div>
+        <div class="bg-white/10 backdrop-blur-md px-6 py-4 rounded-2xl border border-white/5">
+          <p class="text-xs text-zinc-400 uppercase font-['Inter'] mb-1">Check-out</p>
+          <p class="text-xl font-bold">18 Oct, 11:00</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bento Grid -->
+  <div class="grid grid-cols-1 md:grid-cols-12 gap-8 mb-16">
+    <!-- Gallery -->
+    <div class="md:col-span-8 grid grid-cols-2 gap-4">
+      <div class="aspect-square rounded-3xl overflow-hidden bg-zinc-900 flex items-center justify-center text-7xl">🛏️</div>
+      <div class="aspect-square rounded-3xl overflow-hidden bg-zinc-900 flex items-center justify-center text-7xl">🛁</div>
+      <div class="col-span-2 h-[400px] rounded-3xl overflow-hidden bg-zinc-900 relative flex items-center justify-center text-8xl">
+        🌊
+        <div class="absolute inset-0 flex items-center justify-center bg-black/40 opacity-0 hover:opacity-100 transition-opacity cursor-pointer">
+          <span class="text-white font-bold border-2 border-white px-8 py-3 rounded-full">View All 24 Photos</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Details Column -->
+    <div class="md:col-span-4 space-y-8">
+      <!-- Location -->
+      <div class="bg-zinc-900 rounded-3xl p-6 border border-zinc-800">
+        <div class="flex justify-between items-center mb-4">
+          <h3 class="text-lg font-bold">Location</h3>
+          <button class="text-[#ff6b9d] text-sm font-bold font-['Inter']">Get Directions</button>
+        </div>
+        <div class="h-48 w-full bg-zinc-800 rounded-2xl overflow-hidden flex items-center justify-center">
+          <div class="text-center">
+            <span class="material-symbols-outlined text-[#ff6b9d] text-4xl" style="font-variation-settings:'FILL' 1;">location_on</span>
+            <p class="text-zinc-500 text-xs mt-2 font-['Inter']">Arashiyama, Kyoto</p>
+          </div>
+        </div>
+        <p class="mt-4 text-zinc-400 text-sm leading-relaxed">11-2 Genjiyama, Arashiyama, Nishikyo-ku, Kyoto 616-0007, Japan</p>
+      </div>
+      <!-- Experience -->
+      <div class="bg-zinc-900 rounded-3xl p-6 border border-zinc-800">
+        <h3 class="text-lg font-bold mb-6">Experience</h3>
+        <div class="grid grid-cols-2 gap-4">
+          <div class="flex flex-col gap-2 p-4 bg-zinc-800/50 rounded-2xl">
+            <span class="material-symbols-outlined text-[#ff6b9d]">spa</span>
+            <span class="text-xs uppercase font-['Inter'] font-bold tracking-wider">Private Onsen</span>
+          </div>
+          <div class="flex flex-col gap-2 p-4 bg-zinc-800/50 rounded-2xl">
+            <span class="material-symbols-outlined text-[#ff6b9d]">room_service</span>
+            <span class="text-xs uppercase font-['Inter'] font-bold tracking-wider">Kaiseki Meal</span>
+          </div>
+          <div class="flex flex-col gap-2 p-4 bg-zinc-800/50 rounded-2xl">
+            <span class="material-symbols-outlined text-[#ff6b9d]">directions_boat</span>
+            <span class="text-xs uppercase font-['Inter'] font-bold tracking-wider">River Shuttle</span>
+          </div>
+          <div class="flex flex-col gap-2 p-4 bg-zinc-800/50 rounded-2xl">
+            <span class="material-symbols-outlined text-[#ff6b9d]">wifi</span>
+            <span class="text-xs uppercase font-['Inter'] font-bold tracking-wider">Free Wi-Fi</span>
+          </div>
+        </div>
+      </div>
+      <!-- Price -->
+      <div class="bg-[#ff6b9d]/10 rounded-3xl p-8 border border-[#ff6b9d]/20 relative overflow-hidden">
+        <div class="absolute -top-10 -right-10 w-40 h-40 bg-[#ff6b9d]/10 rounded-full blur-3xl"></div>
+        <p class="text-zinc-400 text-xs uppercase font-['Inter'] tracking-widest mb-2">Total Amount Paid</p>
+        <h4 class="text-4xl font-black text-white mb-6">¥320,400</h4>
+        <button class="w-full bg-zinc-100 text-zinc-950 font-bold py-4 rounded-2xl transition-all hover:bg-white active:scale-95">Download Invoice</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Day Timeline -->
+  <div class="relative pl-12">
+    <div class="absolute left-[23px] top-0 bottom-0 w-px bg-[#ff6b9d]/20"></div>
+    <div class="mb-12">
+      <div class="absolute left-0 w-12 h-12 bg-zinc-950 border-2 border-[#ff6b9d] rounded-full flex items-center justify-center">
+        <span class="w-2 h-2 bg-[#ff6b9d] rounded-full"></span>
+      </div>
+      <h3 class="text-2xl font-bold mb-4">Day 1: Arrival &amp; Rejuvenation</h3>
+      <p class="text-zinc-400 max-w-2xl leading-relaxed mb-6">The resort is only accessible via boat. Meet the personal concierge at the Arashiyama boat dock for your 15-minute river journey to the property.</p>
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div class="p-6 bg-zinc-900 rounded-3xl border border-zinc-800 flex items-center gap-4">
+          <div class="w-12 h-12 bg-zinc-800 rounded-2xl flex items-center justify-center text-[#ff6b9d]">
+            <span class="material-symbols-outlined">directions_boat</span>
+          </div>
+          <div><p class="text-sm font-bold">River Transfer</p><p class="text-xs text-zinc-500">14:45 • Departure</p></div>
+        </div>
+        <div class="p-6 bg-zinc-900 rounded-3xl border border-zinc-800 flex items-center gap-4">
+          <div class="w-12 h-12 bg-zinc-800 rounded-2xl flex items-center justify-center text-[#ff6b9d]">
+            <span class="material-symbols-outlined">emoji_food_beverage</span>
+          </div>
+          <div><p class="text-sm font-bold">Welcome Tea</p><p class="text-xs text-zinc-500">15:30 • Library Lounge</p></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</main>
+</div>
+</body></html>
