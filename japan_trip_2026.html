@@ -187,6 +187,19 @@
   html.light .timeline-card{background:#ffffff!important}
   html.light .timeline-card:hover{background:#f0f0f0!important}
   html.light .timeline-card.active-card{background:#fff5f8!important}
+  html.light .bg-surface-container-low{background:#f1f1f3!important}
+  html.light .bg-surface-container{background:#e8e8eb!important}
+  html.light .bg-surface-container-high{background:#e1e1e4!important}
+  html.light .bg-surface-container-highest{background:#d8d8db!important}
+  html.light .bg-zinc-800{background:#e4e4e7!important}
+  html.light .bg-zinc-800\/60{background:rgba(228,228,231,0.7)!important}
+  html.light .bg-zinc-800\/40{background:rgba(228,228,231,0.5)!important}
+  html.light .text-zinc-700{color:#3f3f46!important}
+  html.light ::-webkit-scrollbar-track{background:#f4f4f5!important}
+  html.light ::-webkit-scrollbar-thumb{background:rgba(0,0,0,0.18)!important}
+  html.light .border-white\/10{border-color:rgba(0,0,0,0.08)!important}
+  html.light .bg-black\/60{background:rgba(0,0,0,0.5)!important}
+  html.light nav.md\:hidden{background:rgba(244,244,245,0.95)!important;border-color:rgba(0,0,0,0.08)!important}
 </style>
 </head>
 <body class="text-on-surface flex overflow-hidden h-screen bg-background">
@@ -622,6 +635,11 @@ function initMap(){
     zoomControl:true,mapTypeControl:false,streetViewControl:false,fullscreenControl:false,
     gestureHandling:'greedy',
   });
+  // Apply correct map style based on current theme
+  const isLight = document.documentElement.classList.contains('light');
+  if(isLight) map.setOptions({styles:[]});
+  window.setMapTheme = (light) => map.setOptions({styles: light ? [] : DARK_MAP_STYLES});
+
   drawMap(currentFilter);
   initPlaceSearch();
   document.querySelectorAll('.day-tab').forEach(tab=>{
@@ -1049,12 +1067,13 @@ initAllMediaSlots();
   const K = 'japan2026_theme';
   function applyTheme(t) {
     document.documentElement.classList.toggle('light', t === 'light');
+    if(window.setMapTheme) window.setMapTheme(t === 'light');
     const btn = document.getElementById('theme-toggle');
     if (btn) {
       const ico = btn.querySelector('.material-symbols-outlined');
       if (ico) ico.textContent = t === 'light' ? 'dark_mode' : 'light_mode';
       if (t === 'light') {
-        btn.onmouseout = null; // disable onmouseout hover reset in light mode
+        btn.onmouseout = null;
       }
     }
   }
