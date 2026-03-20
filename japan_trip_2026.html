@@ -611,6 +611,7 @@ const DARK_MAP_STYLES=[
 ];
 
 let map, openInfoWindow=null;
+window.closeInfoWindow=()=>{if(openInfoWindow){openInfoWindow.close();openInfoWindow=null;}};
 
 let placesService=null;
 
@@ -650,7 +651,10 @@ function buildPlaceCard(d, col, place){
   const timeHtml=d.start?`<div class="place-card-row">⏱️ ${d.start}${d.end?' – '+d.end:''}</div>`:'';
   const routeHtml=d.from&&d.to&&d.from!==d.to?`<div class="place-card-row">📍 ${d.from} → ${d.to}</div>`:'';
   return `<div class="place-card">
-    ${photoHtml}
+    <div style="position:relative">
+      ${photoHtml}
+      <button onclick="window.closeInfoWindow()" style="position:absolute;top:8px;right:8px;width:28px;height:28px;border-radius:50%;background:rgba(0,0,0,0.55);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;color:#fff;font-size:14px;line-height:1;backdrop-filter:blur(4px)">✕</button>
+    </div>
     <div class="place-card-body">
       <div class="place-card-day" style="color:${col}">Day ${d.day} · ${d.city}</div>
       <div class="place-card-name">${d.detail}</div>
