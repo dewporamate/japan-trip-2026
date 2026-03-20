@@ -101,50 +101,23 @@
   .modal-sep { height:1px; background:rgba(255,255,255,.06); margin:14px 0; }
 
   /* ── PLACE SEARCH ── */
-  .place-search-wrap{position:relative;margin-bottom:14px}
-  .place-search-row{display:flex;gap:8px;align-items:center}
-  .place-search-row input{
-    flex:1;background:rgba(255,255,255,.05);border:none;
-    border-radius:10px;padding:9px 12px;
-    color:#f1f1f1;font-size:.82rem;
-    font-family:'Public Sans','Noto Sans Thai',sans-serif;
-    transition:background .2s,box-shadow .2s;outline:none;
+  /* ── Google Places Autocomplete dropdown dark theme ── */
+  .pac-container{
+    background:#1c1c1f!important;border:1px solid rgba(255,255,255,.1)!important;
+    border-radius:12px!important;box-shadow:0 12px 40px rgba(0,0,0,.7)!important;
+    font-family:'Public Sans','Noto Sans Thai',sans-serif!important;
+    z-index:3000!important;margin-top:4px!important;overflow:hidden!important;
   }
-  .place-search-row input:focus{background:rgba(255,255,255,.09);box-shadow:0 0 0 2px rgba(255,107,157,.35)}
-  .place-search-row input::placeholder{color:#52525b}
-  .btn-search{
-    padding:9px 14px;border-radius:10px;border:none;cursor:pointer;
-    background:rgba(255,107,157,.15);color:#ff6b9d;
-    font-size:.78rem;font-weight:700;font-family:'Inter',sans-serif;
-    white-space:nowrap;transition:all .2s;flex-shrink:0;
+  .pac-item{
+    color:#a1a1aa!important;border-top:1px solid rgba(255,255,255,.05)!important;
+    padding:9px 14px!important;cursor:pointer!important;line-height:1.4!important;
   }
-  .btn-search:hover{background:rgba(255,107,157,.3)}
-  .btn-search:disabled{opacity:.4;cursor:default}
-  .place-label{
-    font-size:.62rem;color:#52525b;text-transform:uppercase;
-    letter-spacing:.08em;font-weight:700;font-family:'Inter',sans-serif;
-    margin-bottom:5px;display:block;
-  }
-  .place-results{
-    position:absolute;top:calc(100% + 4px);left:0;right:0;
-    background:#1c1c1f;border-radius:12px;z-index:9999;
-    box-shadow:0 8px 32px rgba(0,0,0,.6);
-    max-height:220px;overflow-y:auto;
-    border:1px solid rgba(255,255,255,.08);
-  }
-  .place-results:empty{display:none}
-  .place-result-item{
-    padding:10px 14px;cursor:pointer;
-    border-bottom:1px solid rgba(255,255,255,.05);transition:background .15s;
-  }
-  .place-result-item:last-child{border-bottom:none}
-  .place-result-item:hover{background:rgba(255,107,157,.12)}
-  .place-result-name{font-size:.8rem;color:#f1f1f1;font-weight:600}
-  .place-result-addr{font-size:.7rem;color:#71717a;margin-top:2px}
-  .place-result-coords{font-size:.65rem;color:#52525b;margin-top:1px;font-family:'Inter',monospace}
-  .place-status{font-size:.7rem;color:#71717a;padding:4px 0;margin-top:4px;font-family:'Inter',sans-serif;min-height:18px}
-  .place-status.ok{color:#4ade80}
-  .place-status.err{color:#f87171}
+  .pac-item:first-child{border-top:none!important;}
+  .pac-item:hover,.pac-item-selected{background:rgba(255,107,157,.12)!important;}
+  .pac-item-query{color:#f1f1f1!important;font-size:.82rem!important;}
+  .pac-matched{color:#ff6b9d!important;font-weight:700!important;}
+  .pac-icon{filter:invert(1) opacity(.4)!important;}
+  .pac-logo:after{display:none!important;}
   .modal-actions { display:flex; gap:10px; justify-content:flex-end; margin-top:20px; }
   .btn { padding:10px 22px; border-radius:12px; border:none; cursor:pointer; font-size:.8rem; font-family:'Inter',sans-serif; font-weight:700; transition:all .2s; }
   .btn-primary { background:linear-gradient(135deg,#ac2a5d,#ff6b9d); color:#fff; }
@@ -409,8 +382,8 @@
         <input type="text" id="f-detail" placeholder="ชื่อกิจกรรม...">
       </div>
       <div class="form-group">
-        <label>เมือง / ย่าน</label>
-        <input type="text" id="f-city" placeholder="เช่น Tokyo, Ueno">
+        <label>เมือง / ย่าน <span style="color:#52525b;font-weight:400;font-size:.65rem">(พิมพ์เพื่อค้นหา)</span></label>
+        <input type="text" id="f-city" placeholder="เช่น Sensoji Temple, Shibuya…" autocomplete="off">
       </div>
       <div class="form-group">
         <label>เวลาเริ่ม</label>
@@ -448,18 +421,6 @@
       ⚠️ ต้องจองล่วงหน้า
     </label>
     <div class="modal-sep"></div>
-
-    <!-- PLACE SEARCH → auto-fill lat/lng -->
-    <div class="place-search-wrap">
-      <span class="place-label">🔍 ค้นหาสถานที่ (กรอกชื่อแล้วกดค้นหา)</span>
-      <div class="place-search-row">
-        <input type="text" id="f-place-search" placeholder="เช่น Sensoji Temple, Shibuya Crossing…">
-        <button class="btn-search" id="btn-place-search">ค้นหา</button>
-      </div>
-      <div class="place-results" id="place-results"></div>
-      <div class="place-status" id="place-status"></div>
-    </div>
-
     <div class="modal-grid">
       <div class="form-group">
         <label>Latitude</label>
@@ -624,6 +585,7 @@ function initMap(){
     gestureHandling:'greedy',
   });
   drawMap(currentFilter);
+  initCityAutocomplete();
   document.querySelectorAll('.day-tab').forEach(tab=>{
     tab.addEventListener('click',function(){
       const views={0:[36,137,5],1:[36,137,5],2:[35.52,138.78,11],3:[35.665,139.700,13],4:[35.31,139.52,12],5:[36,137,5]};
@@ -938,88 +900,22 @@ function initAllMediaSlots(){
   });
 }
 
-/* ══════════════════════════════════════════
-   PLACE SEARCH  (Nominatim / OpenStreetMap)
-══════════════════════════════════════════ */
-(function(){
-  const searchInput = document.getElementById('f-place-search');
-  const searchBtn   = document.getElementById('btn-place-search');
-  const resultsList = document.getElementById('place-results');
-  const statusEl    = document.getElementById('place-status');
-
-  function setStatus(msg, type=''){
-    statusEl.textContent = msg;
-    statusEl.className = 'place-status' + (type ? ' '+type : '');
-  }
-
-  function clearResults(){ resultsList.innerHTML = ''; }
-
-  function pickPlace(name, lat, lng){
-    document.getElementById('f-lat').value = lat.toFixed(6);
-    document.getElementById('f-lng').value = lng.toFixed(6);
-    setStatus('✅ เลือกแล้ว: ' + name, 'ok');
-    clearResults();
-    searchInput.value = name;
-  }
-
-  function renderResults(places){
-    clearResults();
-    if(!places.length){
-      setStatus('ไม่พบสถานที่', 'err');
-      return;
-    }
-    setStatus('พบ ' + places.length + ' ผลลัพธ์ — เลือกสถานที่ที่ต้องการ');
-    places.forEach(p => {
-      const name = p.name;
-      const addr = p.formatted_address;
-      const lat  = p.geometry.location.lat();
-      const lng  = p.geometry.location.lng();
-      const div  = document.createElement('div');
-      div.className = 'place-result-item';
-      div.innerHTML = `
-        <div class="place-result-name">${name}</div>
-        <div class="place-result-addr">${addr.substring(0,70)}${addr.length>70?'…':''}</div>
-        <div class="place-result-coords">📍 ${lat.toFixed(5)}, ${lng.toFixed(5)}</div>
-      `;
-      div.addEventListener('click', () => pickPlace(name, lat, lng));
-      resultsList.appendChild(div);
-    });
-  }
-
-  function doSearch(){
-    const q = searchInput.value.trim();
-    if(!q) return;
-    searchBtn.disabled = true;
-    setStatus('⏳ กำลังค้นหา…');
-    clearResults();
-    const service = new google.maps.places.PlacesService(document.createElement('div'));
-    service.textSearch({query: q}, (results, status) => {
-      searchBtn.disabled = false;
-      if(status === google.maps.places.PlacesServiceStatus.OK && results.length){
-        renderResults(results.slice(0,6));
-      } else {
-        setStatus('ไม่พบสถานที่', 'err');
-      }
-    });
-  }
-
-  searchBtn.addEventListener('click', doSearch);
-  searchInput.addEventListener('keydown', e => { if(e.key === 'Enter'){ e.preventDefault(); doSearch(); } });
-  document.addEventListener('click', e => { if(!e.target.closest('.place-search-wrap')) clearResults(); });
-
-  // clear search field เมื่อเปิด modal ใหม่
-  requestAnimationFrame(() => {
-    const origOpen = window.openModal;
-    if(typeof origOpen === 'function'){
-      window.openModal = function(...args){
-        origOpen.apply(this, args);
-        searchInput.value = '';
-        clearResults();
-        setStatus('');
-      };
+/* ── PLACE AUTOCOMPLETE — set up inside initMap after API is ready ── */
+function initCityAutocomplete(){
+  const cityInput = document.getElementById('f-city');
+  const ac = new google.maps.places.Autocomplete(cityInput, {
+    fields: ['geometry', 'name'],
+  });
+  ac.addListener('place_changed', () => {
+    const place = ac.getPlace();
+    if(place.geometry && place.geometry.location){
+      document.getElementById('f-lat').value = place.geometry.location.lat().toFixed(6);
+      document.getElementById('f-lng').value = place.geometry.location.lng().toFixed(6);
     }
   });
-})();
+  // prevent form submit on Enter inside autocomplete
+  cityInput.addEventListener('keydown', e => { if(e.key === 'Enter') e.preventDefault(); });
+}
 
 /* ── REFRESH ── */
 function refresh(){
