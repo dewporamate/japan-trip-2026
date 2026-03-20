@@ -67,57 +67,67 @@
   html.light .bg-white\/8{background:rgba(0,0,0,0.06)!important}
   html.light .bg-zinc-700{background:#d4d4d8!important}
   html.light .text-zinc-300{color:#52525b!important}
+  /* ── Sidebar collapse ── */
+  #sidebar { transition:width 0.3s cubic-bezier(0.4,0,0.2,1); }
+  .sidebar-collapsed { width:76px !important; }
+  .sidebar-collapsed .nav-text, .sidebar-collapsed .logo-text, .sidebar-collapsed .btn-text { display:none; }
+  .sidebar-collapsed .nav-item { justify-content:center; padding-left:0; border-left:none; }
+  .sidebar-collapsed .nav-item-active { border-left:none; }
+  .sidebar-collapsed .add-btn { width:48px; height:48px; padding:0; border-radius:9999px; margin:0 auto; }
 </style>
 </head>
 <body class="text-on-surface flex h-screen overflow-hidden bg-[#09090b]">
 
 <!-- Sidebar -->
-<aside class="hidden md:flex flex-col h-screen py-10 px-5 bg-[#09090b] w-72 shrink-0 border-r border-white/5 sticky top-0" id="sidebar">
+<aside class="hidden md:flex flex-col h-screen py-10 px-5 bg-[#09090b] w-72 shrink-0 border-r border-white/5 sticky top-0 relative" id="sidebar">
+  <button class="absolute -right-3 top-24 bg-[#1a1a1a] border border-white/10 rounded-full w-6 h-6 flex items-center justify-center text-zinc-500 hover:text-primary transition-colors z-50" onclick="toggleSidebar()">
+    <span class="material-symbols-outlined" style="font-size:14px" id="toggleIcon">chevron_left</span>
+  </button>
   <!-- Logo -->
   <div class="mb-10 px-2 flex items-center gap-3">
     <div class="w-10 h-10 rounded-xl bg-primary/15 flex items-center justify-center shrink-0 border border-primary/25">
       <span style="font-size:1.2rem">🌸</span>
     </div>
-    <div class="min-w-0">
+    <div class="logo-text min-w-0">
       <div class="text-base font-black font-['Manrope'] text-primary italic tracking-tight">Japan 2026</div>
       <div class="text-[9px] text-zinc-600 font-['Inter'] uppercase tracking-widest font-bold">Friend Group Trip</div>
     </div>
   </div>
   <!-- Nav -->
   <nav class="flex-1 space-y-1">
-    <a class="group flex items-center text-zinc-500 pl-5 py-2.5 hover:text-on-surface hover:bg-white/5 rounded-xl transition-all duration-200" href="japan_trip_2026.html">
+    <a class="nav-item group flex items-center text-zinc-500 pl-5 py-2.5 hover:text-on-surface hover:bg-white/5 rounded-xl transition-all duration-200" href="japan_trip_2026.html">
       <span class="material-symbols-outlined mr-3 shrink-0" style="font-size:20px">schedule</span>
-      <span class="text-sm font-['Public_Sans']">Itinerary</span>
+      <span class="nav-text text-sm font-['Public_Sans']">Itinerary</span>
     </a>
-    <a class="group flex items-center text-zinc-500 pl-5 py-2.5 hover:text-on-surface hover:bg-white/5 rounded-xl transition-all duration-200" href="transportation.html">
+    <a class="nav-item group flex items-center text-zinc-500 pl-5 py-2.5 hover:text-on-surface hover:bg-white/5 rounded-xl transition-all duration-200" href="transportation.html">
       <span class="material-symbols-outlined mr-3 shrink-0" style="font-size:20px">train</span>
-      <span class="text-sm font-['Public_Sans']">Transportation</span>
+      <span class="nav-text text-sm font-['Public_Sans']">Transportation</span>
     </a>
-    <a class="group flex items-center text-zinc-500 pl-5 py-2.5 hover:text-on-surface hover:bg-white/5 rounded-xl transition-all duration-200" href="dining.html">
+    <a class="nav-item group flex items-center text-zinc-500 pl-5 py-2.5 hover:text-on-surface hover:bg-white/5 rounded-xl transition-all duration-200" href="dining.html">
       <span class="material-symbols-outlined mr-3 shrink-0" style="font-size:20px">restaurant</span>
-      <span class="text-sm font-['Public_Sans']">Dining</span>
+      <span class="nav-text text-sm font-['Public_Sans']">Dining</span>
     </a>
-    <a class="group flex items-center text-zinc-500 pl-5 py-2.5 hover:text-on-surface hover:bg-white/5 rounded-xl transition-all duration-200" href="#">
+    <a class="nav-item group flex items-center text-zinc-500 pl-5 py-2.5 hover:text-on-surface hover:bg-white/5 rounded-xl transition-all duration-200" href="#">
       <span class="material-symbols-outlined mr-3 shrink-0" style="font-size:20px">museum</span>
-      <span class="text-sm font-['Public_Sans']">Activities</span>
+      <span class="nav-text text-sm font-['Public_Sans']">Activities</span>
     </a>
-    <a class="group flex items-center text-primary font-bold border-l-4 border-primary pl-4 py-2.5 rounded-r-xl bg-primary/5 transition-all duration-200" href="lodging.html">
+    <a class="nav-item nav-item-active group flex items-center text-primary font-bold border-l-4 border-primary pl-4 py-2.5 rounded-r-xl bg-primary/5 transition-all duration-200" href="lodging.html">
       <span class="material-symbols-outlined mr-3 shrink-0" style="font-size:20px">hotel</span>
-      <span class="text-sm font-['Public_Sans']">Lodging</span>
+      <span class="nav-text text-sm font-['Public_Sans']">Lodging</span>
     </a>
-    <a class="group flex items-center text-zinc-500 pl-5 py-2.5 hover:text-on-surface hover:bg-white/5 rounded-xl transition-all duration-200" href="japan_trip_2026_map.html">
+    <a class="nav-item group flex items-center text-zinc-500 pl-5 py-2.5 hover:text-on-surface hover:bg-white/5 rounded-xl transition-all duration-200" href="japan_trip_2026_map.html">
       <span class="material-symbols-outlined mr-3 shrink-0" style="font-size:20px">map</span>
-      <span class="text-sm font-['Public_Sans']">Map</span>
+      <span class="nav-text text-sm font-['Public_Sans']">Map</span>
     </a>
-    <a class="group flex items-center text-zinc-500 pl-5 py-2.5 hover:text-on-surface hover:bg-white/5 rounded-xl transition-all duration-200" href="budget.html">
+    <a class="nav-item group flex items-center text-zinc-500 pl-5 py-2.5 hover:text-on-surface hover:bg-white/5 rounded-xl transition-all duration-200" href="budget.html">
       <span class="material-symbols-outlined mr-3 shrink-0" style="font-size:20px">payments</span>
-      <span class="text-sm font-['Public_Sans']">Budget</span>
+      <span class="nav-text text-sm font-['Public_Sans']">Budget</span>
     </a>
   </nav>
   <!-- CTA -->
-  <button class="mt-auto bg-primary text-white rounded-full px-5 py-3 font-bold font-['Public_Sans'] text-sm hover:shadow-[0_0_24px_rgba(255,107,157,0.35)] transition-all active:scale-95 flex items-center justify-center gap-2">
+  <button class="add-btn mt-auto bg-primary text-white rounded-full px-5 py-3 font-bold font-['Public_Sans'] text-sm hover:shadow-[0_0_24px_rgba(255,107,157,0.35)] transition-all active:scale-95 flex items-center justify-center gap-2">
     <span class="material-symbols-outlined" style="font-size:20px">add</span>
-    Add New Stop
+    <span class="btn-text">Add New Stop</span>
   </button>
 </aside>
 
@@ -312,6 +322,25 @@
     applyTheme(next);
   };
   applyTheme(localStorage.getItem(K) || 'dark');
+})();
+</script>
+<script>
+(function(){
+  const SK = 'japan2026_sidebar';
+  function toggleSidebar(){
+    const sidebar = document.getElementById('sidebar');
+    const icon = document.getElementById('toggleIcon');
+    const collapsed = sidebar.classList.toggle('sidebar-collapsed');
+    icon.textContent = collapsed ? 'chevron_right' : 'chevron_left';
+    localStorage.setItem(SK, collapsed ? '1' : '0');
+  }
+  window.toggleSidebar = toggleSidebar;
+  if(localStorage.getItem(SK) === '1'){
+    const sidebar = document.getElementById('sidebar');
+    const icon = document.getElementById('toggleIcon');
+    if(sidebar){ sidebar.classList.add('sidebar-collapsed'); }
+    if(icon){ icon.textContent = 'chevron_right'; }
+  }
 })();
 </script>
 </body>

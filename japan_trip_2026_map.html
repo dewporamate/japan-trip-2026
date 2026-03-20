@@ -297,6 +297,60 @@
     box-shadow:0 0 0 2px rgba(172,42,93,0.45);
   }
   .modal-sep{height:1px;background:rgba(255,255,255,0.06);margin:14px 0}
+
+  /* ── PLACE SEARCH ── */
+  .place-search-wrap{position:relative;margin-bottom:14px}
+  .place-search-row{display:flex;gap:8px;align-items:center}
+  .place-search-row input{
+    flex:1;background:rgba(255,255,255,0.05);border:none;
+    border-radius:10px;padding:9px 12px;
+    color:#f4f4f5;font-size:0.82rem;
+    font-family:'Public Sans','Noto Sans Thai',sans-serif;
+    transition:background .2s,box-shadow .2s;outline:none;
+  }
+  .place-search-row input:focus{
+    background:rgba(255,255,255,0.09);
+    box-shadow:0 0 0 2px rgba(172,42,93,0.35);
+  }
+  .place-search-row input::placeholder{color:#52525b}
+  .btn-search{
+    padding:9px 14px;border-radius:10px;border:none;cursor:pointer;
+    background:rgba(172,42,93,0.2);color:#ff6b9d;
+    font-size:0.78rem;font-weight:700;font-family:'Inter',sans-serif;
+    white-space:nowrap;transition:all .2s;flex-shrink:0;
+  }
+  .btn-search:hover{background:rgba(172,42,93,0.35)}
+  .btn-search:disabled{opacity:.4;cursor:default}
+  .place-label{
+    font-size:0.62rem;color:#52525b;
+    text-transform:uppercase;letter-spacing:0.08em;
+    font-weight:700;font-family:'Inter',sans-serif;
+    margin-bottom:5px;display:block;
+  }
+  .place-results{
+    position:absolute;top:calc(100% + 4px);left:0;right:0;
+    background:#1c1c1f;border-radius:12px;z-index:9999;
+    box-shadow:0 8px 32px rgba(0,0,0,0.6);
+    max-height:220px;overflow-y:auto;
+    border:1px solid rgba(255,255,255,0.08);
+  }
+  .place-results:empty{display:none}
+  .place-result-item{
+    padding:10px 14px;cursor:pointer;
+    border-bottom:1px solid rgba(255,255,255,0.05);
+    transition:background .15s;
+  }
+  .place-result-item:last-child{border-bottom:none}
+  .place-result-item:hover{background:rgba(172,42,93,0.15)}
+  .place-result-name{font-size:0.8rem;color:#f4f4f5;font-weight:600}
+  .place-result-addr{font-size:0.7rem;color:#71717a;margin-top:2px}
+  .place-result-coords{font-size:0.65rem;color:#52525b;margin-top:1px;font-family:'Inter',monospace}
+  .place-status{
+    font-size:0.7rem;color:#71717a;padding:4px 0;margin-top:4px;
+    font-family:'Inter',sans-serif;min-height:18px;
+  }
+  .place-status.ok{color:#4ade80}
+  .place-status.err{color:#f87171}
   .modal-actions{display:flex;gap:10px;justify-content:flex-end;margin-top:20px}
   .btn{
     padding:10px 22px;border-radius:12px;border:none;cursor:pointer;
@@ -342,7 +396,7 @@
 <!-- HEADER -->
 <div id="header">
   <div style="display:flex;align-items:center;gap:16px">
-    <a href="japan_trip_2026.html" style="display:flex;align-items:center;justify-content:center;width:34px;height:34px;border-radius:10px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);color:#a1a1aa;text-decoration:none;flex-shrink:0;transition:background 0.2s,color 0.2s" title="Back to Itinerary" onmouseover="this.style.background='rgba(255,107,157,0.12)';this.style.color='#ff6b9d'" onmouseout="this.style.background='rgba(255,255,255,0.05)';this.style.color='#a1a1aa'">
+    <a id="back-btn" href="japan_trip_2026.html" style="display:flex;align-items:center;justify-content:center;width:34px;height:34px;border-radius:10px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);color:#a1a1aa;text-decoration:none;flex-shrink:0;transition:background 0.2s,color 0.2s" title="Back to Itinerary" onmouseover="this.style.background='rgba(255,107,157,0.12)';this.style.color='#ff6b9d'" onmouseout="this.style.background='rgba(255,255,255,0.05)';this.style.color='#a1a1aa'">
       <span class="material-symbols-outlined" style="font-size:18px;vertical-align:middle">arrow_back</span>
     </a>
     <h1>🌸 Japan 2026</h1>
@@ -440,6 +494,17 @@
     </label>
 
     <div class="modal-sep"></div>
+
+    <!-- PLACE SEARCH → auto-fill lat/lng -->
+    <div class="place-search-wrap">
+      <span class="place-label">🔍 ค้นหาสถานที่ (กรอกชื่อแล้วกดค้นหา)</span>
+      <div class="place-search-row">
+        <input type="text" id="f-place-search" placeholder="เช่น Sensoji Temple, Shibuya Crossing…">
+        <button class="btn-search" id="btn-place-search">ค้นหา</button>
+      </div>
+      <div class="place-results" id="place-results"></div>
+      <div class="place-status" id="place-status"></div>
+    </div>
 
     <!-- LAT / LNG for map pin -->
     <div class="modal-grid">
@@ -819,6 +884,99 @@ function renderCards(container, items, col){
   });
 }
 
+/* ══════════════════════════════════════════
+   PLACE SEARCH  (Nominatim / OpenStreetMap)
+══════════════════════════════════════════ */
+(function(){
+  const searchInput = document.getElementById('f-place-search');
+  const searchBtn   = document.getElementById('btn-place-search');
+  const resultsList = document.getElementById('place-results');
+  const statusEl    = document.getElementById('place-status');
+
+  function setStatus(msg, type=''){
+    statusEl.textContent = msg;
+    statusEl.className = 'place-status' + (type ? ' '+type : '');
+  }
+
+  function clearResults(){ resultsList.innerHTML = ''; }
+
+  function pickPlace(item){
+    document.getElementById('f-lat').value = parseFloat(item.lat).toFixed(6);
+    document.getElementById('f-lng').value = parseFloat(item.lon).toFixed(6);
+    const displayName = item.name || item.display_name.split(',')[0];
+    setStatus('✅ เลือกแล้ว: ' + displayName, 'ok');
+    clearResults();
+    searchInput.value = displayName;
+  }
+
+  function renderResults(places){
+    clearResults();
+    if(!places.length){
+      setStatus('ไม่พบสถานที่ ลองพิมพ์เป็นภาษาอังกฤษ', 'err');
+      return;
+    }
+    setStatus('พบ ' + places.length + ' ผลลัพธ์ — เลือกสถานที่ที่ต้องการ');
+    places.forEach(p => {
+      const name  = p.name || p.display_name.split(',')[0];
+      const addr  = p.display_name;
+      const lat   = parseFloat(p.lat).toFixed(5);
+      const lon   = parseFloat(p.lon).toFixed(5);
+      const div   = document.createElement('div');
+      div.className = 'place-result-item';
+      div.innerHTML = `
+        <div class="place-result-name">${name}</div>
+        <div class="place-result-addr">${addr.substring(0, 70)}${addr.length>70?'…':''}</div>
+        <div class="place-result-coords">📍 ${lat}, ${lon}</div>
+      `;
+      div.addEventListener('click', () => pickPlace(p));
+      resultsList.appendChild(div);
+    });
+  }
+
+  async function doSearch(){
+    const q = searchInput.value.trim();
+    if(!q) return;
+    searchBtn.disabled = true;
+    setStatus('⏳ กำลังค้นหา…');
+    clearResults();
+    try {
+      const url = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(q)}&limit=6&accept-language=th,en&countrycodes=jp,th`;
+      const res  = await fetch(url, { headers: { 'Accept-Language': 'th,en' } });
+      if(!res.ok) throw new Error('HTTP ' + res.status);
+      const data = await res.json();
+      renderResults(data);
+    } catch(e) {
+      setStatus('เกิดข้อผิดพลาด: ' + e.message, 'err');
+    } finally {
+      searchBtn.disabled = false;
+    }
+  }
+
+  searchBtn.addEventListener('click', doSearch);
+  searchInput.addEventListener('keydown', e => { if(e.key === 'Enter'){ e.preventDefault(); doSearch(); } });
+
+  // ปิด dropdown เมื่อคลิกข้างนอก
+  document.addEventListener('click', e => {
+    if(!e.target.closest('.place-search-wrap')) clearResults();
+  });
+
+  // Clear search field เมื่อเปิด modal ใหม่
+  const origOpen = window._origOpenModal;
+  const _patchModal = () => {
+    const origFn = window.openModal;
+    if(typeof origFn === 'function'){
+      window.openModal = function(...args){
+        origFn.apply(this, args);
+        searchInput.value = '';
+        clearResults();
+        setStatus('');
+      };
+    }
+  };
+  // patch หลัง script โหลดเสร็จ
+  requestAnimationFrame(_patchModal);
+})();
+
 /* ── REFRESH (re-draw everything) ── */
 function refresh(){
   drawMap(currentFilter);
@@ -847,6 +1005,22 @@ save();
 
 // ── INIT ──
 refresh();
+
+// ── ถ้าอยู่ใน iframe ให้ back button ส่ง postMessage แทน navigate ──
+(function(){
+  const backBtn = document.getElementById('back-btn');
+  if(!backBtn) return;
+  try {
+    const inIframe = window.self !== window.top;
+    if(inIframe){
+      backBtn.removeAttribute('href');
+      backBtn.addEventListener('click', e => {
+        e.preventDefault();
+        window.parent.postMessage({ action: 'closeMapView' }, '*');
+      });
+    }
+  } catch(_){}
+})();
 </script>
 
 <script>
