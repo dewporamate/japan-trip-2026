@@ -73,10 +73,29 @@
   .gm-style .gm-style-iw-t::after{background:linear-gradient(45deg,#1e1e1e 50%,rgba(30,30,30,0) 51%)!important;box-shadow:-2px 2px 4px rgba(0,0,0,.3)!important;}
   .gm-style .gm-style-iw-chr{display:none!important;}
   button.gm-ui-hover-effect{filter:invert(1)!important;}
-  .gm-popup{padding:12px 16px;font-family:'Public Sans','Noto Sans Thai',sans-serif;font-size:.78rem;line-height:1.6;color:#f1f1f1;min-width:190px;max-width:270px;}
-  .popup-title { font-weight:800; font-size:.88rem; margin-bottom:4px; font-family:'Manrope',sans-serif; }
-  .popup-row { color:#71717a; font-size:.72rem; }
-  .popup-cost { color:#ff6b9d; font-weight:700; margin-top:4px; font-size:.7rem; text-transform:uppercase; letter-spacing:.05em; }
+  /* ── Place Card Popup ── */
+  .gm-style .gm-style-iw-d { overflow:hidden!important; }
+  .gm-style .gm-style-iw { padding:0!important; border-radius:16px!important; box-shadow:0 8px 30px rgba(0,0,0,.25)!important; }
+  .place-card { font-family:'Public Sans','Noto Sans Thai',sans-serif; width:280px; background:#fff; border-radius:16px; overflow:hidden; }
+  .place-card-photo { width:100%; height:130px; object-fit:cover; display:block; background:#e8e8e8; }
+  .place-card-photo-placeholder { width:100%; height:130px; background:linear-gradient(135deg,#f0f0f0,#e0e0e0); display:flex; align-items:center; justify-content:center; font-size:2.5rem; }
+  .place-card-body { padding:12px 14px 14px; }
+  .place-card-day { font-size:.6rem; font-weight:800; letter-spacing:.08em; text-transform:uppercase; margin-bottom:4px; font-family:'Inter',sans-serif; }
+  .place-card-name { font-size:.9rem; font-weight:800; color:#1a1a1a; font-family:'Manrope',sans-serif; line-height:1.3; margin-bottom:6px; }
+  .place-card-meta { display:flex; align-items:center; gap:6px; flex-wrap:wrap; margin-bottom:6px; }
+  .place-card-rating { display:flex; align-items:center; gap:3px; font-size:.72rem; color:#1a1a1a; font-weight:700; }
+  .place-card-stars { color:#f59e0b; font-size:.65rem; }
+  .place-card-reviews { color:#71717a; font-size:.65rem; }
+  .place-card-price { font-size:.72rem; color:#1a1a1a; font-weight:600; }
+  .place-card-open { font-size:.68rem; font-weight:700; padding:2px 7px; border-radius:999px; }
+  .place-card-open.open { background:#dcfce7; color:#16a34a; }
+  .place-card-open.closed { background:#fee2e2; color:#dc2626; }
+  .place-card-row { font-size:.68rem; color:#52525b; margin-bottom:3px; display:flex; align-items:flex-start; gap:5px; }
+  .place-card-footer { display:flex; align-items:center; justify-content:space-between; margin-top:10px; padding-top:10px; border-top:1px solid #f0f0f0; }
+  .place-card-gmaps { display:flex; align-items:center; gap:4px; color:#4285f4; font-size:.68rem; font-weight:700; text-decoration:none; }
+  .place-card-gmaps img { width:14px; height:14px; }
+  .place-card-loading { padding:24px; text-align:center; color:#71717a; font-size:.75rem; font-family:'Inter',sans-serif; }
+  .place-card-ext { background:#f0f7ff; border-radius:8px; padding:5px 9px; color:#4285f4; font-size:.68rem; font-weight:700; text-decoration:none; display:flex; align-items:center; gap:4px; }
   .custom-marker { width:32px; height:32px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:15px; border:2px solid rgba(255,255,255,.2); box-shadow:0 4px 12px rgba(0,0,0,.6); cursor:pointer; }
 
   /* ── Modal ── */
@@ -593,6 +612,83 @@ const DARK_MAP_STYLES=[
 
 let map, openInfoWindow=null;
 
+let placesService=null;
+
+function starsHtml(rating){
+  const full=Math.floor(rating), half=rating%1>=0.5;
+  let s='';
+  for(let i=0;i<5;i++) s+=i<full?'★':(i===full&&half?'½':'☆');
+  return s;
+}
+
+function priceHtml(level){
+  if(!level&&level!==0) return '';
+  return '💴'.repeat(level)||'Free';
+}
+
+function buildLoadingCard(d, col){
+  return `<div class="place-card"><div class="place-card-loading">⏳ กำลังโหลดข้อมูล...</div></div>`;
+}
+
+function buildPlaceCard(d, col, place){
+  const mapsUrl=`https://www.google.com/maps/search/?api=1&query=${d.lat},${d.lng}${place?.place_id?`&query_place_id=${place.place_id}`:''}`;
+  let photoHtml='';
+  if(place?.photos?.length){
+    const url=place.photos[0].getUrl({maxWidth:280,maxHeight:130});
+    photoHtml=`<img class="place-card-photo" src="${url}" alt="${d.detail}" loading="lazy">`;
+  } else {
+    photoHtml=`<div class="place-card-photo-placeholder">${d.emoji||'📍'}</div>`;
+  }
+  let openBadge='';
+  if(place?.opening_hours){
+    const isOpen=place.opening_hours.isOpen?.();
+    openBadge=isOpen===true?'<span class="place-card-open open">เปิด</span>':isOpen===false?'<span class="place-card-open closed">ปิด</span>':'';
+  }
+  const ratingHtml=place?.rating?`<span class="place-card-rating"><span class="place-card-stars">${starsHtml(place.rating)}</span>${place.rating.toFixed(1)}<span class="place-card-reviews">(${(place.user_ratings_total||0).toLocaleString()})</span></span>`:'';
+  const priceLevel=place?.price_level;
+  const pHtml=priceLevel!=null?`<span class="place-card-price">${priceHtml(priceLevel)}</span>`:'';
+  const timeHtml=d.start?`<div class="place-card-row">⏱️ ${d.start}${d.end?' – '+d.end:''}</div>`:'';
+  const routeHtml=d.from&&d.to&&d.from!==d.to?`<div class="place-card-row">📍 ${d.from} → ${d.to}</div>`:'';
+  return `<div class="place-card">
+    ${photoHtml}
+    <div class="place-card-body">
+      <div class="place-card-day" style="color:${col}">Day ${d.day} · ${d.city}</div>
+      <div class="place-card-name">${d.detail}</div>
+      <div class="place-card-meta">${ratingHtml}${pHtml}${openBadge}</div>
+      ${timeHtml}${routeHtml}
+      <div class="place-card-footer">
+        <a href="${mapsUrl}" target="_blank" rel="noopener" class="place-card-gmaps">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="#4285f4"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+          Google Maps
+        </a>
+        <a href="${mapsUrl}" target="_blank" rel="noopener" class="place-card-ext">↗ เปิด</a>
+      </div>
+    </div>
+  </div>`;
+}
+
+function openPlaceCard(d, col, mk, iw){
+  if(!placesService) placesService=new google.maps.places.PlacesService(map);
+  iw.setContent(buildLoadingCard(d, col));
+  if(openInfoWindow) openInfoWindow.close();
+  iw.open({anchor:mk, map});
+  openInfoWindow=iw;
+  placesService.textSearch({
+    query: d.detail,
+    location: new google.maps.LatLng(d.lat, d.lng),
+    radius: 1000,
+  }, (results, status) => {
+    if(status===google.maps.places.PlacesServiceStatus.OK && results[0]){
+      const p=results[0];
+      placesService.getDetails({placeId:p.place_id, fields:['name','rating','user_ratings_total','price_level','photos','opening_hours','place_id']}, (detail, ds) => {
+        iw.setContent(buildPlaceCard(d, col, ds===google.maps.places.PlacesServiceStatus.OK ? detail : p));
+      });
+    } else {
+      iw.setContent(buildPlaceCard(d, col, null));
+    }
+  });
+}
+
 function makeIcon(emoji,color){
   return {path:google.maps.SymbolPath.CIRCLE,scale:14,fillColor:color,fillOpacity:0.13,strokeColor:color,strokeWeight:2,strokeOpacity:0.7};
 }
@@ -625,12 +721,9 @@ function drawMap(filter){
   items.filter(d=>d.lat).forEach(d=>{
     const col=DAY_COLORS[d.day];
     const mk=new google.maps.Marker({position:{lat:d.lat,lng:d.lng},map,icon:makeIcon(d.emoji||'📍',col),label:{text:d.emoji||'📍',fontSize:'13px',color:'#fff'},optimized:false});
-    const costHtml=d.cost?`<div class="popup-cost">💴 ${String(d.cost).replace(/\r\n/g,' · ')}</div>`:'';
-    const openHtml=d.openClose?`<div class="popup-row">🕐 ${String(d.openClose).replace(/\r\n/g,' ')}</div>`:'';
-    const mapsLink=d.lat?`<a href="https://www.google.com/maps/search/?api=1&query=${d.lat},${d.lng}" target="_blank" rel="noopener" style="display:inline-block;margin-top:8px;color:#4285f4;font-size:0.68rem;font-weight:700;text-decoration:none;font-family:'Inter',sans-serif;letter-spacing:0.03em">📍 เปิดใน Google Maps →</a>`:'';
-    const iw=new google.maps.InfoWindow({content:`<div class="gm-popup"><div class="popup-title" style="color:${col}">Day ${d.day} — ${d.city}</div><div style="font-weight:700;margin-bottom:5px">${d.detail}</div>${d.start?`<div class="popup-row">⏱️ ${d.start} – ${d.end} (${d.dur||''})</div>`:''}${d.from&&d.to&&d.from!==d.to?`<div class="popup-row">📍 ${d.from} → ${d.to}</div>`:''}${openHtml}${costHtml}${mapsLink}</div>`});
-    mk.addListener('click',()=>{if(openInfoWindow)openInfoWindow.close();iw.open({anchor:mk,map});openInfoWindow=iw;});
-    mk._itemId=d.id; mk._infoWindow=iw; mapLayers.push(mk);
+    const iw=new google.maps.InfoWindow({content:'',maxWidth:280});
+    mk.addListener('click',()=>openPlaceCard(d,col,mk,iw));
+    mk._itemId=d.id; mk._infoWindow=iw; mk._data=d; mk._col=col; mapLayers.push(mk);
   });
 }
 
@@ -871,7 +964,7 @@ function buildTimeline(filter){
         if(e.target.closest('.btn-edit')||e.target.closest('.btn-delete')) return;
         if(activeCardEl) activeCardEl.classList.remove('active-card');
         card.classList.add('active-card'); activeCardEl = card;
-        if(d.lat&&map){ map.panTo({lat:d.lat,lng:d.lng}); map.setZoom(14); mapLayers.forEach(l=>{if(l._itemId===d.id&&l._infoWindow){if(openInfoWindow)openInfoWindow.close();l._infoWindow.open({anchor:l,map});openInfoWindow=l._infoWindow;}}); }
+        if(d.lat&&map){ map.panTo({lat:d.lat,lng:d.lng}); map.setZoom(14); mapLayers.forEach(l=>{if(l._itemId===d.id&&l._infoWindow&&l._data&&l._col){ openPlaceCard(l._data,l._col,l,l._infoWindow); }}); }
       });
       card.querySelector('.btn-edit').addEventListener('click', e=>{ e.stopPropagation(); openModal(d, d.day); });
       card.querySelector('.btn-delete').addEventListener('click', e=>{
