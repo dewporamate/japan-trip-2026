@@ -100,11 +100,6 @@
   .emoji-opt:hover,.emoji-opt.selected { background:rgba(255,107,157,.2); box-shadow:0 0 0 2px rgba(255,107,157,.4); }
   .modal-sep { height:1px; background:rgba(255,255,255,.06); margin:14px 0; }
 
-  /* ── Card Photo Header ── */
-  .card-photo-wrap{margin:-20px -20px 14px;width:calc(100% + 40px);height:140px;overflow:hidden;border-radius:12px 12px 0 0;position:relative;background:rgba(255,255,255,.03);}
-  .card-photo-img{width:100%;height:100%;object-fit:cover;display:block;transition:opacity .4s;}
-  .card-photo-wrap::after{content:'';position:absolute;inset:0;background:linear-gradient(to bottom,rgba(0,0,0,0) 40%,rgba(12,12,14,.6) 100%);pointer-events:none;}
-
   /* ── Place Search Section ── */
   .place-search-wrap{position:relative;margin-bottom:14px}
   .place-search-row{display:flex;gap:8px;align-items:center}
@@ -629,7 +624,6 @@ function initMap(){
   });
   drawMap(currentFilter);
   initPlaceSearch();
-  _processPhotoQueue();
   document.querySelectorAll('.day-tab').forEach(tab=>{
     tab.addEventListener('click',function(){
       const views={0:[36,137,5],1:[36,137,5],2:[35.52,138.78,11],3:[35.665,139.700,13],4:[35.31,139.52,12],5:[36,137,5]};
@@ -755,40 +749,6 @@ document.getElementById('modal-delete').onclick = ()=>{
   save(); closeModal(); refresh();
 };
 
-/* ── PLACE PHOTO CACHE ── */
-const PHOTO_CACHE_KEY='japan2026_photos_v1';
-let photoCache=JSON.parse(localStorage.getItem(PHOTO_CACHE_KEY)||'{}');
-let _photoQueue=[],_photoProcessing=false;
-
-function _processPhotoQueue(){
-  if(!_photoQueue.length){_photoProcessing=false;return;}
-  if(typeof google==='undefined'||!google.maps){_photoProcessing=false;return;}
-  _photoProcessing=true;
-  const {id,detail,lat,lng}=_photoQueue.shift();
-  const svc=new google.maps.places.PlacesService(document.createElement('div'));
-  svc.textSearch({query:detail,location:new google.maps.LatLng(lat,lng),radius:300},(res,st)=>{
-    if(st===google.maps.places.PlacesServiceStatus.OK&&res?.[0]?.photos?.length){
-      const url=res[0].photos[0].getUrl({maxWidth:600,maxHeight:240});
-      photoCache[id]=url;
-      try{localStorage.setItem(PHOTO_CACHE_KEY,JSON.stringify(photoCache));}catch(e){}
-      const el=document.getElementById('cphoto-'+id);
-      if(el&&!el.querySelector('img')){
-        const img=document.createElement('img');
-        img.src=url;img.className='card-photo-img';img.loading='lazy';
-        el.appendChild(img);
-      }
-    }
-    setTimeout(_processPhotoQueue,300);
-  });
-}
-
-function loadPlacePhoto(id,detail,lat,lng){
-  if(photoCache[id]!==undefined)return;
-  photoCache[id]=null;
-  _photoQueue.push({id,detail,lat,lng});
-  if(!_photoProcessing)_processPhotoQueue();
-}
-
 /* ══════════════════════════════════════════
    BUILD TIMELINE
 ══════════════════════════════════════════ */
@@ -842,13 +802,12 @@ function buildTimeline(filter){
 
       /* card */
       const card = document.createElement('div');
-      card.className = 'timeline-card bg-surface-container-low rounded-xl overflow-hidden p-5 ring-1 ring-white/5 shadow-[0_8px_32px_rgba(0,0,0,0.25)] transition-all duration-200 cursor-pointer group';
+      card.className = 'timeline-card bg-surface-container-low rounded-xl p-5 ring-1 ring-white/5 shadow-[0_8px_32px_rgba(0,0,0,0.25)] transition-all duration-200 cursor-pointer group';
 
       const costStr = String(d.cost||'').replace(/\r\n/g,' · ');
       const isFree = d.cost==='Free';
 
       card.innerHTML = `
-        ${d.lat?`<div class="card-photo-wrap" id="cphoto-${d.id}">${photoCache[d.id]?`<img src="${photoCache[d.id]}" class="card-photo-img" loading="lazy">`:''}` +`</div>`:''}
         <div class="flex justify-between items-start mb-3">
           <span class="font-['Inter'] text-[0.65rem] uppercase tracking-widest text-zinc-600 font-bold">${d.start||''}${d.end?' — '+d.end:''}</span>
           <span class="text-lg">${d.emoji||'📍'}</span>
@@ -900,8 +859,6 @@ function buildTimeline(filter){
       el.appendChild(dotEl);
       el.appendChild(card);
       wrapper.appendChild(el);
-
-      if(d.lat) loadPlacePhoto(d.id, d.detail, d.lat, d.lng);
     });
 
     /* ── Add activity button ── */
