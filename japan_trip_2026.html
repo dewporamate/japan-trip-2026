@@ -727,6 +727,7 @@ function buildTimeline(filter){
             ${d.alert?`<span class="px-2 py-0.5 text-[10px] rounded-full font-['Inter'] uppercase tracking-wide font-bold" style="background:rgba(251,191,36,0.15);color:#fbbf24">⚠️ จองล่วงหน้า</span>`:''}
           </div>
           <div class="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+            ${d.lat?`<a href="https://www.google.com/maps/search/?api=1&query=${d.lat},${d.lng}" target="_blank" rel="noopener" class="btn-navigate w-7 h-7 flex items-center justify-center rounded-lg text-xs transition-colors" style="background:rgba(52,211,153,0.12);color:#34d399" title="Navigate" onclick="event.stopPropagation()"><span class="material-symbols-outlined" style="font-size:14px">navigation</span></a>`:''}
             <button class="btn-edit w-7 h-7 flex items-center justify-center rounded-lg text-xs transition-colors" style="background:rgba(77,150,255,0.12);color:#60a5fa">✏️</button>
             <button class="btn-delete w-7 h-7 flex items-center justify-center rounded-lg text-xs transition-colors" style="background:rgba(255,107,107,0.12);color:#f87171">🗑️</button>
           </div>
