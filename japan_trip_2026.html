@@ -159,6 +159,9 @@
   /* ── Timeline ── */
   .timeline-card:hover { transform:translateX(4px); }
   .timeline-card.active-card { box-shadow:0 8px 32px rgba(255,107,157,.15) !important; outline:1px solid rgba(255,107,157,.25); }
+  /* ── CSS Variables ── */
+  :root { --day-circle-bg: #09090b; }
+  html.light { --day-circle-bg: #f4f4f5; }
   /* ── Light Mode ── */
   html.light body{background:#f4f4f5!important;color:#18181b!important}
   html.light .bg-\[\#09090b\]{background:#f4f4f5!important}
@@ -789,7 +792,7 @@ function buildTimeline(filter){
     const header = document.createElement('div');
     header.className = 'flex items-center gap-5 mb-8 ' + (day===days[0]?'mt-0':'mt-14');
     header.innerHTML = `
-      <div class="w-14 h-14 rounded-full flex flex-col items-center justify-center shrink-0 border-2" style="background:#09090b;border-color:${col}33">
+      <div class="w-14 h-14 rounded-full flex flex-col items-center justify-center shrink-0 border-2 day-circle" style="background:var(--day-circle-bg,#09090b);border-color:${col}33">
         <span class="font-['Manrope'] font-black text-lg leading-none" style="color:${col}">${dayNums[day-1]}</span>
         <span class="text-[8px] tracking-widest text-zinc-600 uppercase font-['Inter'] font-bold">Oct</span>
       </div>
