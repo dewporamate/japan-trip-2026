@@ -8,7 +8,7 @@
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&family=Public+Sans:wght@300;400;600;700&family=Inter:wght@400;500;600;700&family=Noto+Sans+Thai:wght@300;400;600;700&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBMEJI1GmX6i-ZaN-cgvu-yhaQrdRsnvCk&callback=initMap" defer></script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBMEJI1GmX6i-ZaN-cgvu-yhaQrdRsnvCk&libraries=places&callback=initMap" defer></script>
 <script id="tailwind-config">
   tailwind.config = {
     darkMode: "class",
@@ -954,56 +954,53 @@ function initAllMediaSlots(){
 
   function clearResults(){ resultsList.innerHTML = ''; }
 
-  function pickPlace(item){
-    document.getElementById('f-lat').value = parseFloat(item.lat).toFixed(6);
-    document.getElementById('f-lng').value = parseFloat(item.lon).toFixed(6);
-    const displayName = item.name || item.display_name.split(',')[0];
-    setStatus('✅ เลือกแล้ว: ' + displayName, 'ok');
+  function pickPlace(name, lat, lng){
+    document.getElementById('f-lat').value = lat.toFixed(6);
+    document.getElementById('f-lng').value = lng.toFixed(6);
+    setStatus('✅ เลือกแล้ว: ' + name, 'ok');
     clearResults();
-    searchInput.value = displayName;
+    searchInput.value = name;
   }
 
   function renderResults(places){
     clearResults();
     if(!places.length){
-      setStatus('ไม่พบสถานที่ ลองพิมพ์เป็นภาษาอังกฤษ', 'err');
+      setStatus('ไม่พบสถานที่', 'err');
       return;
     }
     setStatus('พบ ' + places.length + ' ผลลัพธ์ — เลือกสถานที่ที่ต้องการ');
     places.forEach(p => {
-      const name = p.name || p.display_name.split(',')[0];
-      const addr = p.display_name;
-      const lat  = parseFloat(p.lat).toFixed(5);
-      const lon  = parseFloat(p.lon).toFixed(5);
+      const name = p.name;
+      const addr = p.formatted_address;
+      const lat  = p.geometry.location.lat();
+      const lng  = p.geometry.location.lng();
       const div  = document.createElement('div');
       div.className = 'place-result-item';
       div.innerHTML = `
         <div class="place-result-name">${name}</div>
         <div class="place-result-addr">${addr.substring(0,70)}${addr.length>70?'…':''}</div>
-        <div class="place-result-coords">📍 ${lat}, ${lon}</div>
+        <div class="place-result-coords">📍 ${lat.toFixed(5)}, ${lng.toFixed(5)}</div>
       `;
-      div.addEventListener('click', () => pickPlace(p));
+      div.addEventListener('click', () => pickPlace(name, lat, lng));
       resultsList.appendChild(div);
     });
   }
 
-  async function doSearch(){
+  function doSearch(){
     const q = searchInput.value.trim();
     if(!q) return;
     searchBtn.disabled = true;
     setStatus('⏳ กำลังค้นหา…');
     clearResults();
-    try {
-      const url = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(q)}&limit=6&accept-language=th,en&countrycodes=jp,th`;
-      const res  = await fetch(url, { headers: { 'Accept-Language': 'th,en' } });
-      if(!res.ok) throw new Error('HTTP ' + res.status);
-      const data = await res.json();
-      renderResults(data);
-    } catch(e) {
-      setStatus('เกิดข้อผิดพลาด: ' + e.message, 'err');
-    } finally {
+    const service = new google.maps.places.PlacesService(document.createElement('div'));
+    service.textSearch({query: q}, (results, status) => {
       searchBtn.disabled = false;
-    }
+      if(status === google.maps.places.PlacesServiceStatus.OK && results.length){
+        renderResults(results.slice(0,6));
+      } else {
+        setStatus('ไม่พบสถานที่', 'err');
+      }
+    });
   }
 
   searchBtn.addEventListener('click', doSearch);
