@@ -101,6 +101,34 @@
   .modal-sep { height:1px; background:rgba(255,255,255,.06); margin:14px 0; }
 
   /* ── PLACE SEARCH ── */
+  /* ── Place Search Section ── */
+  .place-search-wrap{position:relative;margin-bottom:14px}
+  .place-search-row{display:flex;gap:8px;align-items:center}
+  .place-search-row input{
+    flex:1;background:rgba(255,255,255,.05);border:none;
+    border-radius:10px;padding:9px 12px;color:#f1f1f1;font-size:.82rem;
+    font-family:'Public Sans','Noto Sans Thai',sans-serif;
+    transition:background .2s,box-shadow .2s;outline:none;
+  }
+  .place-search-row input:focus{background:rgba(255,255,255,.09);box-shadow:0 0 0 2px rgba(255,107,157,.35)}
+  .place-search-row input::placeholder{color:#52525b}
+  .btn-search{
+    padding:9px 14px;border-radius:10px;border:none;cursor:pointer;
+    background:rgba(255,107,157,.15);color:#ff6b9d;
+    font-size:.78rem;font-weight:700;font-family:'Inter',sans-serif;
+    white-space:nowrap;transition:all .2s;flex-shrink:0;
+  }
+  .btn-search:hover{background:rgba(255,107,157,.3)}
+  .btn-search:disabled{opacity:.4;cursor:default}
+  .place-label{
+    font-size:.62rem;color:#52525b;text-transform:uppercase;
+    letter-spacing:.08em;font-weight:700;font-family:'Inter',sans-serif;
+    margin-bottom:5px;display:block;
+  }
+  .place-status{font-size:.7rem;color:#71717a;padding:4px 0;margin-top:4px;font-family:'Inter',sans-serif;min-height:18px}
+  .place-status.ok{color:#4ade80}
+  .place-status.err{color:#f87171}
+
   /* ── Google Places Autocomplete dropdown dark theme ── */
   .pac-container{
     background:#1c1c1f!important;border:1px solid rgba(255,255,255,.1)!important;
@@ -382,8 +410,8 @@
         <input type="text" id="f-detail" placeholder="ชื่อกิจกรรม...">
       </div>
       <div class="form-group">
-        <label>เมือง / ย่าน <span style="color:#52525b;font-weight:400;font-size:.65rem">(พิมพ์เพื่อค้นหา)</span></label>
-        <input type="text" id="f-city" placeholder="เช่น Sensoji Temple, Shibuya…" autocomplete="off">
+        <label>เมือง / ย่าน</label>
+        <input type="text" id="f-city" placeholder="เช่น Tokyo, Ueno">
       </div>
       <div class="form-group">
         <label>เวลาเริ่ม</label>
@@ -421,6 +449,17 @@
       ⚠️ ต้องจองล่วงหน้า
     </label>
     <div class="modal-sep"></div>
+
+    <!-- PLACE SEARCH → auto-fill lat/lng -->
+    <div class="place-search-wrap">
+      <span class="place-label">🔍 ค้นหาสถานที่ (กรอกชื่อแล้วกดค้นหา)</span>
+      <div class="place-search-row">
+        <input type="text" id="f-place-search" placeholder="เช่น Sensoji Temple, Shibuya Crossing…" autocomplete="off">
+        <button class="btn-search" id="btn-place-search">ค้นหา</button>
+      </div>
+      <div class="place-status" id="place-status"></div>
+    </div>
+
     <div class="modal-grid">
       <div class="form-group">
         <label>Latitude</label>
@@ -585,7 +624,7 @@ function initMap(){
     gestureHandling:'greedy',
   });
   drawMap(currentFilter);
-  initCityAutocomplete();
+  initPlaceSearch();
   document.querySelectorAll('.day-tab').forEach(tab=>{
     tab.addEventListener('click',function(){
       const views={0:[36,137,5],1:[36,137,5],2:[35.52,138.78,11],3:[35.665,139.700,13],4:[35.31,139.52,12],5:[36,137,5]};
@@ -900,21 +939,54 @@ function initAllMediaSlots(){
   });
 }
 
-/* ── PLACE AUTOCOMPLETE — set up inside initMap after API is ready ── */
-function initCityAutocomplete(){
-  const cityInput = document.getElementById('f-city');
-  const ac = new google.maps.places.Autocomplete(cityInput, {
+/* ── PLACE SEARCH + AUTOCOMPLETE ── */
+function initPlaceSearch(){
+  const searchInput = document.getElementById('f-place-search');
+  const searchBtn   = document.getElementById('btn-place-search');
+  const statusEl    = document.getElementById('place-status');
+
+  function setStatus(msg, type=''){
+    statusEl.textContent = msg;
+    statusEl.className = 'place-status' + (type ? ' '+type : '');
+  }
+  function fillLatLng(lat, lng, name){
+    document.getElementById('f-lat').value = lat.toFixed(6);
+    document.getElementById('f-lng').value = lng.toFixed(6);
+    setStatus('✅ เลือกแล้ว: ' + name, 'ok');
+  }
+
+  // Autocomplete dropdown while typing
+  const ac = new google.maps.places.Autocomplete(searchInput, {
     fields: ['geometry', 'name'],
   });
   ac.addListener('place_changed', () => {
     const place = ac.getPlace();
     if(place.geometry && place.geometry.location){
-      document.getElementById('f-lat').value = place.geometry.location.lat().toFixed(6);
-      document.getElementById('f-lng').value = place.geometry.location.lng().toFixed(6);
+      fillLatLng(place.geometry.location.lat(), place.geometry.location.lng(), place.name);
     }
   });
-  // prevent form submit on Enter inside autocomplete
-  cityInput.addEventListener('keydown', e => { if(e.key === 'Enter') e.preventDefault(); });
+
+  // ค้นหา button → text search fallback
+  function doSearch(){
+    const q = searchInput.value.trim();
+    if(!q) return;
+    searchBtn.disabled = true;
+    setStatus('⏳ กำลังค้นหา…');
+    const service = new google.maps.places.PlacesService(document.createElement('div'));
+    service.textSearch({query: q}, (results, status) => {
+      searchBtn.disabled = false;
+      if(status === google.maps.places.PlacesServiceStatus.OK && results.length){
+        const p = results[0];
+        fillLatLng(p.geometry.location.lat(), p.geometry.location.lng(), p.name);
+        searchInput.value = p.name;
+      } else {
+        setStatus('ไม่พบสถานที่', 'err');
+      }
+    });
+  }
+
+  searchBtn.addEventListener('click', doSearch);
+  searchInput.addEventListener('keydown', e => { if(e.key === 'Enter'){ e.preventDefault(); doSearch(); } });
 }
 
 /* ── REFRESH ── */
