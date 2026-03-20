@@ -1,215 +1,275 @@
 <!DOCTYPE html>
-<html class="dark" lang="en"><head>
+<html class="dark" lang="en">
+<head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>Kyoto Zen - Dining</title>
+<title>Japan 2026 — Dining</title>
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;700;800&family=Public+Sans:wght@300;400;600&family=Inter:wght@400;500&family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&family=Public+Sans:wght@300;400;600;700&family=Inter:wght@400;500;600;700&family=Noto+Sans+Thai:wght@300;400;600;700&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<script>
+  tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        colors: {
+          "primary": "#ff6b9d",
+          "on-primary": "#ffffff",
+          "primary-container": "#6e0035",
+          "on-primary-container": "#ffd9e1",
+          "surface": "#09090b",
+          "surface-container-low": "#141414",
+          "surface-container": "#1a1a1a",
+          "surface-container-high": "#242424",
+          "on-surface": "#f1f1f1",
+          "on-surface-variant": "#d8c0c4",
+          "outline": "#4a4143",
+          "outline-variant": "#574146",
+          "inverse-primary": "#ac2a5d",
+        },
+        fontFamily: {
+          "headline": ["Manrope", "sans-serif"],
+          "body": ["Public Sans", "Noto Sans Thai", "sans-serif"],
+          "label": ["Inter", "sans-serif"],
+        },
+      },
+    },
+  }
+</script>
 <style>
-  body { background-color: #09090b; color: #f4f4f5; }
-  .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24; }
-  .no-scrollbar::-webkit-scrollbar { display: none; }
+  .material-symbols-outlined { font-variation-settings:'FILL' 0,'wght' 300,'GRAD' 0,'opsz' 24; vertical-align:middle; }
+  body { font-family:'Public Sans','Noto Sans Thai',sans-serif; background:#09090b; color:#f1f1f1; }
+  ::-webkit-scrollbar { width:5px; }
+  ::-webkit-scrollbar-track { background:#09090b; }
+  ::-webkit-scrollbar-thumb { background:#2a2a2a; border-radius:3px; }
 </style>
 </head>
-<body class="font-['Public_Sans']">
-<div class="flex min-h-screen">
-<!-- SideNavBar -->
-<aside class="hidden md:flex flex-col h-screen w-72 bg-zinc-950 sticky top-0 border-r border-zinc-800/50 py-10 px-6 leading-relaxed">
-  <div class="mb-12">
-    <h1 class="text-xl font-bold font-['Manrope'] text-[#ac2a5d]">Kyoto Zen</h1>
-    <p class="text-[10px] uppercase tracking-widest text-zinc-500 mt-1">Sakura Drift Edition</p>
+<body class="text-on-surface flex h-screen overflow-hidden bg-[#09090b]">
+
+<!-- Sidebar -->
+<aside class="hidden md:flex flex-col h-screen py-10 px-5 bg-[#09090b] w-72 shrink-0 border-r border-white/5 sticky top-0" id="sidebar">
+  <!-- Logo -->
+  <div class="mb-10 px-2 flex items-center gap-3">
+    <div class="w-10 h-10 rounded-xl bg-primary/15 flex items-center justify-center shrink-0 border border-primary/25">
+      <span style="font-size:1.2rem">🌸</span>
+    </div>
+    <div class="min-w-0">
+      <div class="text-base font-black font-['Manrope'] text-primary italic tracking-tight">Japan 2026</div>
+      <div class="text-[9px] text-zinc-600 font-['Inter'] uppercase tracking-widest font-bold">Friend Group Trip</div>
+    </div>
   </div>
-  <nav class="flex-1 space-y-2">
-    <a class="flex items-center gap-4 text-zinc-500 pl-5 hover:bg-zinc-900 transition-all py-3 rounded-xl group" href="japan_trip_2026.html">
-      <span class="material-symbols-outlined text-xl">event_note</span><span>Itinerary</span>
+  <!-- Nav -->
+  <nav class="flex-1 space-y-1">
+    <a class="group flex items-center text-zinc-500 pl-5 py-2.5 hover:text-on-surface hover:bg-white/5 rounded-xl transition-all duration-200" href="japan_trip_2026.html">
+      <span class="material-symbols-outlined mr-3 shrink-0" style="font-size:20px">schedule</span>
+      <span class="text-sm font-['Public_Sans']">Itinerary</span>
     </a>
-    <a class="flex items-center gap-4 text-zinc-500 pl-5 hover:bg-zinc-900 transition-all py-3 rounded-xl group" href="transportation.html">
-      <span class="material-symbols-outlined text-xl">train</span><span>Transportation</span>
+    <a class="group flex items-center text-zinc-500 pl-5 py-2.5 hover:text-on-surface hover:bg-white/5 rounded-xl transition-all duration-200" href="transportation.html">
+      <span class="material-symbols-outlined mr-3 shrink-0" style="font-size:20px">train</span>
+      <span class="text-sm font-['Public_Sans']">Transportation</span>
     </a>
-    <a class="flex items-center gap-4 text-[#ac2a5d] font-bold border-l-4 border-[#ac2a5d] pl-4 py-3 bg-zinc-900 rounded-r-xl" href="dining.html">
-      <span class="material-symbols-outlined text-xl" style="font-variation-settings:'FILL' 1;">restaurant</span><span>Dining</span>
+    <a class="group flex items-center text-primary font-bold border-l-4 border-primary pl-4 py-2.5 rounded-r-xl bg-primary/5 transition-all duration-200" href="dining.html">
+      <span class="material-symbols-outlined mr-3 shrink-0" style="font-size:20px">restaurant</span>
+      <span class="text-sm font-['Public_Sans']">Dining</span>
     </a>
-    <a class="flex items-center gap-4 text-zinc-500 pl-5 hover:bg-zinc-900 transition-all py-3 rounded-xl group" href="#">
-      <span class="material-symbols-outlined text-xl">museum</span><span>Activities</span>
+    <a class="group flex items-center text-zinc-500 pl-5 py-2.5 hover:text-on-surface hover:bg-white/5 rounded-xl transition-all duration-200" href="#">
+      <span class="material-symbols-outlined mr-3 shrink-0" style="font-size:20px">museum</span>
+      <span class="text-sm font-['Public_Sans']">Activities</span>
     </a>
-    <a class="flex items-center gap-4 text-zinc-500 pl-5 hover:bg-zinc-900 transition-all py-3 rounded-xl group" href="lodging.html">
-      <span class="material-symbols-outlined text-xl">hotel</span><span>Lodging</span>
+    <a class="group flex items-center text-zinc-500 pl-5 py-2.5 hover:text-on-surface hover:bg-white/5 rounded-xl transition-all duration-200" href="lodging.html">
+      <span class="material-symbols-outlined mr-3 shrink-0" style="font-size:20px">hotel</span>
+      <span class="text-sm font-['Public_Sans']">Lodging</span>
     </a>
-    <a class="flex items-center gap-4 text-zinc-500 pl-5 hover:bg-zinc-900 transition-all py-3 rounded-xl group" href="japan_trip_2026_map.html">
-      <span class="material-symbols-outlined text-xl">map</span><span>Map</span>
+    <a class="group flex items-center text-zinc-500 pl-5 py-2.5 hover:text-on-surface hover:bg-white/5 rounded-xl transition-all duration-200" href="japan_trip_2026_map.html">
+      <span class="material-symbols-outlined mr-3 shrink-0" style="font-size:20px">map</span>
+      <span class="text-sm font-['Public_Sans']">Map</span>
     </a>
-    <a class="flex items-center gap-4 text-zinc-500 pl-5 hover:bg-zinc-900 transition-all py-3 rounded-xl group" href="budget.html">
-      <span class="material-symbols-outlined text-xl">payments</span><span>Budget</span>
+    <a class="group flex items-center text-zinc-500 pl-5 py-2.5 hover:text-on-surface hover:bg-white/5 rounded-xl transition-all duration-200" href="budget.html">
+      <span class="material-symbols-outlined mr-3 shrink-0" style="font-size:20px">payments</span>
+      <span class="text-sm font-['Public_Sans']">Budget</span>
     </a>
   </nav>
-  <button class="mt-auto w-full py-4 bg-[#ac2a5d] text-white rounded-full font-bold shadow-lg shadow-[#ac2a5d]/20 active:scale-95 transition-transform">
+  <!-- CTA -->
+  <button class="mt-auto bg-primary text-white rounded-full px-5 py-3 font-bold font-['Public_Sans'] text-sm hover:shadow-[0_0_24px_rgba(255,107,157,0.35)] transition-all active:scale-95 flex items-center justify-center gap-2">
+    <span class="material-symbols-outlined" style="font-size:20px">add</span>
     Add New Stop
   </button>
 </aside>
 
-<!-- Main Content -->
-<main class="flex-1 bg-zinc-950 overflow-x-hidden">
-<!-- TopAppBar -->
-<header class="flex justify-between items-center px-8 h-20 w-full bg-zinc-950/70 backdrop-blur-xl sticky top-0 z-50">
-  <div class="flex items-center gap-8">
-    <span class="text-2xl font-black text-zinc-100 italic font-['Manrope']">Zen Planner</span>
-    <nav class="hidden lg:flex gap-6">
-      <a class="text-zinc-500 hover:text-zinc-100 transition-colors font-['Manrope'] font-bold text-lg" href="japan_trip_2026.html">Itinerary</a>
-      <a class="text-zinc-500 hover:text-zinc-100 transition-colors font-['Manrope'] font-bold text-lg" href="japan_trip_2026_map.html">Map</a>
-      <a class="text-zinc-500 hover:text-zinc-100 transition-colors font-['Manrope'] font-bold text-lg" href="budget.html">Budget</a>
-      <a class="text-zinc-500 hover:text-zinc-100 transition-colors font-['Manrope'] font-bold text-lg" href="#">Explore</a>
-    </nav>
-  </div>
-  <div class="flex items-center gap-4">
-    <button class="p-2 text-zinc-400 hover:bg-zinc-800/50 rounded-full transition-colors"><span class="material-symbols-outlined">notifications</span></button>
-    <button class="p-2 text-zinc-400 hover:bg-zinc-800/50 rounded-full transition-colors"><span class="material-symbols-outlined">settings</span></button>
-    <div class="w-10 h-10 rounded-full bg-zinc-800 ring-2 ring-[#ac2a5d] flex items-center justify-center text-zinc-400 font-bold text-sm">ME</div>
-  </div>
-</header>
+<!-- Main -->
+<main class="flex-1 overflow-y-auto bg-[#09090b]">
 
-<div class="p-8 space-y-12 max-w-7xl mx-auto">
-  <!-- Hero -->
-  <section class="relative h-[400px] rounded-[2.5rem] overflow-hidden group">
-    <div class="absolute inset-0 bg-gradient-to-br from-zinc-900 to-zinc-800"></div>
-    <div class="absolute inset-0 flex items-center justify-center opacity-10">
-      <span class="text-[20rem] leading-none">🍣</span>
+  <!-- Top App Bar -->
+  <header class="flex justify-between items-center px-5 md:px-8 h-16 w-full bg-[#09090b]/85 backdrop-blur-xl z-50 sticky top-0 border-b border-white/5 shrink-0">
+    <h1 class="text-lg font-black text-on-surface italic font-['Manrope'] tracking-tight">Dining</h1>
+    <div class="flex items-center gap-2 md:gap-3">
+      <button class="w-8 h-8 flex items-center justify-center rounded-full hover:bg-white/5 transition-colors text-zinc-500 hover:text-primary">
+        <span class="material-symbols-outlined" style="font-size:20px">notifications</span>
+      </button>
+      <button class="w-8 h-8 flex items-center justify-center rounded-full hover:bg-white/5 transition-colors text-zinc-500 hover:text-primary">
+        <span class="material-symbols-outlined" style="font-size:20px">settings</span>
+      </button>
+      <div class="w-8 h-8 rounded-full bg-primary/15 flex items-center justify-center border border-primary/25 cursor-pointer text-base">🧳</div>
     </div>
-    <div class="absolute inset-0 bg-gradient-to-t from-zinc-950 via-zinc-950/20 to-transparent"></div>
-    <div class="absolute bottom-12 left-12 right-12">
-      <span class="px-4 py-1.5 bg-[#ac2a5d] text-white text-[10px] font-bold tracking-[0.2em] rounded-full uppercase mb-4 inline-block">Curated Dining</span>
-      <h2 class="text-6xl font-['Manrope'] font-extrabold text-white tracking-tighter leading-none">Kyoto Gastronomy</h2>
-      <p class="text-zinc-300 mt-4 max-w-lg text-lg leading-relaxed">Experience the delicate balance of seasonal Kaiseki and modern fusion beneath the cherry blossoms.</p>
-    </div>
-  </section>
+  </header>
 
-  <!-- Reservations & Map Grid -->
-  <section class="grid grid-cols-1 lg:grid-cols-12 gap-8">
-    <div class="lg:col-span-8 space-y-6">
-      <div class="flex justify-between items-center mb-4">
-        <h3 class="text-2xl font-['Manrope'] font-bold text-white">Upcoming Reservations</h3>
-        <button class="text-[#ac2a5d] font-bold text-sm hover:underline">View Calendar</button>
+  <div class="max-w-7xl mx-auto p-6 md:p-10 space-y-10">
+
+    <!-- Hero -->
+    <section class="relative h-[340px] rounded-xl overflow-hidden ring-1 ring-white/5">
+      <div class="absolute inset-0 bg-[#1a1a1a]"></div>
+      <div class="absolute inset-0 flex items-center justify-center opacity-10">
+        <span class="text-[18rem] leading-none">🍣</span>
       </div>
+      <div class="absolute inset-0 bg-gradient-to-t from-[#09090b] via-[#09090b]/20 to-transparent"></div>
+      <div class="absolute bottom-8 left-8 right-8">
+        <span class="px-3 py-1 bg-primary text-white text-[9px] font-bold tracking-[0.2em] rounded-full uppercase mb-3 inline-block font-['Inter']">Curated Dining</span>
+        <h2 class="text-4xl md:text-5xl font-['Manrope'] font-extrabold text-white tracking-tighter leading-none">Kyoto Gastronomy</h2>
+        <p class="text-zinc-300 mt-3 max-w-lg text-sm leading-relaxed font-['Public_Sans']">Experience the delicate balance of seasonal Kaiseki and modern fusion beneath the cherry blossoms.</p>
+      </div>
+    </section>
 
-      <!-- Card 1 -->
-      <div class="bg-zinc-900/50 rounded-[2rem] p-8 flex flex-col md:flex-row gap-8 items-center border border-zinc-800/30">
-        <div class="w-full md:w-48 h-48 rounded-2xl overflow-hidden shrink-0 bg-zinc-800 flex items-center justify-center text-6xl">🍱</div>
-        <div class="flex-1 space-y-4">
-          <div class="flex justify-between items-start">
-            <div>
-              <h4 class="text-xl font-['Manrope'] font-bold text-white">Omen Ginkakuji-mae</h4>
-              <p class="text-zinc-400 font-['Inter'] text-xs tracking-wider uppercase">8-10 Ginkakujimaecho, Sakyo Ward</p>
+    <!-- Reservations & Nearby Gems -->
+    <section class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+
+      <!-- Reservations -->
+      <div class="lg:col-span-8 space-y-5">
+        <div class="flex justify-between items-center">
+          <h3 class="text-base font-['Manrope'] font-bold text-on-surface">Upcoming Reservations</h3>
+          <button class="text-primary font-bold text-xs font-['Inter'] hover:text-primary/80 transition-colors uppercase tracking-widest">View Calendar</button>
+        </div>
+
+        <!-- Card 1 -->
+        <div class="bg-[#1a1a1a] rounded-xl p-6 ring-1 ring-white/5 shadow-[0_8px_32px_rgba(0,0,0,0.25)] flex flex-col md:flex-row gap-6 items-start">
+          <div class="w-full md:w-36 h-36 rounded-xl overflow-hidden shrink-0 bg-white/5 flex items-center justify-center text-5xl">🍱</div>
+          <div class="flex-1 space-y-3">
+            <div class="flex justify-between items-start gap-3">
+              <div>
+                <h4 class="text-base font-['Manrope'] font-bold text-on-surface">Omen Ginkakuji-mae</h4>
+                <p class="text-zinc-500 font-['Inter'] text-[10px] tracking-wider uppercase mt-0.5">8-10 Ginkakujimaecho, Sakyo Ward</p>
+              </div>
+              <span class="bg-primary/10 text-primary px-3 py-1 rounded-full text-[10px] font-bold shrink-0 font-['Inter']">Confirmed</span>
             </div>
-            <span class="bg-[#ff6b9d]/10 text-[#ff6b9d] px-4 py-1 rounded-full text-xs font-bold">Confirmed</span>
+            <div class="flex flex-wrap gap-4 text-xs text-zinc-300 font-['Public_Sans']">
+              <div class="flex items-center gap-1.5"><span class="material-symbols-outlined text-primary" style="font-size:16px">calendar_today</span><span>April 14, 2026</span></div>
+              <div class="flex items-center gap-1.5"><span class="material-symbols-outlined text-primary" style="font-size:16px">schedule</span><span>19:30</span></div>
+              <div class="flex items-center gap-1.5"><span class="material-symbols-outlined text-primary" style="font-size:16px">group</span><span>2 Persons</span></div>
+            </div>
+            <button class="bg-white/5 hover:bg-white/10 text-on-surface px-5 py-2 rounded-full text-xs font-bold font-['Public_Sans'] transition-colors">Manage Booking</button>
           </div>
-          <div class="flex flex-wrap gap-6 text-sm text-zinc-300">
-            <div class="flex items-center gap-2"><span class="material-symbols-outlined text-[#ac2a5d] text-lg">calendar_today</span><span>April 14, 2024</span></div>
-            <div class="flex items-center gap-2"><span class="material-symbols-outlined text-[#ac2a5d] text-lg">schedule</span><span>19:30</span></div>
-            <div class="flex items-center gap-2"><span class="material-symbols-outlined text-[#ac2a5d] text-lg">group</span><span>2 Persons</span></div>
-          </div>
-          <div class="pt-2">
-            <button class="bg-zinc-800 hover:bg-zinc-700 text-white px-6 py-2.5 rounded-full text-sm font-bold transition-colors">Manage Booking</button>
+        </div>
+
+        <!-- Card 2 -->
+        <div class="bg-[#1a1a1a] rounded-xl p-6 ring-1 ring-white/5 shadow-[0_8px_32px_rgba(0,0,0,0.25)] flex flex-col md:flex-row gap-6 items-start">
+          <div class="w-full md:w-36 h-36 rounded-xl overflow-hidden shrink-0 bg-white/5 flex items-center justify-center text-5xl">🏮</div>
+          <div class="flex-1 space-y-3">
+            <div class="flex justify-between items-start gap-3">
+              <div>
+                <h4 class="text-base font-['Manrope'] font-bold text-on-surface">The Sodoh Higashiyama</h4>
+                <p class="text-zinc-500 font-['Inter'] text-[10px] tracking-wider uppercase mt-0.5">366-2 Yasaka Kamimachi, Higashiyama Ward</p>
+              </div>
+              <span class="bg-white/5 text-zinc-400 px-3 py-1 rounded-full text-[10px] font-bold shrink-0 font-['Inter']">Waitlisted</span>
+            </div>
+            <div class="flex flex-wrap gap-4 text-xs text-zinc-300 font-['Public_Sans']">
+              <div class="flex items-center gap-1.5"><span class="material-symbols-outlined text-primary" style="font-size:16px">calendar_today</span><span>April 16, 2026</span></div>
+              <div class="flex items-center gap-1.5"><span class="material-symbols-outlined text-primary" style="font-size:16px">schedule</span><span>20:00</span></div>
+              <div class="flex items-center gap-1.5"><span class="material-symbols-outlined text-primary" style="font-size:16px">group</span><span>4 Persons</span></div>
+            </div>
+            <div class="flex gap-3 flex-wrap">
+              <button class="bg-primary text-white px-5 py-2 rounded-full text-xs font-bold font-['Public_Sans'] hover:shadow-[0_0_16px_rgba(255,107,157,0.3)] transition-all active:scale-95">Call Restaurant</button>
+              <button class="bg-white/5 hover:bg-white/10 text-on-surface px-5 py-2 rounded-full text-xs font-bold font-['Public_Sans'] transition-colors">Find Alternative</button>
+            </div>
           </div>
         </div>
       </div>
 
-      <!-- Card 2 -->
-      <div class="bg-zinc-900/50 rounded-[2rem] p-8 flex flex-col md:flex-row gap-8 items-center border border-zinc-800/30">
-        <div class="w-full md:w-48 h-48 rounded-2xl overflow-hidden shrink-0 bg-zinc-800 flex items-center justify-center text-6xl">🏮</div>
-        <div class="flex-1 space-y-4">
-          <div class="flex justify-between items-start">
-            <div>
-              <h4 class="text-xl font-['Manrope'] font-bold text-white">The Sodoh Higashiyama</h4>
-              <p class="text-zinc-400 font-['Inter'] text-xs tracking-wider uppercase">366-2 Yasaka Kamimachi, Higashiyama Ward</p>
+      <!-- Nearby Gems -->
+      <div class="lg:col-span-4">
+        <div class="bg-[#1a1a1a] rounded-xl p-5 ring-1 ring-white/5 shadow-[0_8px_32px_rgba(0,0,0,0.25)] h-full flex flex-col">
+          <h3 class="text-base font-['Manrope'] font-bold text-on-surface mb-5">Nearby Gems</h3>
+          <div class="relative w-full h-48 rounded-xl overflow-hidden mb-5 bg-white/5 flex items-center justify-center shrink-0">
+            <div class="text-center">
+              <span class="material-symbols-outlined text-primary text-4xl" style="font-variation-settings:'FILL' 1; font-size:40px">location_on</span>
+              <p class="text-zinc-500 text-[10px] mt-2 font-['Inter'] uppercase tracking-widest">Gion District</p>
             </div>
-            <span class="bg-zinc-800 text-zinc-400 px-4 py-1 rounded-full text-xs font-bold">Waitlisted</span>
+            <div class="absolute inset-0 bg-primary/5"></div>
           </div>
-          <div class="flex flex-wrap gap-6 text-sm text-zinc-300">
-            <div class="flex items-center gap-2"><span class="material-symbols-outlined text-[#ac2a5d] text-lg">calendar_today</span><span>April 16, 2024</span></div>
-            <div class="flex items-center gap-2"><span class="material-symbols-outlined text-[#ac2a5d] text-lg">schedule</span><span>20:00</span></div>
-            <div class="flex items-center gap-2"><span class="material-symbols-outlined text-[#ac2a5d] text-lg">group</span><span>4 Persons</span></div>
-          </div>
-          <div class="pt-2 flex gap-3">
-            <button class="bg-[#ac2a5d] text-white px-6 py-2.5 rounded-full text-sm font-bold shadow-lg shadow-[#ac2a5d]/20">Call Restaurant</button>
-            <button class="bg-zinc-800 hover:bg-zinc-700 text-white px-6 py-2.5 rounded-full text-sm font-bold transition-colors">Find Alternative</button>
+          <div class="space-y-4 overflow-y-auto">
+            <div class="flex gap-3 items-center cursor-pointer group">
+              <div class="w-14 h-14 rounded-xl bg-white/5 flex items-center justify-center text-2xl shrink-0 group-hover:bg-white/10 transition-colors">🍜</div>
+              <div>
+                <h5 class="text-sm font-bold text-on-surface font-['Public_Sans']">Ichiran Ramen</h5>
+                <p class="text-xs text-zinc-500 font-['Inter'] mt-0.5">4 min walk · $</p>
+              </div>
+            </div>
+            <div class="flex gap-3 items-center cursor-pointer group">
+              <div class="w-14 h-14 rounded-xl bg-white/5 flex items-center justify-center text-2xl shrink-0 group-hover:bg-white/10 transition-colors">🍸</div>
+              <div>
+                <h5 class="text-sm font-bold text-on-surface font-['Public_Sans']">L'Escamoteur Bar</h5>
+                <p class="text-xs text-zinc-500 font-['Inter'] mt-0.5">12 min walk · $$$</p>
+              </div>
+            </div>
+            <div class="flex gap-3 items-center cursor-pointer group">
+              <div class="w-14 h-14 rounded-xl bg-white/5 flex items-center justify-center text-2xl shrink-0 group-hover:bg-white/10 transition-colors">🥟</div>
+              <div>
+                <h5 class="text-sm font-bold text-on-surface font-['Public_Sans']">Chao Chao Gyoza</h5>
+                <p class="text-xs text-zinc-500 font-['Inter'] mt-0.5">7 min walk · $$</p>
+              </div>
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    </section>
 
-    <!-- Nearby Gems -->
-    <div class="lg:col-span-4 flex flex-col gap-6">
-      <div class="bg-zinc-900 rounded-[2rem] p-6 h-full flex flex-col border border-zinc-800/50 overflow-hidden">
-        <h3 class="text-xl font-['Manrope'] font-bold text-white mb-6 px-2">Nearby Gems</h3>
-        <div class="relative w-full h-64 rounded-2xl overflow-hidden mb-8 bg-zinc-800 flex items-center justify-center">
+    <!-- Notes & Media -->
+    <section class="space-y-5">
+      <div class="flex items-center gap-4">
+        <h3 class="text-base font-['Manrope'] font-bold text-on-surface">Notes &amp; Media</h3>
+        <div class="h-px flex-1 bg-white/5"></div>
+        <button class="w-8 h-8 flex items-center justify-center bg-white/5 hover:bg-white/10 rounded-full text-primary transition-colors">
+          <span class="material-symbols-outlined" style="font-size:18px">add</span>
+        </button>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-4 grid-rows-2 gap-4 h-[560px]">
+        <!-- Note -->
+        <div class="md:col-span-2 md:row-span-1 bg-primary/5 border border-primary/15 rounded-xl p-6 flex flex-col justify-between ring-1 ring-white/5">
+          <div>
+            <span class="material-symbols-outlined text-primary mb-3 block" style="font-size:20px">edit_note</span>
+            <p class="text-sm text-on-surface-variant leading-relaxed italic font-['Public_Sans']">"Don't forget to order the Wagyu beef with seasonal truffles at Omen. Also, request the window seat for the Zen garden view."</p>
+          </div>
+          <div class="flex items-center gap-2 mt-4">
+            <div class="w-7 h-7 rounded-full bg-white/10 flex items-center justify-center text-xs">👤</div>
+            <span class="text-[10px] font-['Inter'] text-zinc-500 tracking-wider uppercase">March 28 · By Sarah</span>
+          </div>
+        </div>
+        <!-- Large Photo -->
+        <div class="md:col-span-2 md:row-span-2 rounded-xl overflow-hidden relative bg-white/5 flex items-center justify-center ring-1 ring-white/5">
           <div class="text-center">
-            <span class="material-symbols-outlined text-[#ac2a5d] text-5xl" style="font-variation-settings:'FILL' 1;">location_on</span>
-            <p class="text-zinc-500 text-xs mt-2 font-['Inter'] uppercase tracking-widest">Gion District</p>
+            <div class="text-7xl mb-3">🍵</div>
+            <p class="text-zinc-500 text-xs font-['Inter'] uppercase tracking-widest">Matcha Clouds</p>
           </div>
-          <div class="absolute inset-0 bg-[#ac2a5d]/5"></div>
+          <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end p-6">
+            <div class="flex items-center gap-2">
+              <span class="material-symbols-outlined text-white" style="font-size:16px">play_circle</span>
+              <span class="text-white text-[10px] font-bold uppercase tracking-widest font-['Inter']">Video Reveal · Matcha Clouds</span>
+            </div>
+          </div>
         </div>
-        <div class="space-y-6 px-2 overflow-y-auto no-scrollbar">
-          <div class="flex gap-4 items-center group cursor-pointer">
-            <div class="w-16 h-16 rounded-xl overflow-hidden bg-zinc-800 flex items-center justify-center text-3xl flex-shrink-0">🍜</div>
-            <div><h5 class="text-sm font-bold text-zinc-100">Ichiran Ramen</h5><p class="text-xs text-zinc-500">4 min walk • $</p></div>
-          </div>
-          <div class="flex gap-4 items-center group cursor-pointer">
-            <div class="w-16 h-16 rounded-xl overflow-hidden bg-zinc-800 flex items-center justify-center text-3xl flex-shrink-0">🍸</div>
-            <div><h5 class="text-sm font-bold text-zinc-100">L'Escamoteur Bar</h5><p class="text-xs text-zinc-500">12 min walk • $$$</p></div>
-          </div>
-          <div class="flex gap-4 items-center group cursor-pointer">
-            <div class="w-16 h-16 rounded-xl overflow-hidden bg-zinc-800 flex items-center justify-center text-3xl flex-shrink-0">🥟</div>
-            <div><h5 class="text-sm font-bold text-zinc-100">Chao Chao Gyoza</h5><p class="text-xs text-zinc-500">7 min walk • $$</p></div>
+        <!-- Small Photo -->
+        <div class="md:col-span-1 md:row-span-1 rounded-xl overflow-hidden bg-white/5 flex items-center justify-center text-5xl ring-1 ring-white/5">🍣</div>
+        <!-- Add Media -->
+        <div class="md:col-span-1 md:row-span-1 rounded-xl overflow-hidden bg-[#1a1a1a] flex items-center justify-center border border-dashed border-white/10 group cursor-pointer hover:bg-white/5 transition-colors ring-1 ring-white/5">
+          <div class="text-center">
+            <span class="material-symbols-outlined text-zinc-600 group-hover:text-primary transition-colors" style="font-size:36px">add_photo_alternate</span>
+            <p class="text-[10px] text-zinc-600 mt-2 font-['Inter'] uppercase tracking-widest">Add Media</p>
           </div>
         </div>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- Notes & Media -->
-  <section class="space-y-6">
-    <div class="flex items-center gap-4">
-      <h3 class="text-2xl font-['Manrope'] font-bold text-white">Notes &amp; Media</h3>
-      <div class="h-[1px] flex-1 bg-zinc-800"></div>
-      <button class="p-2 bg-zinc-900 rounded-full text-[#ac2a5d]"><span class="material-symbols-outlined">add</span></button>
-    </div>
-    <div class="grid grid-cols-1 md:grid-cols-4 grid-rows-2 gap-4 h-[600px]">
-      <!-- Note -->
-      <div class="md:col-span-2 md:row-span-1 bg-[#ac2a5d]/5 border border-[#ac2a5d]/20 rounded-[2rem] p-8 flex flex-col justify-between">
-        <div>
-          <span class="material-symbols-outlined text-[#ac2a5d] mb-4">edit_note</span>
-          <p class="text-lg text-zinc-200 leading-relaxed italic">"Don't forget to order the Wagyu beef with seasonal truffles at Omen. Also, request the window seat for the Zen garden view."</p>
-        </div>
-        <div class="flex items-center gap-3">
-          <div class="w-8 h-8 rounded-full bg-zinc-800"></div>
-          <span class="text-xs font-['Inter'] text-zinc-500 tracking-wider">MARCH 28 • BY SARAH</span>
-        </div>
-      </div>
-      <!-- Large Photo -->
-      <div class="md:col-span-2 md:row-span-2 rounded-[2rem] overflow-hidden relative group bg-zinc-800 flex items-center justify-center">
-        <div class="text-center">
-          <div class="text-8xl mb-4">🍵</div>
-          <p class="text-zinc-500 text-sm font-['Inter'] uppercase tracking-widest">Matcha Clouds</p>
-        </div>
-        <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end p-8">
-          <div class="flex items-center gap-2">
-            <span class="material-symbols-outlined text-white text-sm">play_circle</span>
-            <span class="text-white text-xs font-bold uppercase tracking-widest">Video Reveal • Matcha Clouds</span>
-          </div>
-        </div>
-      </div>
-      <!-- Small Photo 1 -->
-      <div class="md:col-span-1 md:row-span-1 rounded-[2rem] overflow-hidden bg-zinc-800 flex items-center justify-center text-6xl">🍣</div>
-      <!-- Add Media -->
-      <div class="md:col-span-1 md:row-span-1 rounded-[2rem] overflow-hidden bg-zinc-900 flex items-center justify-center border border-zinc-800 border-dashed group cursor-pointer hover:bg-zinc-800/50 transition-colors">
-        <div class="text-center">
-          <span class="material-symbols-outlined text-4xl text-zinc-600 group-hover:text-[#ac2a5d] transition-colors">add_photo_alternate</span>
-          <p class="text-xs text-zinc-500 mt-2 font-['Inter']">ADD MEDIA</p>
-        </div>
-      </div>
-    </div>
-  </section>
-</div>
-<div class="h-32"></div>
+  </div>
+  <div class="h-16"></div>
 </main>
-</div>
-</body></html>
+
+</body>
+</html>

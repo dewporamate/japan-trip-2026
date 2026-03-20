@@ -1,212 +1,275 @@
 <!DOCTYPE html>
-<html class="dark" lang="en"><head>
+<html class="dark" lang="en">
+<head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>Kyoto Zen - Transportation</title>
+<title>Japan 2026 — Transportation</title>
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;700;800&family=Public+Sans:wght@300;400;600;700&family=Inter:wght@400;500;700&family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&family=Public+Sans:wght@300;400;600;700&family=Inter:wght@400;500;600;700&family=Noto+Sans+Thai:wght@300;400;600;700&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<script>
+  tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        colors: {
+          "primary": "#ff6b9d",
+          "on-primary": "#ffffff",
+          "primary-container": "#6e0035",
+          "on-primary-container": "#ffd9e1",
+          "surface": "#09090b",
+          "surface-container-low": "#141414",
+          "surface-container": "#1a1a1a",
+          "surface-container-high": "#242424",
+          "on-surface": "#f1f1f1",
+          "on-surface-variant": "#d8c0c4",
+          "outline": "#4a4143",
+          "outline-variant": "#574146",
+          "inverse-primary": "#ac2a5d",
+        },
+        fontFamily: {
+          "headline": ["Manrope", "sans-serif"],
+          "body": ["Public Sans", "Noto Sans Thai", "sans-serif"],
+          "label": ["Inter", "sans-serif"],
+        },
+      },
+    },
+  }
+</script>
 <style>
-  .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24; }
-  body { background-color: #09090b; color: #f4f4f5; }
+  .material-symbols-outlined { font-variation-settings:'FILL' 0,'wght' 300,'GRAD' 0,'opsz' 24; vertical-align:middle; }
+  body { font-family:'Public Sans','Noto Sans Thai',sans-serif; background:#09090b; color:#f1f1f1; }
+  ::-webkit-scrollbar { width:5px; }
+  ::-webkit-scrollbar-track { background:#09090b; }
+  ::-webkit-scrollbar-thumb { background:#2a2a2a; border-radius:3px; }
 </style>
 </head>
-<body class="font-['Public_Sans']">
-<div class="flex min-h-screen">
-<!-- SideNavBar -->
-<aside class="hidden md:flex flex-col h-screen w-72 bg-zinc-950 sticky top-0 py-10 px-6 border-r border-zinc-800/50">
-  <div class="mb-12">
-    <h1 class="text-xl font-bold font-['Manrope'] text-[#ff6b9d]">Kyoto Zen</h1>
-    <p class="text-xs text-zinc-500 tracking-widest uppercase mt-1">Sakura Drift Edition</p>
+<body class="text-on-surface flex h-screen overflow-hidden bg-[#09090b]">
+
+<!-- Sidebar -->
+<aside class="hidden md:flex flex-col h-screen py-10 px-5 bg-[#09090b] w-72 shrink-0 border-r border-white/5 sticky top-0" id="sidebar">
+  <!-- Logo -->
+  <div class="mb-10 px-2 flex items-center gap-3">
+    <div class="w-10 h-10 rounded-xl bg-primary/15 flex items-center justify-center shrink-0 border border-primary/25">
+      <span style="font-size:1.2rem">🌸</span>
+    </div>
+    <div class="min-w-0">
+      <div class="text-base font-black font-['Manrope'] text-primary italic tracking-tight">Japan 2026</div>
+      <div class="text-[9px] text-zinc-600 font-['Inter'] uppercase tracking-widest font-bold">Friend Group Trip</div>
+    </div>
   </div>
-  <nav class="flex-1 space-y-2">
-    <a class="flex items-center text-zinc-500 pl-5 py-3 hover:bg-zinc-800 transition-all rounded-xl group" href="japan_trip_2026.html">
-      <span class="material-symbols-outlined mr-4 group-hover:text-[#ff6b9d]">event_note</span><span>Itinerary</span>
+  <!-- Nav -->
+  <nav class="flex-1 space-y-1">
+    <a class="group flex items-center text-zinc-500 pl-5 py-2.5 hover:text-on-surface hover:bg-white/5 rounded-xl transition-all duration-200" href="japan_trip_2026.html">
+      <span class="material-symbols-outlined mr-3 shrink-0" style="font-size:20px">schedule</span>
+      <span class="text-sm font-['Public_Sans']">Itinerary</span>
     </a>
-    <a class="flex items-center text-[#ff6b9d] font-bold border-l-4 border-[#ff6b9d] pl-4 py-3 bg-zinc-900/50 rounded-r-xl" href="transportation.html">
-      <span class="material-symbols-outlined mr-4" style="font-variation-settings:'FILL' 1;">train</span><span>Transportation</span>
+    <a class="group flex items-center text-primary font-bold border-l-4 border-primary pl-4 py-2.5 rounded-r-xl bg-primary/5 transition-all duration-200" href="transportation.html">
+      <span class="material-symbols-outlined mr-3 shrink-0" style="font-size:20px">train</span>
+      <span class="text-sm font-['Public_Sans']">Transportation</span>
     </a>
-    <a class="flex items-center text-zinc-500 pl-5 py-3 hover:bg-zinc-800 transition-all rounded-xl group" href="dining.html">
-      <span class="material-symbols-outlined mr-4 group-hover:text-[#ff6b9d]">restaurant</span><span>Dining</span>
+    <a class="group flex items-center text-zinc-500 pl-5 py-2.5 hover:text-on-surface hover:bg-white/5 rounded-xl transition-all duration-200" href="dining.html">
+      <span class="material-symbols-outlined mr-3 shrink-0" style="font-size:20px">restaurant</span>
+      <span class="text-sm font-['Public_Sans']">Dining</span>
     </a>
-    <a class="flex items-center text-zinc-500 pl-5 py-3 hover:bg-zinc-800 transition-all rounded-xl group" href="#">
-      <span class="material-symbols-outlined mr-4 group-hover:text-[#ff6b9d]">museum</span><span>Activities</span>
+    <a class="group flex items-center text-zinc-500 pl-5 py-2.5 hover:text-on-surface hover:bg-white/5 rounded-xl transition-all duration-200" href="#">
+      <span class="material-symbols-outlined mr-3 shrink-0" style="font-size:20px">museum</span>
+      <span class="text-sm font-['Public_Sans']">Activities</span>
     </a>
-    <a class="flex items-center text-zinc-500 pl-5 py-3 hover:bg-zinc-800 transition-all rounded-xl group" href="lodging.html">
-      <span class="material-symbols-outlined mr-4 group-hover:text-[#ff6b9d]">hotel</span><span>Lodging</span>
+    <a class="group flex items-center text-zinc-500 pl-5 py-2.5 hover:text-on-surface hover:bg-white/5 rounded-xl transition-all duration-200" href="lodging.html">
+      <span class="material-symbols-outlined mr-3 shrink-0" style="font-size:20px">hotel</span>
+      <span class="text-sm font-['Public_Sans']">Lodging</span>
     </a>
-    <a class="flex items-center text-zinc-500 pl-5 py-3 hover:bg-zinc-800 transition-all rounded-xl group" href="japan_trip_2026_map.html">
-      <span class="material-symbols-outlined mr-4 group-hover:text-[#ff6b9d]">map</span><span>Map</span>
+    <a class="group flex items-center text-zinc-500 pl-5 py-2.5 hover:text-on-surface hover:bg-white/5 rounded-xl transition-all duration-200" href="japan_trip_2026_map.html">
+      <span class="material-symbols-outlined mr-3 shrink-0" style="font-size:20px">map</span>
+      <span class="text-sm font-['Public_Sans']">Map</span>
     </a>
-    <a class="flex items-center text-zinc-500 pl-5 py-3 hover:bg-zinc-800 transition-all rounded-xl group" href="budget.html">
-      <span class="material-symbols-outlined mr-4 group-hover:text-[#ff6b9d]">payments</span><span>Budget</span>
+    <a class="group flex items-center text-zinc-500 pl-5 py-2.5 hover:text-on-surface hover:bg-white/5 rounded-xl transition-all duration-200" href="budget.html">
+      <span class="material-symbols-outlined mr-3 shrink-0" style="font-size:20px">payments</span>
+      <span class="text-sm font-['Public_Sans']">Budget</span>
     </a>
   </nav>
-  <button class="mt-8 w-full bg-[#ff6b9d] text-white py-4 rounded-full font-bold flex items-center justify-center gap-2 shadow-lg shadow-[#ff6b9d]/20 active:scale-95 transition-transform">
-    <span class="material-symbols-outlined">add</span> Add New Stop
+  <!-- CTA -->
+  <button class="mt-auto bg-primary text-white rounded-full px-5 py-3 font-bold font-['Public_Sans'] text-sm hover:shadow-[0_0_24px_rgba(255,107,157,0.35)] transition-all active:scale-95 flex items-center justify-center gap-2">
+    <span class="material-symbols-outlined" style="font-size:20px">add</span>
+    Add New Stop
   </button>
 </aside>
 
-<!-- Main Content -->
-<main class="flex-1 min-w-0 bg-zinc-950 overflow-x-hidden pb-24 md:pb-12">
-<header class="h-20 flex justify-between items-center px-8 w-full bg-zinc-950/70 backdrop-blur-xl z-50 sticky top-0">
-  <div class="flex items-center gap-4">
-    <span class="text-2xl font-black text-zinc-100 italic font-['Manrope']">Zen Planner</span>
-  </div>
-  <div class="flex items-center gap-6">
-    <div class="hidden md:flex gap-8 items-center mr-8">
-      <a class="text-zinc-400 hover:text-zinc-100 transition-colors" href="japan_trip_2026.html">Itinerary</a>
-      <a class="text-zinc-400 hover:text-zinc-100 transition-colors" href="japan_trip_2026_map.html">Map</a>
-      <a class="text-zinc-400 hover:text-zinc-100 transition-colors" href="budget.html">Budget</a>
-      <a class="text-zinc-400 hover:text-zinc-100 transition-colors" href="#">Explore</a>
+<!-- Main -->
+<main class="flex-1 overflow-y-auto bg-[#09090b]">
+
+  <!-- Top App Bar -->
+  <header class="flex justify-between items-center px-5 md:px-8 h-16 w-full bg-[#09090b]/85 backdrop-blur-xl z-50 sticky top-0 border-b border-white/5 shrink-0">
+    <h1 class="text-lg font-black text-on-surface italic font-['Manrope'] tracking-tight">Transportation</h1>
+    <div class="flex items-center gap-2 md:gap-3">
+      <button class="w-8 h-8 flex items-center justify-center rounded-full hover:bg-white/5 transition-colors text-zinc-500 hover:text-primary">
+        <span class="material-symbols-outlined" style="font-size:20px">notifications</span>
+      </button>
+      <button class="w-8 h-8 flex items-center justify-center rounded-full hover:bg-white/5 transition-colors text-zinc-500 hover:text-primary">
+        <span class="material-symbols-outlined" style="font-size:20px">settings</span>
+      </button>
+      <div class="w-8 h-8 rounded-full bg-primary/15 flex items-center justify-center border border-primary/25 cursor-pointer text-base">🧳</div>
     </div>
-    <button class="text-zinc-400 hover:text-zinc-100 p-2"><span class="material-symbols-outlined">notifications</span></button>
-    <button class="text-zinc-400 hover:text-zinc-100 p-2"><span class="material-symbols-outlined">settings</span></button>
-    <div class="w-10 h-10 rounded-full bg-zinc-800 border border-zinc-700 flex items-center justify-center text-zinc-400 font-bold text-sm">ME</div>
-  </div>
-</header>
+  </header>
 
-<div class="max-w-7xl mx-auto px-8 pt-12">
-  <!-- Hero -->
-  <div class="relative rounded-3xl overflow-hidden mb-16 h-80 flex items-end p-12 bg-zinc-900">
-    <div class="absolute inset-0 bg-gradient-to-t from-zinc-950 via-zinc-950/40 to-transparent z-10"></div>
-    <div class="absolute inset-0 flex items-center justify-center opacity-20 text-[15rem] leading-none">🚅</div>
-    <div class="relative z-20">
-      <span class="font-['Inter'] uppercase tracking-[0.2em] text-[#ff6b9d] font-bold text-xs">Transportation Hub</span>
-      <h2 class="font-['Manrope'] text-5xl font-extrabold text-white mt-2 tracking-tight">The Sakura Express</h2>
+  <div class="max-w-7xl mx-auto p-6 md:p-10 space-y-10">
+
+    <!-- Hero -->
+    <div class="relative rounded-xl overflow-hidden h-64 flex items-end p-8 bg-[#1a1a1a] ring-1 ring-white/5 shadow-[0_8px_32px_rgba(0,0,0,0.25)]">
+      <div class="absolute inset-0 bg-gradient-to-t from-[#09090b] via-[#09090b]/40 to-transparent z-10"></div>
+      <div class="absolute inset-0 flex items-center justify-center opacity-15 text-[13rem] leading-none">🚅</div>
+      <div class="relative z-20">
+        <span class="font-['Inter'] uppercase tracking-[0.2em] text-primary font-bold text-[10px]">Transportation Hub</span>
+        <h2 class="font-['Manrope'] text-4xl font-extrabold text-white mt-1.5 tracking-tight">The Sakura Express</h2>
+      </div>
     </div>
-  </div>
 
-  <!-- Bento Grid -->
-  <div class="grid grid-cols-12 gap-8">
-    <!-- Shinkansen Card (col-span 8) -->
-    <div class="col-span-12 lg:col-span-8 space-y-8">
-      <div class="bg-zinc-900 rounded-[2rem] p-8 border border-zinc-800/50">
-        <div class="flex justify-between items-start mb-10">
-          <div class="flex gap-4 items-center">
-            <div class="w-14 h-14 bg-[#ac2a5d]/10 rounded-2xl flex items-center justify-center">
-              <span class="material-symbols-outlined text-[#ff6b9d] text-3xl">train</span>
-            </div>
-            <div>
-              <h3 class="font-['Manrope'] text-2xl font-bold">Shinkansen Nozomi 23</h3>
-              <p class="text-zinc-500 font-['Inter'] text-sm uppercase tracking-wider">Tokyo → Kyoto · Car 4, Seat 12-A</p>
-            </div>
-          </div>
-          <span class="bg-[#ff6b9d]/10 text-[#ff6b9d] px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-widest">Active Soon</span>
-        </div>
+    <!-- Bento Grid -->
+    <div class="grid grid-cols-12 gap-8">
 
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 items-center relative">
-          <div class="text-center md:text-left">
-            <p class="text-zinc-500 text-xs uppercase tracking-widest mb-1">Departure</p>
-            <p class="text-4xl font-['Manrope'] font-black text-white">09:30</p>
-            <p class="text-zinc-400 font-medium">Tokyo Station</p>
-            <p class="text-sm text-[#ff6b9d] font-bold mt-2">Platform 14</p>
-          </div>
-          <div class="flex flex-col items-center">
-            <div class="w-full h-[2px] bg-zinc-800 relative">
-              <div class="absolute -top-1.5 left-0 w-3 h-3 rounded-full bg-zinc-700"></div>
-              <div class="absolute -top-1.5 right-0 w-3 h-3 rounded-full bg-[#ff6b9d]"></div>
-              <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-zinc-900 px-4">
-                <span class="material-symbols-outlined text-zinc-600">fast_forward</span>
+      <!-- Main Column -->
+      <div class="col-span-12 lg:col-span-8 space-y-6">
+
+        <!-- Shinkansen Card -->
+        <div class="bg-[#1a1a1a] rounded-xl p-6 ring-1 ring-white/5 shadow-[0_8px_32px_rgba(0,0,0,0.25)]">
+          <div class="flex justify-between items-start mb-8">
+            <div class="flex gap-3 items-center">
+              <div class="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center shrink-0">
+                <span class="material-symbols-outlined text-primary" style="font-size:24px">train</span>
+              </div>
+              <div>
+                <h3 class="font-['Manrope'] text-lg font-bold text-on-surface">Shinkansen Nozomi 23</h3>
+                <p class="text-zinc-500 font-['Inter'] text-[10px] uppercase tracking-wider mt-0.5">Tokyo → Kyoto · Car 4, Seat 12-A</p>
               </div>
             </div>
-            <p class="text-[10px] uppercase tracking-widest text-zinc-600 mt-4">2H 15M Duration</p>
+            <span class="bg-primary/10 text-primary px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest font-['Inter'] shrink-0">Active Soon</span>
           </div>
-          <div class="text-center md:text-right">
-            <p class="text-zinc-500 text-xs uppercase tracking-widest mb-1">Arrival</p>
-            <p class="text-4xl font-['Manrope'] font-black text-white">11:45</p>
-            <p class="text-zinc-400 font-medium">Kyoto Station</p>
-            <p class="text-sm text-zinc-500 font-bold mt-2">Platform 0</p>
+
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-6 items-center">
+            <!-- Departure -->
+            <div class="text-center md:text-left">
+              <p class="text-zinc-500 text-[10px] uppercase tracking-widest mb-1 font-['Inter']">Departure</p>
+              <p class="text-4xl font-['Manrope'] font-black text-on-surface">09:30</p>
+              <p class="text-zinc-400 font-['Public_Sans'] text-sm mt-1">Tokyo Station</p>
+              <p class="text-xs text-primary font-bold mt-1.5 font-['Inter']">Platform 14</p>
+            </div>
+            <!-- Duration -->
+            <div class="flex flex-col items-center">
+              <div class="w-full h-px bg-white/10 relative">
+                <div class="absolute -top-1.5 left-0 w-3 h-3 rounded-full bg-white/20"></div>
+                <div class="absolute -top-1.5 right-0 w-3 h-3 rounded-full bg-primary"></div>
+                <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-[#1a1a1a] px-3">
+                  <span class="material-symbols-outlined text-zinc-600" style="font-size:18px">fast_forward</span>
+                </div>
+              </div>
+              <p class="text-[10px] uppercase tracking-widest text-zinc-600 mt-3 font-['Inter']">2H 15M Duration</p>
+            </div>
+            <!-- Arrival -->
+            <div class="text-center md:text-right">
+              <p class="text-zinc-500 text-[10px] uppercase tracking-widest mb-1 font-['Inter']">Arrival</p>
+              <p class="text-4xl font-['Manrope'] font-black text-on-surface">11:45</p>
+              <p class="text-zinc-400 font-['Public_Sans'] text-sm mt-1">Kyoto Station</p>
+              <p class="text-xs text-zinc-500 font-bold mt-1.5 font-['Inter']">Platform 0</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Connections -->
+        <div class="space-y-3">
+          <h4 class="font-['Manrope'] text-base font-bold text-on-surface">Subsequent Connections</h4>
+          <!-- Connection 1 -->
+          <div class="bg-[#1a1a1a] rounded-xl p-5 ring-1 ring-white/5 flex items-center justify-between group hover:bg-[#242424] transition-all duration-200">
+            <div class="flex gap-5 items-center">
+              <div class="text-zinc-500 text-sm font-['Inter'] font-semibold w-12 shrink-0">12:15</div>
+              <div class="h-8 w-px bg-white/10 rounded-full"></div>
+              <div>
+                <p class="font-bold text-on-surface text-sm font-['Public_Sans']">Kyoto City Subway Karasuma Line</p>
+                <p class="text-xs text-zinc-500 font-['Public_Sans'] mt-0.5">Kyoto Station → Shijo Station</p>
+              </div>
+            </div>
+            <div class="flex items-center gap-4 shrink-0">
+              <span class="text-xs font-['Inter'] text-zinc-400 uppercase tracking-tight">¥220 · 4 Mins</span>
+              <span class="material-symbols-outlined text-zinc-600 group-hover:text-primary transition-colors" style="font-size:20px">directions_subway</span>
+            </div>
+          </div>
+          <!-- Connection 2 -->
+          <div class="bg-[#1a1a1a] rounded-xl p-5 ring-1 ring-white/5 flex items-center justify-between group hover:bg-[#242424] transition-all duration-200">
+            <div class="flex gap-5 items-center">
+              <div class="text-zinc-500 text-sm font-['Inter'] font-semibold w-12 shrink-0">12:40</div>
+              <div class="h-8 w-px bg-white/10 rounded-full"></div>
+              <div>
+                <p class="font-bold text-on-surface text-sm font-['Public_Sans']">Kyoto City Bus 205</p>
+                <p class="text-xs text-zinc-500 font-['Public_Sans'] mt-0.5">Shijo Karasuma → Kawaramachi</p>
+              </div>
+            </div>
+            <div class="flex items-center gap-4 shrink-0">
+              <span class="text-xs font-['Inter'] text-zinc-400 uppercase tracking-tight">¥230 · 12 Mins</span>
+              <span class="material-symbols-outlined text-zinc-600 group-hover:text-primary transition-colors" style="font-size:20px">directions_bus</span>
+            </div>
           </div>
         </div>
       </div>
 
-      <!-- Connections -->
-      <div class="space-y-4">
-        <h4 class="font-['Manrope'] text-xl font-bold px-2">Subsequent Connections</h4>
-        <div class="bg-zinc-900/40 rounded-3xl p-6 flex items-center justify-between group hover:bg-zinc-900 transition-colors">
-          <div class="flex gap-6 items-center">
-            <div class="text-zinc-500">12:15</div>
-            <div class="h-10 w-1 bg-zinc-800 rounded-full"></div>
-            <div>
-              <p class="font-bold text-white">Kyoto City Subway Karasuma Line</p>
-              <p class="text-sm text-zinc-500">Kyoto Station → Shijo Station</p>
+      <!-- Sidebar Column -->
+      <div class="col-span-12 lg:col-span-4 space-y-6">
+
+        <!-- Map Mini -->
+        <div class="bg-[#1a1a1a] rounded-xl overflow-hidden ring-1 ring-white/5 shadow-[0_8px_32px_rgba(0,0,0,0.25)]">
+          <div class="h-56 relative bg-white/5 flex items-center justify-center">
+            <div class="text-center">
+              <div class="relative inline-block">
+                <div class="absolute -inset-4 bg-primary/20 rounded-full animate-pulse"></div>
+                <span class="material-symbols-outlined text-primary" style="font-variation-settings:'FILL' 1; font-size:44px">location_on</span>
+              </div>
+            </div>
+            <div class="absolute bottom-3 left-3 right-3 bg-[#09090b]/80 backdrop-blur-md p-3 rounded-xl border border-white/5 flex justify-between items-center">
+              <span class="text-[10px] font-bold uppercase tracking-widest text-zinc-300 font-['Inter']">Live Route Map</span>
+              <span class="material-symbols-outlined text-zinc-400" style="font-size:16px">open_in_new</span>
             </div>
           </div>
-          <div class="flex items-center gap-6">
-            <span class="text-sm font-['Inter'] text-zinc-400 uppercase tracking-tighter">¥220 · 4 Mins</span>
-            <span class="material-symbols-outlined text-zinc-600 group-hover:text-[#ff6b9d] transition-colors">directions_subway</span>
-          </div>
         </div>
-        <div class="bg-zinc-900/40 rounded-3xl p-6 flex items-center justify-between group hover:bg-zinc-900 transition-colors">
-          <div class="flex gap-6 items-center">
-            <div class="text-zinc-500">12:40</div>
-            <div class="h-10 w-1 bg-zinc-800 rounded-full"></div>
-            <div>
-              <p class="font-bold text-white">Kyoto City Bus 205</p>
-              <p class="text-sm text-zinc-500">Shijo Karasuma → Kawaramachi</p>
+
+        <!-- Digital Wallet -->
+        <div class="bg-[#1a1a1a] rounded-xl p-5 ring-1 ring-white/5 shadow-[0_8px_32px_rgba(0,0,0,0.25)]">
+          <h4 class="font-['Manrope'] text-base font-bold text-on-surface mb-5 flex items-center justify-between">
+            Digital Wallet
+            <span class="material-symbols-outlined text-zinc-500" style="font-size:18px">qr_code_2</span>
+          </h4>
+          <div class="space-y-3">
+            <!-- QR -->
+            <div class="aspect-[4/3] bg-white/5 rounded-xl border-2 border-dashed border-white/10 flex flex-col items-center justify-center p-5 group hover:border-primary/40 transition-colors cursor-pointer">
+              <div class="w-24 h-24 bg-white/10 rounded-lg mb-3 flex items-center justify-center group-hover:bg-white/15 transition-colors">
+                <span class="material-symbols-outlined text-zinc-400" style="font-size:44px">qr_code</span>
+              </div>
+              <p class="text-[10px] font-['Inter'] uppercase tracking-widest text-zinc-500 group-hover:text-zinc-300 transition-colors">Tap to Enlarge</p>
             </div>
-          </div>
-          <div class="flex items-center gap-6">
-            <span class="text-sm font-['Inter'] text-zinc-400 uppercase tracking-tighter">¥230 · 12 Mins</span>
-            <span class="material-symbols-outlined text-zinc-600 group-hover:text-[#ff6b9d] transition-colors">directions_bus</span>
+            <!-- Attachment -->
+            <div class="flex items-center gap-3 p-3 bg-white/5 rounded-xl border border-white/5">
+              <div class="w-10 h-10 bg-white/5 rounded-xl flex items-center justify-center shrink-0">
+                <span class="material-symbols-outlined text-zinc-400" style="font-size:18px">image</span>
+              </div>
+              <div class="flex-1 min-w-0">
+                <p class="text-xs font-bold truncate font-['Public_Sans'] text-on-surface">jr-pass-confirmation.jpg</p>
+                <p class="text-[9px] text-zinc-500 uppercase font-['Inter'] mt-0.5">2.4 MB · Uploaded 2d ago</p>
+              </div>
+              <button class="text-zinc-600 hover:text-on-surface transition-colors shrink-0">
+                <span class="material-symbols-outlined" style="font-size:18px">download</span>
+              </button>
+            </div>
+            <!-- Add Screenshot -->
+            <button class="w-full py-3 border border-dashed border-white/10 rounded-xl text-zinc-500 font-bold text-xs font-['Public_Sans'] flex items-center justify-center gap-2 hover:bg-white/5 hover:text-on-surface transition-all">
+              <span class="material-symbols-outlined" style="font-size:16px">add_a_photo</span> Add Screenshot
+            </button>
           </div>
         </div>
+
       </div>
     </div>
 
-    <!-- Sidebar (col-span 4) -->
-    <div class="col-span-12 lg:col-span-4 space-y-8">
-      <!-- Map Mini -->
-      <div class="bg-zinc-900 rounded-[2rem] overflow-hidden border border-zinc-800/50">
-        <div class="h-64 relative bg-zinc-800 flex items-center justify-center">
-          <div class="text-center">
-            <div class="relative inline-block">
-              <div class="absolute -inset-4 bg-[#ff6b9d]/20 rounded-full animate-pulse"></div>
-              <span class="material-symbols-outlined text-[#ff6b9d] text-5xl" style="font-variation-settings:'FILL' 1;">location_on</span>
-            </div>
-          </div>
-          <div class="absolute bottom-4 left-4 right-4 bg-zinc-950/80 backdrop-blur-md p-3 rounded-2xl border border-white/5 flex justify-between items-center">
-            <span class="text-xs font-bold uppercase tracking-widest text-zinc-300">Live Route Map</span>
-            <span class="material-symbols-outlined text-zinc-400 text-sm">open_in_new</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- Digital Wallet -->
-      <div class="bg-zinc-900 rounded-[2rem] p-8 border border-zinc-800/50">
-        <h4 class="font-['Manrope'] text-lg font-bold mb-6 flex items-center justify-between">
-          Digital Wallet
-          <span class="material-symbols-outlined text-zinc-500 text-lg">qr_code_2</span>
-        </h4>
-        <div class="space-y-4">
-          <!-- QR -->
-          <div class="aspect-[4/3] bg-zinc-800/50 rounded-2xl border-2 border-dashed border-zinc-700 flex flex-col items-center justify-center p-6 group hover:border-[#ff6b9d]/50 transition-colors cursor-pointer">
-            <div class="w-32 h-32 bg-zinc-700 rounded-lg mb-4 flex items-center justify-center grayscale group-hover:grayscale-0 transition-all">
-              <span class="material-symbols-outlined text-zinc-400 text-5xl">qr_code</span>
-            </div>
-            <p class="text-xs font-['Inter'] uppercase tracking-widest text-zinc-500 group-hover:text-zinc-300">Tap to Enlarge</p>
-          </div>
-          <!-- Attachment -->
-          <div class="flex items-center gap-4 p-4 bg-zinc-950/50 rounded-2xl border border-zinc-800">
-            <div class="w-12 h-12 bg-zinc-800 rounded-xl flex items-center justify-center">
-              <span class="material-symbols-outlined text-zinc-400">image</span>
-            </div>
-            <div class="flex-1 min-w-0">
-              <p class="text-sm font-bold truncate">jr-pass-confirmation.jpg</p>
-              <p class="text-[10px] text-zinc-500 uppercase">2.4 MB · Uploaded 2d ago</p>
-            </div>
-            <button class="text-zinc-600 hover:text-zinc-200"><span class="material-symbols-outlined">download</span></button>
-          </div>
-          <button class="w-full py-4 border-2 border-zinc-800 rounded-2xl text-zinc-500 font-bold text-sm flex items-center justify-center gap-2 hover:bg-zinc-800 transition-colors">
-            <span class="material-symbols-outlined text-sm">add_a_photo</span> Add Screenshot
-          </button>
-        </div>
-      </div>
-    </div>
   </div>
-
-  <div class="h-24"></div>
-</div>
+  <div class="h-16"></div>
 </main>
-</div>
-</body></html>
+
+</body>
+</html>
