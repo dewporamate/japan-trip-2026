@@ -42,6 +42,31 @@
   ::-webkit-scrollbar { width:5px; }
   ::-webkit-scrollbar-track { background:#09090b; }
   ::-webkit-scrollbar-thumb { background:#2a2a2a; border-radius:3px; }
+  /* ── Light Mode ── */
+  html.light body{background:#f4f4f5!important;color:#18181b!important}
+  html.light .bg-\[\#09090b\]{background:#f4f4f5!important}
+  html.light .bg-\[\#1a1a1a\]{background:#ffffff!important}
+  html.light .bg-\[\#242424\]{background:#e4e4e7!important}
+  html.light header{background:rgba(244,244,245,0.88)!important}
+  html.light aside{background:#f4f4f5!important}
+  html.light .border-white\/5{border-color:rgba(0,0,0,0.09)!important}
+  html.light .ring-white\/5{--tw-ring-color:rgba(0,0,0,0.09)!important}
+  html.light .ring-1{box-shadow:0 0 0 1px rgba(0,0,0,0.09)!important}
+  html.light .bg-white\/5{background:rgba(0,0,0,0.05)!important}
+  html.light .hover\:bg-white\/5:hover{background:rgba(0,0,0,0.05)!important}
+  html.light .hover\:bg-\[\#242424\]:hover{background:#e4e4e7!important}
+  html.light .text-on-surface{color:#18181b!important}
+  html.light .text-zinc-400{color:#71717a!important}
+  html.light .text-zinc-500{color:#52525b!important}
+  html.light .text-zinc-600{color:#3f3f46!important}
+  html.light [class*="shadow-\[0_8px"]{box-shadow:0 2px 16px rgba(0,0,0,0.09)!important}
+  html.light .bg-primary\/5{background:rgba(255,107,157,0.07)!important}
+  html.light .bg-primary\/10{background:rgba(255,107,157,0.12)!important}
+  html.light .bg-primary\/15{background:rgba(255,107,157,0.15)!important}
+  html.light .border-primary\/25{border-color:rgba(255,107,157,0.25)!important}
+  html.light .bg-white\/8{background:rgba(0,0,0,0.06)!important}
+  html.light .bg-zinc-700{background:#d4d4d8!important}
+  html.light .text-zinc-300{color:#52525b!important}
 </style>
 </head>
 <body class="text-on-surface flex h-screen overflow-hidden bg-[#09090b]">
@@ -103,6 +128,9 @@
   <header class="flex justify-between items-center px-5 md:px-8 h-16 w-full bg-[#09090b]/85 backdrop-blur-xl z-50 sticky top-0 border-b border-white/5 shrink-0">
     <h1 class="text-lg font-black text-on-surface italic font-['Manrope'] tracking-tight">Transportation</h1>
     <div class="flex items-center gap-2 md:gap-3">
+      <button id="theme-toggle" onclick="toggleTheme()" class="w-8 h-8 flex items-center justify-center rounded-full hover:bg-white/5 transition-colors text-zinc-500 hover:text-primary" title="Toggle Light/Dark mode">
+        <span class="material-symbols-outlined" style="font-size:20px">light_mode</span>
+      </button>
       <button class="w-8 h-8 flex items-center justify-center rounded-full hover:bg-white/5 transition-colors text-zinc-500 hover:text-primary">
         <span class="material-symbols-outlined" style="font-size:20px">notifications</span>
       </button>
@@ -130,85 +158,7 @@
 
       <!-- Main Column -->
       <div class="col-span-12 lg:col-span-8 space-y-6">
-
-        <!-- Shinkansen Card -->
-        <div class="bg-[#1a1a1a] rounded-xl p-6 ring-1 ring-white/5 shadow-[0_8px_32px_rgba(0,0,0,0.25)]">
-          <div class="flex justify-between items-start mb-8">
-            <div class="flex gap-3 items-center">
-              <div class="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center shrink-0">
-                <span class="material-symbols-outlined text-primary" style="font-size:24px">train</span>
-              </div>
-              <div>
-                <h3 class="font-['Manrope'] text-lg font-bold text-on-surface">Shinkansen Nozomi 23</h3>
-                <p class="text-zinc-500 font-['Inter'] text-[10px] uppercase tracking-wider mt-0.5">Tokyo → Kyoto · Car 4, Seat 12-A</p>
-              </div>
-            </div>
-            <span class="bg-primary/10 text-primary px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest font-['Inter'] shrink-0">Active Soon</span>
-          </div>
-
-          <div class="grid grid-cols-1 md:grid-cols-3 gap-6 items-center">
-            <!-- Departure -->
-            <div class="text-center md:text-left">
-              <p class="text-zinc-500 text-[10px] uppercase tracking-widest mb-1 font-['Inter']">Departure</p>
-              <p class="text-4xl font-['Manrope'] font-black text-on-surface">09:30</p>
-              <p class="text-zinc-400 font-['Public_Sans'] text-sm mt-1">Tokyo Station</p>
-              <p class="text-xs text-primary font-bold mt-1.5 font-['Inter']">Platform 14</p>
-            </div>
-            <!-- Duration -->
-            <div class="flex flex-col items-center">
-              <div class="w-full h-px bg-white/10 relative">
-                <div class="absolute -top-1.5 left-0 w-3 h-3 rounded-full bg-white/20"></div>
-                <div class="absolute -top-1.5 right-0 w-3 h-3 rounded-full bg-primary"></div>
-                <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-[#1a1a1a] px-3">
-                  <span class="material-symbols-outlined text-zinc-600" style="font-size:18px">fast_forward</span>
-                </div>
-              </div>
-              <p class="text-[10px] uppercase tracking-widest text-zinc-600 mt-3 font-['Inter']">2H 15M Duration</p>
-            </div>
-            <!-- Arrival -->
-            <div class="text-center md:text-right">
-              <p class="text-zinc-500 text-[10px] uppercase tracking-widest mb-1 font-['Inter']">Arrival</p>
-              <p class="text-4xl font-['Manrope'] font-black text-on-surface">11:45</p>
-              <p class="text-zinc-400 font-['Public_Sans'] text-sm mt-1">Kyoto Station</p>
-              <p class="text-xs text-zinc-500 font-bold mt-1.5 font-['Inter']">Platform 0</p>
-            </div>
-          </div>
-        </div>
-
-        <!-- Connections -->
-        <div class="space-y-3">
-          <h4 class="font-['Manrope'] text-base font-bold text-on-surface">Subsequent Connections</h4>
-          <!-- Connection 1 -->
-          <div class="bg-[#1a1a1a] rounded-xl p-5 ring-1 ring-white/5 flex items-center justify-between group hover:bg-[#242424] transition-all duration-200">
-            <div class="flex gap-5 items-center">
-              <div class="text-zinc-500 text-sm font-['Inter'] font-semibold w-12 shrink-0">12:15</div>
-              <div class="h-8 w-px bg-white/10 rounded-full"></div>
-              <div>
-                <p class="font-bold text-on-surface text-sm font-['Public_Sans']">Kyoto City Subway Karasuma Line</p>
-                <p class="text-xs text-zinc-500 font-['Public_Sans'] mt-0.5">Kyoto Station → Shijo Station</p>
-              </div>
-            </div>
-            <div class="flex items-center gap-4 shrink-0">
-              <span class="text-xs font-['Inter'] text-zinc-400 uppercase tracking-tight">¥220 · 4 Mins</span>
-              <span class="material-symbols-outlined text-zinc-600 group-hover:text-primary transition-colors" style="font-size:20px">directions_subway</span>
-            </div>
-          </div>
-          <!-- Connection 2 -->
-          <div class="bg-[#1a1a1a] rounded-xl p-5 ring-1 ring-white/5 flex items-center justify-between group hover:bg-[#242424] transition-all duration-200">
-            <div class="flex gap-5 items-center">
-              <div class="text-zinc-500 text-sm font-['Inter'] font-semibold w-12 shrink-0">12:40</div>
-              <div class="h-8 w-px bg-white/10 rounded-full"></div>
-              <div>
-                <p class="font-bold text-on-surface text-sm font-['Public_Sans']">Kyoto City Bus 205</p>
-                <p class="text-xs text-zinc-500 font-['Public_Sans'] mt-0.5">Shijo Karasuma → Kawaramachi</p>
-              </div>
-            </div>
-            <div class="flex items-center gap-4 shrink-0">
-              <span class="text-xs font-['Inter'] text-zinc-400 uppercase tracking-tight">¥230 · 12 Mins</span>
-              <span class="material-symbols-outlined text-zinc-600 group-hover:text-primary transition-colors" style="font-size:20px">directions_bus</span>
-            </div>
-          </div>
-        </div>
+        <div id="transport-list" class="space-y-2"></div>
       </div>
 
       <!-- Sidebar Column -->
@@ -269,7 +219,86 @@
 
   </div>
   <div class="h-16"></div>
+
+<script>
+(function(){
+  const LS_KEY = 'japan2026_v3';
+  const TRANSPORT_EMOJI = new Set(['✈️','🚅','🚌','🚃','🚗','🚶','🚲','🛫','🛬']);
+  const FOOD_EMOJI = new Set(['🍽️','🍜','🍣','🍡','🦐','🍱','☕','🥩','🍺','🍚']);
+  const LODGING_EMOJI = new Set(['🏠','🧳']);
+  const DAY_COLORS = {1:'#ff6b9d',2:'#a78bfa',3:'#fbbf24',4:'#34d399',5:'#60a5fa'};
+  const DAY_NAMES = {1:'เดินทาง',2:'ฟูจิ',3:'Harajuku',4:'Kamakura',5:'กลับบ้าน'};
+  const DAY_DATES = {1:'9-10 ต.ค.',2:'11 ต.ค.',3:'12 ต.ค.',4:'13 ต.ค.',5:'14 ต.ค.'};
+  function loadData() { return JSON.parse(localStorage.getItem(LS_KEY)||'null')||[]; }
+  function parseCost(s) { if(!s||s==='Free')return 0; const m=s.match(/[\d,]+/); return m?parseInt(m[0].replace(/,/g,''),10):0; }
+  function isTransport(d) { return TRANSPORT_EMOJI.has(d.emoji); }
+  function isFood(d) { return FOOD_EMOJI.has(d.emoji); }
+  function isLodging(d) { return LODGING_EMOJI.has(d.emoji)||/check.in|check.out|ที่พัก/i.test(d.detail); }
+  const EMPTY = `<div class="text-center py-16 text-zinc-600"><span class="material-symbols-outlined block mb-3" style="font-size:40px">inbox</span><p class="text-sm font-['Public_Sans']">ยังไม่มีข้อมูล — เพิ่มจากหน้า Itinerary</p></div>`;
+
+  const data = loadData();
+  const items = data.filter(isTransport);
+  const container = document.getElementById('transport-list');
+  if (!container) return;
+  if (!items.length) { container.innerHTML = EMPTY; return; }
+
+  const byDay = {};
+  items.forEach(d => { (byDay[d.day] = byDay[d.day]||[]).push(d); });
+  let html = '';
+  Object.keys(byDay).sort((a,b)=>Number(a)-Number(b)).forEach(day => {
+    const col = DAY_COLORS[day] || '#ff6b9d';
+    html += `<div class="flex items-center gap-3 mb-3 mt-1">
+      <span class="text-[10px] font-['Inter'] font-bold uppercase tracking-widest px-3 py-1 rounded-full" style="color:${col};background:${col}20">Day ${day} · ${DAY_NAMES[day]||''}</span>
+    </div>`;
+    byDay[day].forEach(d => {
+      const isFree = d.cost === 'Free';
+      const hasCost = d.cost && d.cost !== 'Free';
+      const cost = hasCost
+        ? `<span class="text-[10px] font-['Inter'] text-zinc-400 uppercase">${d.cost.substring(0,24)}</span>`
+        : isFree
+        ? `<span class="text-[10px] font-['Inter'] text-emerald-400 uppercase">Free</span>`
+        : '';
+      const dur = d.dur ? `<span class="text-[10px] font-['Inter'] text-zinc-600 ml-2">${d.dur}</span>` : '';
+      html += `<div class="bg-[#1a1a1a] rounded-xl p-4 ring-1 ring-white/5 flex items-center justify-between group hover:bg-[#242424] transition-all duration-200 mb-2">
+        <div class="flex gap-4 items-center">
+          <div class="text-zinc-500 text-sm font-['Inter'] font-semibold w-12 shrink-0">${d.start||''}</div>
+          <div class="h-8 w-px bg-white/10 rounded-full"></div>
+          <div>
+            <p class="font-bold text-on-surface text-sm font-['Public_Sans']">${d.emoji||''} ${d.detail}</p>
+            ${d.from&&d.to&&d.from!==d.to?`<p class="text-xs text-zinc-500 font-['Public_Sans'] mt-0.5">${d.from} → ${d.to}</p>`:''}
+          </div>
+        </div>
+        <div class="flex flex-col items-end gap-1 shrink-0 ml-3">${cost}${dur}</div>
+      </div>`;
+    });
+  });
+  container.innerHTML = html;
+})();
+</script>
 </main>
 
+
+<script>
+(function(){
+  const K = 'japan2026_theme';
+  function applyTheme(t) {
+    document.documentElement.classList.toggle('light', t === 'light');
+    const btn = document.getElementById('theme-toggle');
+    if (btn) {
+      const ico = btn.querySelector('.material-symbols-outlined');
+      if (ico) ico.textContent = t === 'light' ? 'dark_mode' : 'light_mode';
+      if (t === 'light') {
+        btn.onmouseout = null; // disable onmouseout hover reset in light mode
+      }
+    }
+  }
+  window.toggleTheme = function() {
+    const next = document.documentElement.classList.contains('light') ? 'dark' : 'light';
+    localStorage.setItem(K, next);
+    applyTheme(next);
+  };
+  applyTheme(localStorage.getItem(K) || 'dark');
+})();
+</script>
 </body>
 </html>

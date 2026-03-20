@@ -314,13 +314,37 @@
     font-family:'Inter',sans-serif;
   }
   .alert-toggle input[type=checkbox]{accent-color:#ac2a5d;width:15px;height:15px;cursor:pointer}
+  /* ── Light Mode ── */
+  html.light body{background:#f4f4f5!important;color:#18181b!important}
+  html.light #header{background:rgba(244,244,245,0.92)!important;border-bottom:1px solid rgba(0,0,0,0.08)!important}
+  html.light #header h1{color:#18181b!important}
+  html.light .header-meta{color:#71717a!important}
+  html.light #sidebar{background:#f4f4f5!important;border-right:1px solid rgba(0,0,0,0.08)!important}
+  html.light #panel{background:#f4f4f5!important}
+  html.light .card{background:#ffffff!important;border-color:rgba(0,0,0,0.08)!important;color:#18181b!important}
+  html.light .card:hover{background:#f0f0f0!important}
+  html.light .day-header{color:#3f3f46!important}
+  html.light .day-header:hover{background:rgba(0,0,0,0.04)!important}
+  html.light #day-tabs{background:#f4f4f5!important;border-bottom:1px solid rgba(0,0,0,0.08)!important}
+  html.light .day-tab{color:#71717a!important;background:transparent!important}
+  html.light .day-tab.active{background:rgba(255,107,157,0.12)!important;color:#ff6b9d!important}
+  html.light .card-detail{color:#52525b!important}
+  html.light .card-city,.card-time{color:#71717a!important}
+  html.light #budget-badge .amount{color:#18181b!important}
+  html.light #budget-badge .thb{color:#71717a!important}
+  html.light .btn{background:rgba(0,0,0,0.06)!important;color:#3f3f46!important}
+  html.light .btn:hover{background:rgba(0,0,0,0.1)!important}
+  html.light .section-label{color:#71717a!important}
 </style>
 </head>
 <body>
 
 <!-- HEADER -->
 <div id="header">
-  <div style="display:flex;align-items:center;gap:20px">
+  <div style="display:flex;align-items:center;gap:16px">
+    <a href="japan_trip_2026.html" style="display:flex;align-items:center;justify-content:center;width:34px;height:34px;border-radius:10px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);color:#a1a1aa;text-decoration:none;flex-shrink:0;transition:background 0.2s,color 0.2s" title="Back to Itinerary" onmouseover="this.style.background='rgba(255,107,157,0.12)';this.style.color='#ff6b9d'" onmouseout="this.style.background='rgba(255,255,255,0.05)';this.style.color='#a1a1aa'">
+      <span class="material-symbols-outlined" style="font-size:18px;vertical-align:middle">arrow_back</span>
+    </a>
     <h1>🌸 Japan 2026</h1>
     <div class="header-meta" style="border-left:1px solid #27272a;padding-left:20px">Oct 9–14 &nbsp;·&nbsp; 5 Days &nbsp;·&nbsp; Friend Group ✈️</div>
   </div>
@@ -330,6 +354,9 @@
       <div class="amount" id="total-jpy">—</div>
       <div class="thb" id="total-thb"></div>
     </div>
+    <button id="theme-toggle" onclick="toggleTheme()" title="Toggle Light/Dark mode" style="width:34px;height:34px;border-radius:10px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);color:#a1a1aa;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background 0.2s,color 0.2s;flex-shrink:0" onmouseover="this.style.background='rgba(255,107,157,0.12)';this.style.color='#ff6b9d'" onmouseout="if(!document.documentElement.classList.contains('light')){this.style.background='rgba(255,255,255,0.05)';this.style.color='#a1a1aa'}">
+      <span class="material-symbols-outlined" style="font-size:18px;vertical-align:middle">light_mode</span>
+    </button>
     <div style="width:38px;height:38px;border-radius:50%;background:rgba(172,42,93,0.2);display:flex;align-items:center;justify-content:center;font-size:1.1rem;cursor:pointer;border:2px solid rgba(172,42,93,0.3)">🧳</div>
   </div>
 </div>
@@ -820,6 +847,29 @@ save();
 
 // ── INIT ──
 refresh();
+</script>
+
+<script>
+(function(){
+  const K = 'japan2026_theme';
+  function applyTheme(t) {
+    document.documentElement.classList.toggle('light', t === 'light');
+    const btn = document.getElementById('theme-toggle');
+    if (btn) {
+      const ico = btn.querySelector('.material-symbols-outlined');
+      if (ico) ico.textContent = t === 'light' ? 'dark_mode' : 'light_mode';
+      if (t === 'light') {
+        btn.onmouseout = null; // disable onmouseout hover reset in light mode
+      }
+    }
+  }
+  window.toggleTheme = function() {
+    const next = document.documentElement.classList.contains('light') ? 'dark' : 'light';
+    localStorage.setItem(K, next);
+    applyTheme(next);
+  };
+  applyTheme(localStorage.getItem(K) || 'dark');
+})();
 </script>
 </body>
 </html>

@@ -110,6 +110,34 @@
   /* ── Timeline ── */
   .timeline-card:hover { transform:translateX(4px); }
   .timeline-card.active-card { box-shadow:0 8px 32px rgba(255,107,157,.15) !important; outline:1px solid rgba(255,107,157,.25); }
+  /* ── Light Mode ── */
+  html.light body{background:#f4f4f5!important;color:#18181b!important}
+  html.light .bg-\[\#09090b\]{background:#f4f4f5!important}
+  html.light .bg-\[\#1a1a1a\]{background:#ffffff!important}
+  html.light .bg-\[\#242424\]{background:#e4e4e7!important}
+  html.light header{background:rgba(244,244,245,0.88)!important}
+  html.light aside{background:#f4f4f5!important}
+  html.light .border-white\/5{border-color:rgba(0,0,0,0.09)!important}
+  html.light .ring-white\/5{--tw-ring-color:rgba(0,0,0,0.09)!important}
+  html.light .ring-1{box-shadow:0 0 0 1px rgba(0,0,0,0.09)!important}
+  html.light .bg-white\/5{background:rgba(0,0,0,0.05)!important}
+  html.light .hover\:bg-white\/5:hover{background:rgba(0,0,0,0.05)!important}
+  html.light .hover\:bg-\[\#242424\]:hover{background:#e4e4e7!important}
+  html.light .text-on-surface{color:#18181b!important}
+  html.light .text-zinc-400{color:#71717a!important}
+  html.light .text-zinc-500{color:#52525b!important}
+  html.light .text-zinc-600{color:#3f3f46!important}
+  html.light [class*="shadow-\[0_8px"]{box-shadow:0 2px 16px rgba(0,0,0,0.09)!important}
+  html.light .bg-primary\/5{background:rgba(255,107,157,0.07)!important}
+  html.light .bg-primary\/10{background:rgba(255,107,157,0.12)!important}
+  html.light .bg-primary\/15{background:rgba(255,107,157,0.15)!important}
+  html.light .border-primary\/25{border-color:rgba(255,107,157,0.25)!important}
+  html.light .bg-white\/8{background:rgba(0,0,0,0.06)!important}
+  html.light .bg-zinc-700{background:#d4d4d8!important}
+  html.light .text-zinc-300{color:#52525b!important}
+  html.light .timeline-card{background:#ffffff!important}
+  html.light .timeline-card:hover{background:#f0f0f0!important}
+  html.light .timeline-card.active-card{background:#fff5f8!important}
 </style>
 </head>
 <body class="text-on-surface flex overflow-hidden h-screen bg-background">
@@ -191,6 +219,9 @@
       <!-- Budget hidden anchors (used by JS only) -->
       <span id="total-jpy" style="display:none"></span>
       <span id="total-thb" style="display:none"></span>
+      <button id="theme-toggle" onclick="toggleTheme()" class="w-8 h-8 flex items-center justify-center rounded-full hover:bg-white/5 transition-colors text-zinc-500 hover:text-primary" title="Toggle Light/Dark mode">
+        <span class="material-symbols-outlined" style="font-size:20px">light_mode</span>
+      </button>
       <button class="w-8 h-8 flex items-center justify-center rounded-full hover:bg-white/5 transition-colors text-zinc-500 hover:text-primary">
         <span class="material-symbols-outlined" style="font-size:20px">notifications</span>
       </button>
@@ -400,6 +431,7 @@ const DEFAULT_DATA = [
   {day:1,date:"10 ต.ค.",city:"Kita",emoji:"🚶",start:"10:40",end:"10:50",dur:"10m",detail:"เดินไปที่พักฝากกระเป๋า 🧳",from:"Oku Station",to:"KETA House OKU",openClose:"Check-in 16:00-23:00",cost:"",lat:35.7494,lng:139.7625},
   {day:1,date:"10 ต.ค.",city:"Kita",emoji:"🍽️",start:"11:00",end:"12:00",dur:"1h",detail:"หาอะไรกินกันแถวที่พัก 🍜",from:"Kita area",to:"Kita area",cost:"max 5,000¥ (1,000฿)",lat:35.7490,lng:139.7630},
   {day:1,date:"10 ต.ค.",city:"Kita",emoji:"🚅",start:"12:00",end:"12:10",dur:"10m",detail:"รถไฟ Kaminakazato → Ueno",from:"Oku Station",to:"Ueno Station",openClose:"04:30-24:00",cost:"¥170",lat:35.7141,lng:139.7774},
+  {day:1,date:"10 ต.ค.",city:"Ueno",emoji:"🎌",start:"12:10",end:"12:10",dur:"",detail:"🎌 เริ่มเที่ยว DAY 1 — ออกจาก Ueno Station!",from:"Ueno Station",to:"Ueno Station",cost:"",lat:35.7141,lng:139.7774},
   {day:1,date:"10 ต.ค.",city:"Ueno",emoji:"🚶",start:"12:10",end:"14:00",dur:"2h",detail:"Ameyoko Market + street food 🛍️🍢",from:"Ueno Station",to:"Ameyoko Market",cost:"max 1,500¥/person",lat:35.7085,lng:139.7746},
   {day:1,date:"10 ต.ค.",city:"Asakusa",emoji:"⛩️",start:"14:00",end:"16:00",dur:"2h",detail:"Sensoji Temple + Nakamise-dori shopping ⛩️",from:"Ueno Station",to:"Sensoji Temple",openClose:"06:00-17:00",cost:"Free",lat:35.7148,lng:139.7967},
   {day:1,date:"10 ต.ค.",city:"Kita",emoji:"🏠",start:"16:00",end:"17:00",dur:"1h",detail:"Check-in ที่พัก KETA House OKU 🏠",from:"Oku Station",to:"KETA House OKU",openClose:"Check-in 16:00-23:00",cost:"",lat:35.7494,lng:139.7625},
@@ -850,6 +882,29 @@ function toggleSidebar(){
 itinerary = itinerary.map((d,i)=>d.id!=null?d:{...d,id:i});
 save();
 refresh();
+</script>
+
+<script>
+(function(){
+  const K = 'japan2026_theme';
+  function applyTheme(t) {
+    document.documentElement.classList.toggle('light', t === 'light');
+    const btn = document.getElementById('theme-toggle');
+    if (btn) {
+      const ico = btn.querySelector('.material-symbols-outlined');
+      if (ico) ico.textContent = t === 'light' ? 'dark_mode' : 'light_mode';
+      if (t === 'light') {
+        btn.onmouseout = null; // disable onmouseout hover reset in light mode
+      }
+    }
+  }
+  window.toggleTheme = function() {
+    const next = document.documentElement.classList.contains('light') ? 'dark' : 'light';
+    localStorage.setItem(K, next);
+    applyTheme(next);
+  };
+  applyTheme(localStorage.getItem(K) || 'dark');
+})();
 </script>
 </body>
 </html>
