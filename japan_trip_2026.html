@@ -426,7 +426,10 @@
 <!-- ═══════════════ EDIT MODAL ═══════════════ -->
 <div id="modal-overlay">
   <div id="modal">
-    <div class="modal-title" id="modal-title">แก้ไขกิจกรรม</div>
+    <div class="flex items-center justify-between mb-0" style="margin-bottom:0">
+      <div class="modal-title" id="modal-title" style="margin-bottom:0">แก้ไขกิจกรรม</div>
+      <button id="modal-close-btn" onclick="closeModal()" style="width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,0.06);border:none;cursor:pointer;color:#71717a;font-size:16px;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:background .15s,color .15s" onmouseover="this.style.background='rgba(255,255,255,0.12)';this.style.color='#f1f1f1'" onmouseout="this.style.background='rgba(255,255,255,0.06)';this.style.color='#71717a'">✕</button>
+    </div>
 
     <div class="form-group modal-grid full" style="margin-bottom:4px">
       <label>ไอคอน</label>
@@ -799,7 +802,6 @@ function openModal(item=null, dayNum=1){
 
 function closeModal(){ overlay.classList.remove('open'); }
 document.getElementById('modal-cancel').onclick = closeModal;
-overlay.addEventListener('click',e=>{ if(e.target===overlay) closeModal(); });
 
 document.getElementById('modal-save').onclick = async ()=>{
   const detail = document.getElementById('f-detail').value.trim();
@@ -999,17 +1001,26 @@ function buildTimeline(filter){
       chosenClass: 'sortable-chosen',
       onEnd: async evt => {
         if (evt.oldIndex === evt.newIndex) return;
-        // collect current order of .timeline-wrapper els (skip addRow)
         const els = [...wrapper.querySelectorAll('.timeline-wrapper')];
         const ids = els.map(el => el.dataset.id);
-        // map ids to full itinerary items preserving other-day items
         const dayItems = itinerary.filter(x => x.day === day);
         const reordered = ids.map(id => dayItems.find(x => x.id === id)).filter(Boolean);
-        // compute global order by replacing this day's items in full itinerary
-        const others = itinerary.filter(x => x.day !== day);
-        const allReordered = [...others, ...reordered];
+
+        // keep time slots fixed — reassign start/end/dur/actDate in original order
+        const oldTimes = dayItems.map(x => ({ start: x.start, end: x.end, dur: x.dur, actDate: x.actDate }));
         const batch = writeBatch(db);
-        allReordered.forEach((item, i) => { batch.update(doc(db, 'itinerary', item.id), { order: i }); });
+        reordered.forEach((item, i) => {
+          batch.update(doc(db, 'itinerary', item.id), {
+            order: i,
+            start:   oldTimes[i].start,
+            end:     oldTimes[i].end,
+            dur:     oldTimes[i].dur,
+            actDate: oldTimes[i].actDate,
+          });
+        });
+        // update order for other-day items too
+        const others = itinerary.filter(x => x.day !== day);
+        others.forEach((item, i) => { batch.update(doc(db, 'itinerary', item.id), { order: reordered.length + i }); });
         await batch.commit();
       },
     });
@@ -1188,6 +1199,7 @@ window.openMapView       = openMapView;
 window.closeMapView      = closeMapView;
 window.toggleSidebar     = toggleSidebar;
 window.openModal         = openModal;
+window.closeModal        = closeModal;
 window.triggerMediaUpload = triggerMediaUpload;
 
 // ── INIT handled by onSnapshot; media slots init after first render ──
