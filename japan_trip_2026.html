@@ -15,6 +15,7 @@
   };
 </script>
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBMEJI1GmX6i-ZaN-cgvu-yhaQrdRsnvCk&libraries=places&callback=initMap" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.2/Sortable.min.js"></script>
 <script id="tailwind-config">
   tailwind.config = {
     darkMode: "class",
@@ -165,11 +166,10 @@
   /* ── Timeline ── */
   .timeline-card:hover { transform:translateX(4px); }
   .timeline-card.active-card { box-shadow:0 8px 32px rgba(255,107,157,.15) !important; outline:1px solid rgba(255,107,157,.25); }
-  .timeline-card.drag-over { outline:1px dashed rgba(255,107,157,.4); background:rgba(255,107,157,.06)!important; transform:none!important; }
-  .timeline-wrapper[draggable] .timeline-card { cursor:grab; }
-  .timeline-wrapper[draggable]:active .timeline-card { cursor:grabbing; }
   .btn-drag { background:rgba(255,255,255,0.05); color:#52525b; cursor:grab; transition:color .15s,background .15s; }
   .btn-drag:hover { background:rgba(255,255,255,0.1); color:#e4e4e7; }
+  .sortable-ghost { opacity:.35; }
+  .sortable-chosen .timeline-card { outline:1px dashed rgba(255,107,157,.4); background:rgba(255,107,157,.04)!important; }
   /* ── CSS Variables ── */
   :root { --day-circle-bg: #09090b; }
   html.light { --day-circle-bg: #f4f4f5; }
@@ -627,9 +627,15 @@ onSnapshot(query(itineraryCol, orderBy('order')), snapshot => {
     seedDefaultData();
     return;
   }
+  const dateNum = d => parseInt((d.actDate||'').match(/\d+/)?.[0] || '0');
   itinerary = snapshot.docs
     .map(d => ({ ...d.data(), id: d.id }))
-    .sort((a, b) => a.day !== b.day ? a.day - b.day : (a.start||'').localeCompare(b.start||''));
+    .sort((a, b) => {
+      if (a.day !== b.day) return a.day - b.day;
+      const da = dateNum(a), db = dateNum(b);
+      if (da !== db) return da - db;
+      return (a.start||'').localeCompare(b.start||'');
+    });
   refresh();
 });
 
@@ -878,7 +884,6 @@ function buildTimeline(filter){
       const el = document.createElement('div');
       el.className = 'relative timeline-wrapper';
       el.dataset.id = d.id;
-      el.draggable = false;
 
       /* dot */
       const dotEl = document.createElement('div');
@@ -949,45 +954,6 @@ function buildTimeline(filter){
         await deleteDoc(doc(db,'itinerary',d.id));
       });
 
-      /* ── Drag to reorder — enable only from handle ── */
-      const dragHandle = card.querySelector('.btn-drag');
-      dragHandle.addEventListener('mousedown', () => { el.draggable = true; });
-      dragHandle.addEventListener('mouseup',   () => { el.draggable = false; });
-
-      el.addEventListener('dragstart', e => {
-        e.dataTransfer.setData('text/plain', d.id);
-        e.dataTransfer.effectAllowed = 'move';
-        setTimeout(() => { el.style.opacity = '.4'; }, 0);
-      });
-      el.addEventListener('dragend', () => {
-        el.draggable = false;
-        el.style.opacity = '';
-        document.querySelectorAll('.drag-over').forEach(x => x.classList.remove('drag-over'));
-      });
-      el.addEventListener('dragover', e => {
-        e.preventDefault();
-        e.dataTransfer.dropEffect = 'move';
-        card.classList.add('drag-over');
-      });
-      el.addEventListener('dragleave', e => {
-        if (!el.contains(e.relatedTarget)) card.classList.remove('drag-over');
-      });
-      el.addEventListener('drop', async e => {
-        e.preventDefault();
-        card.classList.remove('drag-over');
-        const fromId = e.dataTransfer.getData('text/plain');
-        const toId = d.id;
-        if (fromId === toId) return;
-        const fi = itinerary.findIndex(x => x.id === fromId);
-        const ti = itinerary.findIndex(x => x.id === toId);
-        if (fi < 0 || ti < 0) return;
-        const reordered = [...itinerary];
-        const [moved] = reordered.splice(fi, 1);
-        reordered.splice(ti, 0, moved);
-        const batch = writeBatch(db);
-        reordered.forEach((item, i) => { batch.update(doc(db, 'itinerary', item.id), { order: i }); });
-        await batch.commit();
-      });
 
       el.appendChild(dotEl);
       el.appendChild(card);
@@ -1003,6 +969,31 @@ function buildTimeline(filter){
     `;
     addRow.querySelector('.add-activity-btn').addEventListener('click', ()=>openModal(null, day));
     wrapper.appendChild(addRow);
+
+    /* ── SortableJS drag-to-reorder ── */
+    Sortable.create(wrapper, {
+      animation: 150,
+      handle: '.btn-drag',
+      filter: '.add-activity-btn',
+      draggable: '.timeline-wrapper',
+      ghostClass: 'sortable-ghost',
+      chosenClass: 'sortable-chosen',
+      onEnd: async evt => {
+        if (evt.oldIndex === evt.newIndex) return;
+        // collect current order of .timeline-wrapper els (skip addRow)
+        const els = [...wrapper.querySelectorAll('.timeline-wrapper')];
+        const ids = els.map(el => el.dataset.id);
+        // map ids to full itinerary items preserving other-day items
+        const dayItems = itinerary.filter(x => x.day === day);
+        const reordered = ids.map(id => dayItems.find(x => x.id === id)).filter(Boolean);
+        // compute global order by replacing this day's items in full itinerary
+        const others = itinerary.filter(x => x.day !== day);
+        const allReordered = [...others, ...reordered];
+        const batch = writeBatch(db);
+        allReordered.forEach((item, i) => { batch.update(doc(db, 'itinerary', item.id), { order: i }); });
+        await batch.commit();
+      },
+    });
 
     container.appendChild(wrapper);
   });
