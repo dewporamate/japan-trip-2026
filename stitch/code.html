@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Sakura Drift - Itinerary</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;700;800&amp;family=Public_Sans:wght@300;400;600;700&amp;family=Inter:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "on-secondary-container": "#67567d",
+              "tertiary-fixed-dim": "#e9c400",
+              "surface-container-low": "#f4f3f3",
+              "secondary-container": "#e5cefd",
+              "primary": "#ac2a5d",
+              "surface-container-highest": "#e2e2e2",
+              "primary-container": "#ff6b9d",
+              "surface-tint": "#ac2a5d",
+              "error-container": "#ffdad6",
+              "on-secondary-fixed": "#231437",
+              "surface-container-lowest": "#ffffff",
+              "on-secondary": "#ffffff",
+              "tertiary": "#705d00",
+              "outline-variant": "#ddbfc5",
+              "tertiary-container": "#ba9c00",
+              "on-primary": "#ffffff",
+              "on-error-container": "#93000a",
+              "error": "#ba1a1a",
+              "background": "#f9f9f9",
+              "on-tertiary-container": "#403500",
+              "surface-container": "#eeeeee",
+              "inverse-primary": "#ffb1c5",
+              "secondary": "#68577f",
+              "inverse-surface": "#2f3131",
+              "secondary-fixed": "#eedcff",
+              "secondary-fixed-dim": "#d4beec",
+              "tertiary-fixed": "#ffe16d",
+              "inverse-on-surface": "#f1f1f1",
+              "surface": "#f9f9f9",
+              "on-error": "#ffffff",
+              "on-surface-variant": "#574146",
+              "on-primary-fixed-variant": "#8c0a46",
+              "on-primary-fixed": "#3f001b",
+              "on-secondary-fixed-variant": "#503f66",
+              "primary-fixed": "#ffd9e1",
+              "on-surface": "#1a1c1c",
+              "surface-dim": "#dadada",
+              "primary-fixed-dim": "#ffb1c5",
+              "on-primary-container": "#6e0035",
+              "on-background": "#1a1c1c",
+              "surface-variant": "#e2e2e2",
+              "on-tertiary-fixed": "#221b00",
+              "surface-container-high": "#e8e8e8",
+              "surface-bright": "#f9f9f9",
+              "outline": "#8a7176",
+              "on-tertiary-fixed-variant": "#544600",
+              "on-tertiary": "#ffffff"
+            },
+            fontFamily: {
+              "headline": ["Manrope"],
+              "body": ["Public Sans"],
+              "label": ["Inter"]
+            },
+            borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+        }
+        .sidebar-expanded { width: 18rem; }
+        .sidebar-collapsed { width: 5rem; }
+        .hide-scrollbar::-webkit-scrollbar { display: none; }
+    </style>
+</head>
+<body class="bg-zinc-950 text-zinc-100 font-body selection:bg-primary-container/30">
+<!-- Top Navigation Shell -->
+<header class="fixed top-0 z-50 w-full h-20 bg-zinc-950/70 backdrop-blur-xl flex justify-between items-center px-8 border-none">
+<div class="flex items-center gap-4">
+<span class="text-2xl font-black text-zinc-100 italic font-headline">Zen Planner</span>
+</div>
+<nav class="hidden md:flex items-center gap-8">
+<a class="text-[#ff6b9d] border-b-2 border-[#ac2a5d] pb-1 font-headline tracking-tight font-bold text-lg" href="#">Itinerary</a>
+<a class="text-zinc-400 hover:text-zinc-100 transition-colors font-headline tracking-tight font-bold text-lg" href="#">Map</a>
+<a class="text-zinc-400 hover:text-zinc-100 transition-colors font-headline tracking-tight font-bold text-lg" href="#">Budget</a>
+<a class="text-zinc-400 hover:text-zinc-100 transition-colors font-headline tracking-tight font-bold text-lg" href="#">Explore</a>
+</nav>
+<div class="flex items-center gap-6">
+<button class="material-symbols-outlined text-zinc-400 hover:text-[#ff6b9d] transition-colors">notifications</button>
+<button class="material-symbols-outlined text-zinc-400 hover:text-[#ff6b9d] transition-colors">settings</button>
+<div class="w-10 h-10 rounded-full bg-zinc-800 overflow-hidden ring-2 ring-[#ac2a5d]/20">
+<img alt="User profile" class="w-full h-full object-cover" data-alt="Close up portrait of a smiling traveler" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAM-TX1jFtZMwU4pifVTHMW_Ucpt4Us1lAJBFP1TUNTv52kmoEo-7_sVyUuOZiTBu3Yzv-whoGTeVAmDYy088563LTuCL-xUe1LIyoBVEA_UyibuL7Q_mRr1KWXS-OiS8vO_8W8T3frDJjuAsn0u9rJXYJf3yP3rWCogQja9-8Aq06kn9PM_xxp3iDB13RQdoiEu5Pf2qDx95ufXVW1FfMG90F-UcSgd-PwAtYIsDArXXXJW-KqTs0jmV1F7uAqvlARt2b8Sc204qw"/>
+</div>
+</div>
+</header>
+<div class="flex pt-20 h-screen overflow-hidden">
+<!-- Collapsible SideNavBar -->
+<!-- Note: Using hover-expand simulation via CSS for the 'collapsible' requirement in static HTML -->
+<aside class="sidebar-expanded group flex flex-col h-full py-10 px-6 bg-zinc-900 border-none transition-all duration-300 ease-in-out shrink-0">
+<div class="flex items-center gap-4 mb-12">
+<div class="w-12 h-12 rounded-xl bg-[#ac2a5d] flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-white">temple_buddhist</span>
+</div>
+<div class="flex flex-col group-sidebar-collapsed:hidden overflow-hidden whitespace-nowrap">
+<span class="text-xl font-bold font-headline text-[#ff6b9d]">Kyoto Zen</span>
+<span class="text-xs text-zinc-500 font-label tracking-widest uppercase">Autumn Editorial</span>
+</div>
+</div>
+<nav class="flex-1 space-y-2">
+<a class="flex items-center gap-4 py-3 text-[#ff6b9d] font-bold border-l-4 border-[#ac2a5d] pl-4 bg-[#ff6b9d]/5 rounded-r-xl transition-all duration-300" href="#">
+<span class="material-symbols-outlined">train</span>
+<span class="group-sidebar-collapsed:hidden">Transportation</span>
+</a>
+<a class="flex items-center gap-4 py-3 text-zinc-500 pl-5 hover:bg-zinc-800 hover:text-zinc-300 rounded-xl transition-all duration-300" href="#">
+<span class="material-symbols-outlined">restaurant</span>
+<span class="group-sidebar-collapsed:hidden">Dining</span>
+</a>
+<a class="flex items-center gap-4 py-3 text-zinc-500 pl-5 hover:bg-zinc-800 hover:text-zinc-300 rounded-xl transition-all duration-300" href="#">
+<span class="material-symbols-outlined">museum</span>
+<span class="group-sidebar-collapsed:hidden">Activities</span>
+</a>
+<a class="flex items-center gap-4 py-3 text-zinc-500 pl-5 hover:bg-zinc-800 hover:text-zinc-300 rounded-xl transition-all duration-300" href="#">
+<span class="material-symbols-outlined">hotel</span>
+<span class="group-sidebar-collapsed:hidden">Lodging</span>
+</a>
+</nav>
+<button class="mt-auto flex items-center justify-center gap-2 py-4 rounded-full bg-gradient-to-r from-[#ac2a5d] to-[#ff6b9d] text-white font-bold shadow-lg shadow-[#ac2a5d]/20 hover:scale-105 active:scale-95 transition-all">
+<span class="material-symbols-outlined">add</span>
+<span class="group-sidebar-collapsed:hidden whitespace-nowrap">Add New Stop</span>
+</button>
+</aside>
+<!-- Main Content Canvas -->
+<main class="flex-1 overflow-y-auto bg-zinc-950 p-8 md:p-12 hide-scrollbar">
+<header class="mb-16">
+<span class="font-label text-xs tracking-[0.3em] text-[#ff6b9d] uppercase mb-4 block">Current Adventure</span>
+<h1 class="text-6xl md:text-8xl font-black font-headline text-zinc-100 tracking-tighter leading-[0.9] mb-6">
+                    Sakura Drift <br/>
+<span class="text-zinc-800">2024 Edition</span>
+</h1>
+<p class="max-w-xl text-zinc-400 text-lg leading-relaxed">
+                    A curated journey through the heart of Japan, focusing on the transient beauty of cherry blossoms and the stillness of Zen gardens.
+                </p>
+</header>
+<!-- Itinerary Section -->
+<section class="space-y-16">
+<!-- Day Group -->
+<div class="relative pl-12">
+<!-- Timeline Rail -->
+<div class="absolute left-0 top-0 bottom-0 w-[2px] bg-[#ff6b9d] opacity-20"></div>
+<div class="flex items-center gap-6 mb-12 -ml-12">
+<div class="w-24 h-24 rounded-full bg-zinc-900 flex flex-col items-center justify-center border-4 border-zinc-950 z-10 shadow-2xl">
+<span class="font-headline font-black text-2xl text-[#ff6b9d]">01</span>
+<span class="font-label text-[10px] tracking-widest text-zinc-500 uppercase">April</span>
+</div>
+<div>
+<h2 class="text-3xl font-headline font-bold text-zinc-100">Arrival at KIX</h2>
+<p class="text-zinc-500 uppercase tracking-widest text-xs font-label">The gateway to Osaka</p>
+</div>
+</div>
+<!-- Activity Cards with Media Support -->
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+<!-- Card 1 -->
+<div class="bg-zinc-900/50 rounded-3xl p-8 hover:bg-zinc-900 transition-all duration-500 group">
+<div class="flex justify-between items-start mb-6">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-[#ff6b9d]">flight_land</span>
+<span class="font-label text-xs text-zinc-500 tracking-widest uppercase">10:30 AM — Arrival</span>
+</div>
+<span class="bg-zinc-800 text-zinc-400 px-3 py-1 rounded-full text-[10px] font-bold tracking-tighter">CONFIRMED</span>
+</div>
+<h3 class="text-2xl font-headline font-bold text-zinc-100 mb-4">Touchdown at Kansai</h3>
+<p class="text-zinc-400 leading-relaxed mb-8">Clear customs and pick up the pre-ordered JR Pass and Pocket WiFi from the service desk.</p>
+<!-- Media Section -->
+<div class="grid grid-cols-2 gap-3 mt-4">
+<div class="relative aspect-video rounded-2xl overflow-hidden bg-zinc-800 group/media">
+<img alt="Osaka Airport Architecture" class="w-full h-full object-cover opacity-60 group-hover/media:scale-110 group-hover/media:opacity-100 transition-all duration-700" data-alt="Modern architectural lines of Kansai airport" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD1El9c6lVvavYb2SmclLMh-VtcIDjx12NVTqpL3KkbMoRqFxpiyq4qZNpsZAd7zKtIyMD7Gm1i-tYPEsj_ln0kZeWP6XlcyF_m7F2alsFLrG2EioCNuoOWuZyBa5Psnsw0wsiph7MEyqXe5fr5RMBWGi02pV857oLaE_AB3Hr9y5PCI9AjWWpoIr2QXUgWoEtARLY9KxtbR7aydbIYNFRTo8dVVYAUmssOvdwrpXNA_Z_mFZSux9xabsQNE0--h14tzVDQURfZ7xs"/>
+<div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover/media:opacity-100 transition-opacity">
+<span class="material-symbols-outlined text-white text-3xl">zoom_in</span>
+</div>
+</div>
+<div class="relative aspect-video rounded-2xl overflow-hidden bg-zinc-800 group/media">
+<img alt="Japanese Train" class="w-full h-full object-cover opacity-60 group-hover/media:scale-110 group-hover/media:opacity-100 transition-all duration-700" data-alt="Haruka Express train at the station" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDFJSKqnaflSk8cM4JGSdxObX7zc0MQLMQmnzS9O9TXYSfjDCKs7uq8F7QPkVRPlUnN4Ft0aYllkCk1b7x81HDNsSxQZU7EaHdW-iVlo9636mQ_BAKZxFUDvJdbu-RmlD9oN7yfcPyAsq_ntAr4_eidEKhVFcc1IZ61AgcmstkcftQ9_msVzovJg0nIHHnNKckNo-hna1hfg-o2CpkOqfl2JOIB0j0UI3MLVSZb6-FYyZl5EFR_y39PMguauSFJppcvVIpoT6PuphA"/>
+<div class="absolute inset-0 flex items-center justify-center bg-black/40">
+<span class="material-symbols-outlined text-white text-3xl">play_circle</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Card 2 -->
+<div class="bg-zinc-900/50 rounded-3xl p-8 hover:bg-zinc-900 transition-all duration-500 group border-l-4 border-[#ac2a5d]/40">
+<div class="flex justify-between items-start mb-6">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-[#ff6b9d]">directions_railway</span>
+<span class="font-label text-xs text-zinc-500 tracking-widest uppercase">12:15 PM — Transit</span>
+</div>
+<span class="text-[#ff6b9d] text-xs font-bold tracking-widest uppercase">Haruka Express</span>
+</div>
+<h3 class="text-2xl font-headline font-bold text-zinc-100 mb-4">Haruka to Kyoto Station</h3>
+<p class="text-zinc-400 leading-relaxed mb-8">Take the limited express directly to the heart of Kyoto. Enjoy the scenic rural transition.</p>
+<!-- Media Placeholder for New Memories -->
+<div class="w-full h-40 rounded-2xl border-2 border-dashed border-zinc-800 flex flex-col items-center justify-center gap-2 text-zinc-600 hover:border-[#ff6b9d]/30 hover:text-zinc-400 transition-colors cursor-pointer">
+<span class="material-symbols-outlined text-4xl">add_a_photo</span>
+<span class="font-label text-[10px] uppercase tracking-widest">Add photos or videos</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Day 2 Preview -->
+<div class="relative pl-12 opacity-50">
+<div class="absolute left-0 top-0 bottom-0 w-[2px] bg-[#ff6b9d] opacity-10"></div>
+<div class="flex items-center gap-6 mb-8 -ml-12">
+<div class="w-24 h-24 rounded-full bg-zinc-900 flex flex-col items-center justify-center border-4 border-zinc-950 z-10">
+<span class="font-headline font-black text-2xl text-zinc-600">02</span>
+<span class="font-label text-[10px] tracking-widest text-zinc-700 uppercase">April</span>
+</div>
+<h2 class="text-3xl font-headline font-bold text-zinc-600">Arashiyama Bamboo</h2>
+</div>
+</div>
+</section>
+</main>
+</div>
+<!-- Mobile Bottom Navigation -->
+<nav class="md:hidden fixed bottom-0 left-0 w-full z-50 bg-zinc-900/80 backdrop-blur-2xl flex justify-around items-center px-6 py-4 pb-safe border-none shadow-[0_-8px_32px_rgba(0,0,0,0.5)]">
+<button class="flex flex-col items-center justify-center bg-[#ff6b9d]/10 text-[#ff6b9d] rounded-xl px-4 py-2">
+<span class="material-symbols-outlined">calendar_today</span>
+<span class="font-label text-[10px] uppercase tracking-widest font-bold mt-1">Day 1</span>
+</button>
+<button class="flex flex-col items-center justify-center text-zinc-500 px-4 py-2">
+<span class="material-symbols-outlined">calendar_today</span>
+<span class="font-label text-[10px] uppercase tracking-widest font-bold mt-1">Day 2</span>
+</button>
+<button class="flex flex-col items-center justify-center text-zinc-500 px-4 py-2">
+<span class="material-symbols-outlined">calendar_today</span>
+<span class="font-label text-[10px] uppercase tracking-widest font-bold mt-1">Day 3</span>
+</button>
+<button class="flex flex-col items-center justify-center text-zinc-400 px-4 py-2">
+<span class="material-symbols-outlined">payments</span>
+<span class="font-label text-[10px] uppercase tracking-widest font-bold mt-1">Total</span>
+</button>
+</nav>
+</body></html>

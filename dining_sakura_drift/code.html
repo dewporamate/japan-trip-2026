@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;700;800&amp;family=Public+Sans:wght@300;400;600&amp;family=Inter:wght@400;500&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "surface": "#f9f9f9",
+              "on-error": "#ffffff",
+              "secondary": "#68577f",
+              "tertiary-container": "#ba9c00",
+              "primary-container": "#ff6b9d",
+              "on-secondary-fixed": "#231437",
+              "error": "#ba1a1a",
+              "secondary-fixed-dim": "#d4beec",
+              "primary": "#ac2a5d",
+              "outline-variant": "#ddbfc5",
+              "surface-container-low": "#f4f3f3",
+              "on-surface-variant": "#574146",
+              "on-primary-fixed": "#3f001b",
+              "inverse-on-surface": "#f1f1f1",
+              "on-tertiary-fixed-variant": "#544600",
+              "on-secondary-fixed-variant": "#503f66",
+              "surface-container-highest": "#e2e2e2",
+              "surface-container-lowest": "#ffffff",
+              "on-background": "#1a1c1c",
+              "background": "#f9f9f9",
+              "surface-variant": "#e2e2e2",
+              "inverse-primary": "#ffb1c5",
+              "on-surface": "#1a1c1c",
+              "primary-fixed-dim": "#ffb1c5",
+              "on-primary-fixed-variant": "#8c0a46",
+              "surface-tint": "#ac2a5d",
+              "surface-container": "#eeeeee",
+              "secondary-fixed": "#eedcff",
+              "on-tertiary": "#ffffff",
+              "on-tertiary-fixed": "#221b00",
+              "surface-bright": "#f9f9f9",
+              "inverse-surface": "#2f3131",
+              "on-secondary": "#ffffff",
+              "on-secondary-container": "#67567d",
+              "surface-container-high": "#e8e8e8",
+              "on-primary-container": "#6e0035",
+              "on-primary": "#ffffff",
+              "tertiary-fixed-dim": "#e9c400",
+              "error-container": "#ffdad6",
+              "primary-fixed": "#ffd9e1",
+              "tertiary-fixed": "#ffe16d",
+              "surface-dim": "#dadada",
+              "on-tertiary-container": "#403500",
+              "outline": "#8a7176",
+              "secondary-container": "#e5cefd",
+              "tertiary": "#705d00",
+              "on-error-container": "#93000a"
+            },
+            fontFamily: {
+              "headline": ["Manrope"],
+              "body": ["Public Sans"],
+              "label": ["Inter"]
+            },
+            borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+<style>
+        body { background-color: #09090b; color: #f4f4f5; }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24; }
+        .glass-panel { backdrop-filter: blur(20px); background: rgba(24, 24, 27, 0.7); }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+    </style>
+</head>
+<body class="font-body selection:bg-primary-container/30">
+<div class="flex min-h-screen">
+<!-- SideNavBar -->
+<aside class="hidden md:flex flex-col h-screen w-72 bg-[#f9f9f9] dark:bg-zinc-950 sticky top-0 border-r border-zinc-800/50 py-10 px-6 font-['Public_Sans'] leading-relaxed">
+<div class="mb-12">
+<h1 class="text-xl font-bold font-['Manrope'] text-[#ac2a5d]">Kyoto Zen</h1>
+<p class="text-[10px] uppercase tracking-widest text-zinc-500 mt-1">Sakura Drift Edition</p>
+</div>
+<nav class="flex-1 space-y-2">
+<a class="flex items-center gap-4 text-zinc-500 pl-5 hover:bg-white dark:hover:bg-zinc-900 transition-all py-3 rounded-xl group" href="#">
+<span class="material-symbols-outlined text-xl">event_note</span>
+<span>Itinerary</span>
+</a>
+<a class="flex items-center gap-4 text-zinc-500 pl-5 hover:bg-white dark:hover:bg-zinc-900 transition-all py-3 rounded-xl group" href="#">
+<span class="material-symbols-outlined text-xl">train</span>
+<span>Transportation</span>
+</a>
+<a class="flex items-center gap-4 text-[#ac2a5d] font-bold border-l-4 border-[#ac2a5d] pl-4 py-3 bg-white dark:bg-zinc-900 rounded-r-xl transition-all translate-x-1 duration-300" href="#">
+<span class="material-symbols-outlined text-xl">restaurant</span>
+<span>Dining</span>
+</a>
+<a class="flex items-center gap-4 text-zinc-500 pl-5 hover:bg-white dark:hover:bg-zinc-900 transition-all py-3 rounded-xl group" href="#">
+<span class="material-symbols-outlined text-xl">museum</span>
+<span>Activities</span>
+</a>
+<a class="flex items-center gap-4 text-zinc-500 pl-5 hover:bg-white dark:hover:bg-zinc-900 transition-all py-3 rounded-xl group" href="#">
+<span class="material-symbols-outlined text-xl">hotel</span>
+<span>Lodging</span>
+</a>
+<a class="flex items-center gap-4 text-zinc-500 pl-5 hover:bg-white dark:hover:bg-zinc-900 transition-all py-3 rounded-xl group" href="#">
+<span class="material-symbols-outlined text-xl">map</span>
+<span>Map</span>
+</a>
+<a class="flex items-center gap-4 text-zinc-500 pl-5 hover:bg-white dark:hover:bg-zinc-900 transition-all py-3 rounded-xl group" href="#">
+<span class="material-symbols-outlined text-xl">payments</span>
+<span>Budget</span>
+</a>
+</nav>
+<button class="mt-auto w-full py-4 bg-[#ac2a5d] text-white rounded-full font-bold shadow-lg shadow-[#ac2a5d]/20 active:scale-95 transition-transform">
+                Add New Stop
+            </button>
+</aside>
+<!-- Main Content -->
+<main class="flex-1 bg-zinc-950 overflow-x-hidden">
+<!-- TopAppBar -->
+<header class="flex justify-between items-center px-8 h-20 w-full bg-white/70 dark:bg-zinc-950/70 backdrop-blur-xl sticky top-0 z-50">
+<div class="flex items-center gap-8">
+<span class="text-2xl font-black text-[#1a1c1c] dark:text-zinc-100 italic">Zen Planner</span>
+<nav class="hidden lg:flex gap-6">
+<a class="text-zinc-500 dark:text-zinc-400 hover:text-zinc-800 transition-colors font-['Manrope'] tracking-tight font-bold text-lg" href="#">Itinerary</a>
+<a class="text-zinc-500 dark:text-zinc-400 hover:text-zinc-800 transition-colors font-['Manrope'] tracking-tight font-bold text-lg" href="#">Map</a>
+<a class="text-zinc-500 dark:text-zinc-400 hover:text-zinc-800 transition-colors font-['Manrope'] tracking-tight font-bold text-lg" href="#">Budget</a>
+<a class="text-zinc-500 dark:text-zinc-400 hover:text-zinc-800 transition-colors font-['Manrope'] tracking-tight font-bold text-lg" href="#">Explore</a>
+</nav>
+</div>
+<div class="flex items-center gap-4">
+<button class="p-2 text-zinc-400 hover:bg-zinc-800/50 rounded-full transition-colors active:scale-95">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="p-2 text-zinc-400 hover:bg-zinc-800/50 rounded-full transition-colors active:scale-95">
+<span class="material-symbols-outlined">settings</span>
+</button>
+<div class="w-10 h-10 rounded-full bg-zinc-800 overflow-hidden ring-2 ring-[#ac2a5d]">
+<img alt="User profile" data-alt="User profile avatar close up" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBihNdNXwa95QlCebao5HLip8v6i2fNMCB48nVmzSmTIR7uaEVXFJ-xJf5QlaqWpVzP_JL-cKwVCjl114dThWUXPd8pyOlaqumjopXYrVOUE-eN-0W4zK49IZ_mKRDHXawpK1SzT0Qe5K19bpksHkt_Fu1CaTpxLqYWG7-1G2DHoh-1kTvhh9lp3FAWxgwVrJv8CCruSTOBHMz9uRtXvUdM0W0bfO94nSN12AsmPd-uEq54yfZn0SsmUevmYuK7UJCsjt2noRw8ccA"/>
+</div>
+</div>
+</header>
+<div class="p-8 space-y-12 max-w-7xl mx-auto">
+<!-- Hero Section (Editorial Style) -->
+<section class="relative h-[400px] rounded-[2.5rem] overflow-hidden group">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" data-alt="Modern high end Japanese restaurant interior with moody lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCY50zvQU1uvkG2d30WXXC4IFwgMa4NVkJ_fU435T41uUSUgUkDnYGESuERIVKSpOY8LTo7i3NnoeiU4S3viirIlma8Va69XibkqofqeawowstQIUhKTX_tNH87X_1nCcwSsiPYiMuOrw1jIkfIvmEbnRehYfi0L5c6jdXDuetAgx8a00ib9F87eI-4CHWDw1ZhoE1PeqX6bsn_-5zf-2PWb8w98hYrL0J_e-9Rrc1vuH5_di5iQlTrPLNSetVwceyuOc_c3yI0kmI"/>
+<div class="absolute inset-0 bg-gradient-to-t from-zinc-950 via-zinc-950/20 to-transparent"></div>
+<div class="absolute bottom-12 left-12 right-12">
+<div class="flex items-end justify-between">
+<div>
+<span class="px-4 py-1.5 bg-[#ac2a5d] text-white text-[10px] font-bold tracking-[0.2em] rounded-full uppercase mb-4 inline-block">Curated Dining</span>
+<h2 class="text-6xl font-headline font-extrabold text-white tracking-tighter leading-none">Kyoto Gastronomy</h2>
+<p class="text-zinc-300 mt-4 max-w-lg font-body text-lg leading-relaxed">Experience the delicate balance of seasonal Kaiseki and modern fusion beneath the cherry blossoms.</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Reservations & Map Grid (Asymmetric) -->
+<section class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+<div class="lg:col-span-8 space-y-6">
+<div class="flex justify-between items-center mb-4">
+<h3 class="text-2xl font-headline font-bold text-white">Upcoming Reservations</h3>
+<button class="text-primary font-bold text-sm hover:underline">View Calendar</button>
+</div>
+<!-- Reservation Card 1 -->
+<div class="bg-zinc-900/50 rounded-[2rem] p-8 flex flex-col md:flex-row gap-8 items-center border border-zinc-800/30">
+<div class="w-full md:w-48 h-48 rounded-2xl overflow-hidden shrink-0">
+<img class="w-full h-full object-cover" data-alt="Gourmet sushi platter on a dark ceramic plate" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDlbaBlcrRh_-fFc19CduZb5l6P7_taNLICvDnmoHbmtI0WoiKL2l3Um2UoKLVPBLXyEqTyUTjJY9HuMSpgOhGOythoarKDpTbK1RZdXSQe8-tT8Ge-KztBJIeTwdBRLrOBIj5cC83B_KmtvARuXonv3xmijUZ0ibG1SzJH0ud5YVN_K9aaS3cMZlwMoO7ins-JAi2f1PcGnSpapwVWNw1dC6-E57KRJb_cJ9B_Sfob1z6qgTMM6jHrlaeflQW3lot74Nvt89jaHE0"/>
+</div>
+<div class="flex-1 space-y-4">
+<div class="flex justify-between items-start">
+<div>
+<h4 class="text-xl font-headline font-bold text-white">Omen Ginkakuji-mae</h4>
+<p class="text-zinc-400 font-label text-xs tracking-wider uppercase">8-10 Ginkakujimaecho, Sakyo Ward</p>
+</div>
+<span class="bg-[#ff6b9d]/10 text-[#ff6b9d] px-4 py-1 rounded-full text-xs font-bold">Confirmed</span>
+</div>
+<div class="flex gap-6 text-sm text-zinc-300">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-lg">calendar_today</span>
+<span>April 14, 2024</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-lg">schedule</span>
+<span>19:30</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-lg">group</span>
+<span>2 Persons</span>
+</div>
+</div>
+<div class="pt-2">
+<button class="bg-zinc-800 hover:bg-zinc-700 text-white px-6 py-2.5 rounded-full text-sm font-bold transition-colors">Manage Booking</button>
+</div>
+</div>
+</div>
+<!-- Reservation Card 2 -->
+<div class="bg-zinc-900/50 rounded-[2rem] p-8 flex flex-col md:flex-row gap-8 items-center border border-zinc-800/30">
+<div class="w-full md:w-48 h-48 rounded-2xl overflow-hidden shrink-0">
+<img class="w-full h-full object-cover" data-alt="Traditional Japanese tea house interior with tatami mats" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCMEYYhIRaHRyQ6K2dS7ubavS3-hbBr7rnpKq4tMcBBU3qzrB_L2AA9dQA9SjHQndJWi48Q5GsGceoIBXurqw5vmXE268rMEKxQKFQHXhpaUKKuwLooAKi2ZOBipBVOKrpTW7q2zl0NcdAt43tWPijeTDCL_GvkQHo0jFJIKgaYR0lrlsI69twa_nfrCMTpBCSw2UptQwyur-GB2yttygVfJSee7k6DKZSbydJ4e02zyNPyNTuwElUyOxnbOWAmEVzswDyH5BQPlts"/>
+</div>
+<div class="flex-1 space-y-4">
+<div class="flex justify-between items-start">
+<div>
+<h4 class="text-xl font-headline font-bold text-white">The Sodoh Higashiyama</h4>
+<p class="text-zinc-400 font-label text-xs tracking-wider uppercase">366-2 Yasaka Kamimachi, Higashiyama Ward</p>
+</div>
+<span class="bg-zinc-800 text-zinc-400 px-4 py-1 rounded-full text-xs font-bold">Waitlisted</span>
+</div>
+<div class="flex gap-6 text-sm text-zinc-300">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-lg">calendar_today</span>
+<span>April 16, 2024</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-lg">schedule</span>
+<span>20:00</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-lg">group</span>
+<span>4 Persons</span>
+</div>
+</div>
+<div class="pt-2 flex gap-3">
+<button class="bg-[#ac2a5d] text-white px-6 py-2.5 rounded-full text-sm font-bold shadow-lg shadow-[#ac2a5d]/20">Call Restaurant</button>
+<button class="bg-zinc-800 hover:bg-zinc-700 text-white px-6 py-2.5 rounded-full text-sm font-bold transition-colors">Find Alternative</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Map Sidebar (Editorial Column) -->
+<div class="lg:col-span-4 flex flex-col gap-6">
+<div class="bg-zinc-900 rounded-[2rem] p-6 h-full flex flex-col border border-zinc-800/50 overflow-hidden">
+<h3 class="text-xl font-headline font-bold text-white mb-6 px-2">Nearby Gems</h3>
+<div class="relative w-full h-64 rounded-2xl overflow-hidden mb-8">
+<img class="w-full h-full object-cover grayscale" data-alt="Abstract minimalist map of Kyoto district" data-location="Kyoto, Japan" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBTBzNhMrMi04lD96a1HOxsFpNH-VRWgZae8Jxh4ieLd1T8QIWqGmdkQ6XMi0xwmMkw-4odYp9l6DJNeopvwhePFcFpsJ2a5ZAeYEibAw0cxyC6WDeqF7dQt_jfJlcuuyCbWCpns6UeZoa8cuKh-hUZwqJgIJn-EJsCkKJj2Xwr1h2kXGEpH710ef4I2KIuDGgnBxOAXGdcX_GGLDbdvXSj5SBfCaV2E-RYVl5U-lGXAbYg38C1sip1pnW-4zRvYb_SCIKzp_O6rA0"/>
+<div class="absolute inset-0 bg-primary/10"></div>
+<div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
+<span class="material-symbols-outlined text-primary text-4xl" style="font-variation-settings: 'FILL' 1;">location_on</span>
+</div>
+</div>
+<div class="space-y-6 px-2 overflow-y-auto no-scrollbar">
+<div class="flex gap-4 items-center group cursor-pointer">
+<div class="w-16 h-16 rounded-xl overflow-hidden bg-zinc-800">
+<img class="w-full h-full object-cover group-hover:scale-110 transition-transform" data-alt="Close up of ramen bowl with egg and pork" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDqicJ50i437ayGWMmcUDudaW1mmw6uo8mw0IWBnLfvKFY42J1unstVZMMIMvG4zHjbbTFm6N-_TE3vWpMmYGS-qRFIdGgvE0VvdJbcltaSNAtPJ0Jx2v9BovSfRZxi2P5WCxBgMoxxcga5Wc6Y5LkTn8H4W4x9cETj5IkNrC9eVPKy9yRq8hjkZ5wVC9f3_okDXN_RJtE8o1nwE0wsHBYHcl1rwiYXQE2ZCxLWu7UzUORLMhPjVKCUKBJtcaS01TAFWFbM2ciTN8I"/>
+</div>
+<div>
+<h5 class="text-sm font-bold text-zinc-100">Ichiran Ramen</h5>
+<p class="text-xs text-zinc-500">4 min walk • $</p>
+</div>
+</div>
+<div class="flex gap-4 items-center group cursor-pointer">
+<div class="w-16 h-16 rounded-xl overflow-hidden bg-zinc-800">
+<img class="w-full h-full object-cover group-hover:scale-110 transition-transform" data-alt="Elegant cocktails on a marble bar top" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDXKfZ0ovYOptWzN8fNe5mkXgSJPEwIuKnWHe7ufEV2eoawdTfaxPfsOYvedSJg_mTdegPia8sRCJbzmF-W6DiJDDUQFsyNELMfmgIC1ABw39RKZZi-7NwVVIfi8VIR7EdrdWoxMi6f78Rk0NBdVM49ERMSZ_t658wNhM2zN4F__x960UjebIGGtRTLhm58FFtu-V8ftQ4VzKPvzhdNsto5XRxkbwBnZTI6bnQsxRDUnQKLNqLI5cnjKIj0Vc_D1kcPVGzpHTz9-nk"/>
+</div>
+<div>
+<h5 class="text-sm font-bold text-zinc-100">L'Escamoteur Bar</h5>
+<p class="text-xs text-zinc-500">12 min walk • $$$</p>
+</div>
+</div>
+<div class="flex gap-4 items-center group cursor-pointer">
+<div class="w-16 h-16 rounded-xl overflow-hidden bg-zinc-800">
+<img class="w-full h-full object-cover group-hover:scale-110 transition-transform" data-alt="Gyoza dumplings on a wooden plate" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBiwoXCbzAcDP2pAGoRK9-bYoNmBQEEQUIC0gO2b-MFOKHPDoysuFyZxIQtM4uqNrYjK_tJrqZpbPcuri4Ao3x8U8CMvRkRl-uh69JJq4ML5Tkoc2CarWuuoadOvDaLIOT2uE-86u4my3BKpM09skIZ6Rcp7g0BrfllPOf3eTftA13mvI6PkjdSFxcXcOqbKGwNyPt9oQ1VRpRQKnbBciYsBpTAQHigeqfgStgVcdbY8migkx8WA_W5xgLw-_bG02_TcoVhQMd-qXk"/>
+</div>
+<div>
+<h5 class="text-sm font-bold text-zinc-100">Chao Chao Gyoza</h5>
+<p class="text-xs text-zinc-500">7 min walk • $$</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Notes & Media Section (Bento Grid Style) -->
+<section class="space-y-6">
+<div class="flex items-center gap-4">
+<h3 class="text-2xl font-headline font-bold text-white">Notes &amp; Media</h3>
+<div class="h-[1px] flex-1 bg-zinc-800"></div>
+<button class="p-2 bg-zinc-900 rounded-full text-primary">
+<span class="material-symbols-outlined">add</span>
+</button>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-4 grid-rows-2 gap-4 h-[600px]">
+<!-- Note Block -->
+<div class="md:col-span-2 md:row-span-1 bg-primary/5 border border-primary/20 rounded-[2rem] p-8 flex flex-col justify-between">
+<div>
+<span class="material-symbols-outlined text-primary mb-4">edit_note</span>
+<p class="text-lg font-body text-zinc-200 leading-relaxed italic">"Don't forget to order the Wagyu beef with seasonal truffles at Omen. Also, request the window seat for the Zen garden view."</p>
+</div>
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-zinc-800"></div>
+<span class="text-xs font-label text-zinc-500 tracking-wider">MARCH 28 • BY SARAH</span>
+</div>
+</div>
+<!-- Large Photo -->
+<div class="md:col-span-2 md:row-span-2 rounded-[2rem] overflow-hidden relative group">
+<img class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000" data-alt="High detail macro shot of matcha dessert with cherry blossoms" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBqg_boglic-A5e5q6v8d6ewcR6h9Ok7joDfm0FiwOxua_QZ7cvDTG_-hAURYqgCFeqstyQqAO2wQRSrpbF8xNY72Ulo4C0Zp8AzJUtORK85u6PUUwdm8-t5cr7EBCjW4kFq4h1dCwY7uRlPKFfL7P6SbWYW9RCVhMRdH9nRez4bOxBHmlPPlelv-_kHf6_jLE_4ISvKKB4SDYBgBAbgzZHaLgX87KOzqKYok8JsYnz6J67QXw488M7ddxCVxoLX-GTYv7cfIepGWY"/>
+<div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end p-8">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-white text-sm">play_circle</span>
+<span class="text-white text-xs font-bold uppercase tracking-widest">Video Reveal • Matcha Clouds</span>
+</div>
+</div>
+</div>
+<!-- Small Photo 1 -->
+<div class="md:col-span-1 md:row-span-1 rounded-[2rem] overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="Premium sashimi selection arranged in a bowl" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDTnhNdM_ex_Mp7ynVITwIRNP-pfH4YZ-Bm1vBJJlLD8-6JtySXhTlehqclLTs4evOf-6UxiE9z8Zn821vbUXBtB58TwEhOzvkCs_UlKwtNIt0tziQlZWXxn-6tySb1rZ9XX8PLIVvj_Xa59CXthgFHT4VZi-R0rN2tSudrYQYq3LE0qY818YQUZMHfKr2qe1OAlOfDj03T4GCLEaCNL8vQHMwQBWEeN_httqJ-bdAz675Jt28GdUfHeYtG6Nr8dU0FNXPHUwL18GU"/>
+</div>
+<!-- Small Photo 2 -->
+<div class="md:col-span-1 md:row-span-1 rounded-[2rem] overflow-hidden bg-zinc-900 flex items-center justify-center border border-zinc-800 border-dashed group cursor-pointer hover:bg-zinc-800/50 transition-colors">
+<div class="text-center">
+<span class="material-symbols-outlined text-4xl text-zinc-600 group-hover:text-primary transition-colors">add_photo_alternate</span>
+<p class="text-xs text-zinc-500 mt-2 font-label">ADD MEDIA</p>
+</div>
+</div>
+</div>
+</section>
+</div>
+<!-- Bottom Margin for Shell -->
+<div class="h-32"></div>
+</main>
+</div>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-6 py-4 pb-safe md:hidden bg-white/80 dark:bg-zinc-900/80 backdrop-blur-2xl shadow-[0_-8px_32px_rgba(0,0,0,0.04)] rounded-t-3xl">
+<a class="flex flex-col items-center justify-center text-zinc-400 dark:text-zinc-500 px-4 py-2 hover:text-[#ac2a5d] transition-all scale-98 active:opacity-80" href="#">
+<span class="material-symbols-outlined">calendar_today</span>
+<span class="font-['Public_Sans'] text-[10px] uppercase tracking-widest font-bold mt-1">Day 1</span>
+</a>
+<a class="flex flex-col items-center justify-center text-zinc-400 dark:text-zinc-500 px-4 py-2 hover:text-[#ac2a5d] transition-all scale-98 active:opacity-80" href="#">
+<span class="material-symbols-outlined">calendar_today</span>
+<span class="font-['Public_Sans'] text-[10px] uppercase tracking-widest font-bold mt-1">Day 2</span>
+</a>
+<a class="flex flex-col items-center justify-center text-zinc-400 dark:text-zinc-500 px-4 py-2 hover:text-[#ac2a5d] transition-all scale-98 active:opacity-80" href="#">
+<span class="material-symbols-outlined">calendar_today</span>
+<span class="font-['Public_Sans'] text-[10px] uppercase tracking-widest font-bold mt-1">Day 3</span>
+</a>
+<a class="flex flex-col items-center justify-center text-zinc-400 dark:text-zinc-500 px-4 py-2 hover:text-[#ac2a5d] transition-all scale-98 active:opacity-80" href="#">
+<span class="material-symbols-outlined">calendar_today</span>
+<span class="font-['Public_Sans'] text-[10px] uppercase tracking-widest font-bold mt-1">Day 4</span>
+</a>
+<a class="flex flex-col items-center justify-center text-zinc-400 dark:text-zinc-500 px-4 py-2 hover:text-[#ac2a5d] transition-all scale-98 active:opacity-80" href="#">
+<span class="material-symbols-outlined">payments</span>
+<span class="font-['Public_Sans'] text-[10px] uppercase tracking-widest font-bold mt-1">Total: ¥45k</span>
+</a>
+</nav>
+</body></html>

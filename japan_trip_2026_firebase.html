@@ -6,14 +6,8 @@
 <title>🌸 Japan Trip 2026 — Friend Group Itinerary</title>
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&family=Public+Sans:wght@300;400;600;700&family=Inter:wght@400;500;600;700&family=Noto+Sans+Thai:wght@300;400;600;700&family=Kanit:wght@300;400;600;700&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
-<script>
-  // Relay: Google Maps callback fires before module script — bridge the gap
-  window.initMap = function() {
-    if (window.__initMapReady) window.__initMapReady();
-    else window.__initMapPending = true;
-  };
-</script>
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBMEJI1GmX6i-ZaN-cgvu-yhaQrdRsnvCk&libraries=places&callback=initMap" defer></script>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <style>
   /* ─── MATERIAL SYMBOLS ─── */
   .material-symbols-outlined {
@@ -28,6 +22,7 @@
     color:#f4f4f5; /* zinc-100 */
     height:100vh;overflow:hidden;display:flex;flex-direction:column;
   }
+  canvas#petals{position:fixed;top:0;left:0;pointer-events:none;z-index:900}
 
   /* ─── HEADER ─── */
   #header{
@@ -220,23 +215,17 @@
     body{height:auto;overflow:auto}
   }
 
-  /* ─── GOOGLE MAPS INFOWINDOW ─── */
-  .gm-style .gm-style-iw-c{
-    background:#27272a!important;border-radius:16px!important;
-    box-shadow:0 20px 56px rgba(0,0,0,.75)!important;padding:0!important;
+  /* ─── LEAFLET POPUP ─── */
+  .leaflet-popup-content-wrapper{
+    background:#27272a;border:none;
+    border-radius:16px;color:#f4f4f5;
+    box-shadow:0 20px 56px rgba(0,0,0,0.75);
   }
-  .gm-style .gm-style-iw-d{overflow:hidden!important;padding:0!important;}
-  .gm-style .gm-style-iw-t::after{
-    background:linear-gradient(45deg,#27272a 50%,rgba(39,39,42,0) 51%)!important;
-    box-shadow:-2px 2px 4px rgba(0,0,0,.3)!important;
-  }
-  .gm-style .gm-style-iw-chr{display:none!important;}
-  button.gm-ui-hover-effect{filter:invert(1)!important;}
-  .gm-popup{
-    padding:14px 18px;
+  .leaflet-popup-tip{background:#27272a}
+  .leaflet-popup-content{
+    margin:14px 18px;
     font-family:'Public Sans','Noto Sans Thai',sans-serif;
-    font-size:0.78rem;line-height:1.6;color:#f4f4f5;
-    min-width:200px;max-width:280px;
+    font-size:0.78rem;line-height:1.6;
   }
   .popup-title{
     font-weight:800;font-size:0.88rem;margin-bottom:4px;
@@ -309,60 +298,6 @@
     box-shadow:0 0 0 2px rgba(172,42,93,0.45);
   }
   .modal-sep{height:1px;background:rgba(255,255,255,0.06);margin:14px 0}
-
-  /* ── PLACE SEARCH ── */
-  .place-search-wrap{position:relative;margin-bottom:14px}
-  .place-search-row{display:flex;gap:8px;align-items:center}
-  .place-search-row input{
-    flex:1;background:rgba(255,255,255,0.05);border:none;
-    border-radius:10px;padding:9px 12px;
-    color:#f4f4f5;font-size:0.82rem;
-    font-family:'Public Sans','Noto Sans Thai',sans-serif;
-    transition:background .2s,box-shadow .2s;outline:none;
-  }
-  .place-search-row input:focus{
-    background:rgba(255,255,255,0.09);
-    box-shadow:0 0 0 2px rgba(172,42,93,0.35);
-  }
-  .place-search-row input::placeholder{color:#52525b}
-  .btn-search{
-    padding:9px 14px;border-radius:10px;border:none;cursor:pointer;
-    background:rgba(172,42,93,0.2);color:#ff6b9d;
-    font-size:0.78rem;font-weight:700;font-family:'Inter',sans-serif;
-    white-space:nowrap;transition:all .2s;flex-shrink:0;
-  }
-  .btn-search:hover{background:rgba(172,42,93,0.35)}
-  .btn-search:disabled{opacity:.4;cursor:default}
-  .place-label{
-    font-size:0.62rem;color:#52525b;
-    text-transform:uppercase;letter-spacing:0.08em;
-    font-weight:700;font-family:'Inter',sans-serif;
-    margin-bottom:5px;display:block;
-  }
-  .place-results{
-    position:absolute;top:calc(100% + 4px);left:0;right:0;
-    background:#1c1c1f;border-radius:12px;z-index:9999;
-    box-shadow:0 8px 32px rgba(0,0,0,0.6);
-    max-height:220px;overflow-y:auto;
-    border:1px solid rgba(255,255,255,0.08);
-  }
-  .place-results:empty{display:none}
-  .place-result-item{
-    padding:10px 14px;cursor:pointer;
-    border-bottom:1px solid rgba(255,255,255,0.05);
-    transition:background .15s;
-  }
-  .place-result-item:last-child{border-bottom:none}
-  .place-result-item:hover{background:rgba(172,42,93,0.15)}
-  .place-result-name{font-size:0.8rem;color:#f4f4f5;font-weight:600}
-  .place-result-addr{font-size:0.7rem;color:#71717a;margin-top:2px}
-  .place-result-coords{font-size:0.65rem;color:#52525b;margin-top:1px;font-family:'Inter',monospace}
-  .place-status{
-    font-size:0.7rem;color:#71717a;padding:4px 0;margin-top:4px;
-    font-family:'Inter',sans-serif;min-height:18px;
-  }
-  .place-status.ok{color:#4ade80}
-  .place-status.err{color:#f87171}
   .modal-actions{display:flex;gap:10px;justify-content:flex-end;margin-top:20px}
   .btn{
     padding:10px 22px;border-radius:12px;border:none;cursor:pointer;
@@ -380,49 +315,23 @@
     font-family:'Inter',sans-serif;
   }
   .alert-toggle input[type=checkbox]{accent-color:#ac2a5d;width:15px;height:15px;cursor:pointer}
-  /* ── Light Mode ── */
-  html.light body{background:#f4f4f5!important;color:#18181b!important}
-  html.light #header{background:rgba(244,244,245,0.92)!important;border-bottom:1px solid rgba(0,0,0,0.08)!important}
-  html.light #header h1{color:#18181b!important}
-  html.light .header-meta{color:#71717a!important}
-  html.light #sidebar{background:#f4f4f5!important;border-right:1px solid rgba(0,0,0,0.08)!important}
-  html.light #panel{background:#f4f4f5!important}
-  html.light .card{background:#ffffff!important;border-color:rgba(0,0,0,0.08)!important;color:#18181b!important}
-  html.light .card:hover{background:#f0f0f0!important}
-  html.light .day-header{color:#3f3f46!important}
-  html.light .day-header:hover{background:rgba(0,0,0,0.04)!important}
-  html.light #day-tabs{background:#f4f4f5!important;border-bottom:1px solid rgba(0,0,0,0.08)!important}
-  html.light .day-tab{color:#71717a!important;background:transparent!important}
-  html.light .day-tab.active{background:rgba(255,107,157,0.12)!important;color:#ff6b9d!important}
-  html.light .card-detail{color:#52525b!important}
-  html.light .card-city,.card-time{color:#71717a!important}
-  html.light #budget-badge .amount{color:#18181b!important}
-  html.light #budget-badge .thb{color:#71717a!important}
-  html.light .btn{background:rgba(0,0,0,0.06)!important;color:#3f3f46!important}
-  html.light .btn:hover{background:rgba(0,0,0,0.1)!important}
-  html.light .section-label{color:#71717a!important}
 </style>
 </head>
 <body>
+<canvas id="petals"></canvas>
 
 <!-- HEADER -->
 <div id="header">
-  <div style="display:flex;align-items:center;gap:16px">
-    <a id="back-btn" href="japan_trip_2026.html" style="display:flex;align-items:center;justify-content:center;width:34px;height:34px;border-radius:10px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);color:#a1a1aa;text-decoration:none;flex-shrink:0;transition:background 0.2s,color 0.2s" title="Back to Itinerary" onmouseover="this.style.background='rgba(255,107,157,0.12)';this.style.color='#ff6b9d'" onmouseout="this.style.background='rgba(255,255,255,0.05)';this.style.color='#a1a1aa'">
-      <span class="material-symbols-outlined" style="font-size:18px;vertical-align:middle">arrow_back</span>
-    </a>
+  <div style="display:flex;align-items:center;gap:20px">
     <h1>🌸 Japan 2026</h1>
     <div class="header-meta" style="border-left:1px solid #27272a;padding-left:20px">Oct 9–14 &nbsp;·&nbsp; 5 Days &nbsp;·&nbsp; Friend Group ✈️</div>
   </div>
   <div style="display:flex;align-items:center;gap:24px">
     <div id="budget-badge">
-      <div class="label">Expense</div>
+      <div class="label">Transport Cost</div>
       <div class="amount" id="total-jpy">—</div>
       <div class="thb" id="total-thb"></div>
     </div>
-    <button id="theme-toggle" onclick="toggleTheme()" title="Toggle Light/Dark mode" style="width:34px;height:34px;border-radius:10px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);color:#a1a1aa;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background 0.2s,color 0.2s;flex-shrink:0" onmouseover="this.style.background='rgba(255,107,157,0.12)';this.style.color='#ff6b9d'" onmouseout="if(!document.documentElement.classList.contains('light')){this.style.background='rgba(255,255,255,0.05)';this.style.color='#a1a1aa'}">
-      <span class="material-symbols-outlined" style="font-size:18px;vertical-align:middle">light_mode</span>
-    </button>
     <div style="width:38px;height:38px;border-radius:50%;background:rgba(172,42,93,0.2);display:flex;align-items:center;justify-content:center;font-size:1.1rem;cursor:pointer;border:2px solid rgba(172,42,93,0.3)">🧳</div>
   </div>
 </div>
@@ -507,17 +416,6 @@
 
     <div class="modal-sep"></div>
 
-    <!-- PLACE SEARCH → auto-fill lat/lng -->
-    <div class="place-search-wrap">
-      <span class="place-label">🔍 ค้นหาสถานที่ (กรอกชื่อแล้วกดค้นหา)</span>
-      <div class="place-search-row">
-        <input type="text" id="f-place-search" placeholder="เช่น Sensoji Temple, Shibuya Crossing…">
-        <button class="btn-search" id="btn-place-search">ค้นหา</button>
-      </div>
-      <div class="place-results" id="place-results"></div>
-      <div class="place-status" id="place-status"></div>
-    </div>
-
     <!-- LAT / LNG for map pin -->
     <div class="modal-grid">
       <div class="form-group">
@@ -538,29 +436,9 @@
   </div>
 </div>
 
-<script type="module">
-/* ─── Firebase v10 Modular SDK ─── */
-import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js';
-import {
-  getFirestore, collection, addDoc, updateDoc, deleteDoc,
-  doc, onSnapshot, writeBatch, query, orderBy
-} from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
-
-const firebaseConfig = {
-  apiKey: "AIzaSyA48_2e-Ed3ss20V5yuTlLRb9vXx3V3OgY",
-  authDomain: "japan-trip-2026-b0275.firebaseapp.com",
-  projectId: "japan-trip-2026-b0275",
-  storageBucket: "japan-trip-2026-b0275.firebasestorage.app",
-  messagingSenderId: "551330402525",
-  appId: "1:551330402525:web:b1ccc22dbb76ac7c560b34"
-};
-
-const firebaseApp = initializeApp(firebaseConfig);
-const db = getFirestore(firebaseApp);
-const itineraryCol = collection(db, 'itinerary');
-
+<script>
 /* ══════════════════════════════════════════
-   DEFAULT ITINERARY DATA (seed if Firestore empty)
+   DEFAULT ITINERARY DATA
 ══════════════════════════════════════════ */
 const DEFAULT_DATA = [
   // DAY 1 — Bangkok Departure
@@ -627,134 +505,66 @@ const DAY_COLORS = {1:"#ff6b9d",2:"#a78bfa",3:"#fbbf24",4:"#34d399",5:"#60a5fa"}
 const DAY_NAMES  = {1:"✈️ เดินทาง + ถึงญี่ปุ่น",2:"🗻 ภูเขาไฟฟูจิ",3:"🛍️ Harajuku · Shibuya",4:"🏖️ Kamakura · Enoshima",5:"🛫 กลับบ้าน"};
 const DAY_DATES  = {1:"9-10 ต.ค. 2569",2:"11 ต.ค. 2569",3:"12 ต.ค. 2569",4:"13 ต.ค. 2569",5:"14 ต.ค. 2569"};
 
-/* ── State ── */
-let itinerary = [];
+/* ── localStorage ── */
+const LS_KEY = 'japan2026_v2';
+let itinerary = JSON.parse(localStorage.getItem(LS_KEY) || 'null') || DEFAULT_DATA.map((d,i)=>({...d,id:i}));
+function save(){ localStorage.setItem(LS_KEY, JSON.stringify(itinerary)); }
+function nextId(){ return Date.now(); }
 
-/* ── Seed default data to Firestore (first time only) ── */
-async function seedDefaultData() {
-  const batch = writeBatch(db);
-  DEFAULT_DATA.forEach((item, i) => {
-    const docRef = doc(itineraryCol);
-    batch.set(docRef, { ...item, order: i });
-  });
-  await batch.commit();
-}
-
-/* ── Real-time listener ── */
-let _seeded = false;
-onSnapshot(query(itineraryCol, orderBy('order')), snapshot => {
-  if (snapshot.empty && !_seeded) {
-    _seeded = true;
-    seedDefaultData();
-    return;
-  }
-  itinerary = snapshot.docs
-    .map(d => ({ ...d.data(), id: d.id }))
-    .sort((a, b) => {
-      if (a.day !== b.day) return a.day - b.day;
-      return (a.start || '').localeCompare(b.start || '');
+/* ── Cherry Blossoms ── */
+(function(){
+  const c=document.getElementById('petals'),ctx=c.getContext('2d');
+  let p=[];
+  function resize(){c.width=innerWidth;c.height=innerHeight}
+  resize(); window.addEventListener('resize',resize);
+  for(let i=0;i<40;i++) p.push({x:Math.random()*innerWidth,y:Math.random()*innerHeight,r:Math.random()*4+2,vx:Math.random()*0.5-.1,vy:Math.random()*0.7+.3,a:Math.random()*Math.PI*2,va:Math.random()*.03-.015,al:Math.random()*.4+.15});
+  (function draw(){
+    ctx.clearRect(0,0,c.width,c.height);
+    p.forEach(b=>{
+      ctx.save();ctx.translate(b.x,b.y);ctx.rotate(b.a);ctx.globalAlpha=b.al;ctx.fillStyle='#ff6b9d';
+      ctx.beginPath();
+      for(let i=0;i<5;i++){const ag=i*Math.PI*2/5-Math.PI/2,x1=Math.cos(ag)*b.r,y1=Math.sin(ag)*b.r,a2=ag+Math.PI/5,x2=Math.cos(a2)*b.r*.38,y2=Math.sin(a2)*b.r*.38;i?ctx.lineTo(x1,y1):ctx.moveTo(x1,y1);ctx.lineTo(x2,y2);}
+      ctx.closePath();ctx.fill();ctx.restore();
+      b.x+=b.vx;b.y+=b.vy;b.a+=b.va;
+      if(b.y>c.height+10)b.y=-10;if(b.x<-10)b.x=c.width+10;if(b.x>c.width+10)b.x=-10;
     });
-  refresh();
-});
-
+    requestAnimationFrame(draw);
+  })();
+})();
 
 /* ── MAP ── */
-const DARK_MAP_STYLES=[
-  {elementType:'geometry',stylers:[{color:'#212121'}]},
-  {elementType:'labels.text.fill',stylers:[{color:'#aaaaaa'}]},
-  {elementType:'labels.text.stroke',stylers:[{color:'#1a1a1a'}]},
-  {featureType:'administrative.country',elementType:'labels.text.fill',stylers:[{color:'#c0c0c0'}]},
-  {featureType:'administrative.locality',elementType:'labels.text.fill',stylers:[{color:'#e0e0e0'}]},
-  {featureType:'administrative.neighborhood',elementType:'labels.text.fill',stylers:[{color:'#c8c8c8'}]},
-  {featureType:'poi',elementType:'labels.text.fill',stylers:[{color:'#b0b0b0'}]},
-  {featureType:'poi',elementType:'labels.icon',stylers:[{visibility:'on'}]},
-  {featureType:'poi.park',elementType:'geometry',stylers:[{color:'#181818'}]},
-  {featureType:'road',elementType:'geometry.fill',stylers:[{color:'#2c2c2c'}]},
-  {featureType:'road.arterial',elementType:'geometry',stylers:[{color:'#373737'}]},
-  {featureType:'road.arterial',elementType:'labels.text.fill',stylers:[{color:'#bbbbbb'}]},
-  {featureType:'road.highway',elementType:'geometry',stylers:[{color:'#3c3c3c'}]},
-  {featureType:'road.highway',elementType:'labels.text.fill',stylers:[{color:'#cccccc'}]},
-  {featureType:'road.local',elementType:'labels.text.fill',stylers:[{color:'#999999'}]},
-  {featureType:'transit',elementType:'labels.text.fill',stylers:[{color:'#aaaaaa'}]},
-  {featureType:'transit',elementType:'labels.icon',stylers:[{visibility:'on'}]},
-  {featureType:'water',elementType:'geometry',stylers:[{color:'#000000'}]},
-  {featureType:'water',elementType:'labels.text.fill',stylers:[{color:'#5a5a5a'}]},
-];
-
-let map, openInfoWindow=null;
+const map=L.map('map',{zoomControl:true}).setView([30,135],4);
+L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',{attribution:'© CartoDB',maxZoom:19,subdomains:'abcd'}).addTo(map);
 
 function makeIcon(emoji,color){
-  return {
-    path:google.maps.SymbolPath.CIRCLE,
-    scale:14,
-    fillColor:color,fillOpacity:0.13,
-    strokeColor:color,strokeWeight:2,strokeOpacity:0.7,
-  };
+  return L.divIcon({className:'',html:`<div class="custom-marker" style="background:${color}22;border-color:${color}99">${emoji}</div>`,iconSize:[32,32],iconAnchor:[16,16],popupAnchor:[0,-18]});
 }
 function flightArc(from,to,steps=80){
-  return Array.from({length:steps+1},(_,i)=>{const t=i/steps;return{lat:(from[0]+(to[0]-from[0])*t+Math.sin(t*Math.PI)*0.2),lng:(from[1]+(to[1]-from[1])*t)};});
+  return Array.from({length:steps+1},(_,i)=>{const t=i/steps;return[(from[0]+(to[0]-from[0])*t+Math.sin(t*Math.PI)*0.2),(from[1]+(to[1]-from[1])*t)];});
 }
 
 let mapLayers=[], activeCardEl=null, currentFilter=0;
 
-function clearMap(){
-  mapLayers.forEach(l=>l.setMap(null));mapLayers=[];
-  if(openInfoWindow){openInfoWindow.close();openInfoWindow=null;}
-}
+function clearMap(){mapLayers.forEach(l=>map.removeLayer(l));mapLayers=[];}
 
 function drawMap(filter){
-  if(!map) return;
   clearMap();
   const items=filter===0?itinerary:itinerary.filter(d=>d.day===filter);
   items.filter(d=>d.isFlight&&d.flightFrom).forEach(d=>{
-    const pl=new google.maps.Polyline({
-      path:flightArc(d.flightFrom,[d.lat,d.lng]),map,
-      strokeColor:DAY_COLORS[d.day],strokeWeight:0,strokeOpacity:0,
-      icons:[{icon:{path:'M 0,-1 0,1',strokeOpacity:1,strokeWeight:2.5,scale:4,strokeColor:DAY_COLORS[d.day]},offset:'0',repeat:'12px'}],
-    });
+    const pl=L.polyline(flightArc(d.flightFrom,[d.lat,d.lng]),{color:DAY_COLORS[d.day],weight:2.5,dashArray:'7 5',opacity:.8}).addTo(map);
     mapLayers.push(pl);
   });
   [...new Set(items.map(d=>d.day))].forEach(day=>{
-    const pts=items.filter(d=>d.day===day&&!d.isFlight&&d.lat).map(d=>({lat:d.lat,lng:d.lng}));
-    if(pts.length>1){
-      const pl=new google.maps.Polyline({path:pts,map,strokeColor:DAY_COLORS[day],strokeWeight:2,strokeOpacity:0.4});
-      mapLayers.push(pl);
-    }
+    const pts=items.filter(d=>d.day===day&&!d.isFlight&&d.lat).map(d=>[d.lat,d.lng]);
+    if(pts.length>1){const pl=L.polyline(pts,{color:DAY_COLORS[day],weight:2,opacity:.4}).addTo(map);mapLayers.push(pl);}
   });
   items.filter(d=>d.lat).forEach(d=>{
     const col=DAY_COLORS[d.day];
-    const mk=new google.maps.Marker({
-      position:{lat:d.lat,lng:d.lng},map,
-      icon:makeIcon(d.emoji||'📍',col),
-      label:{text:d.emoji||'📍',fontSize:'13px',color:'#fff'},
-      optimized:false,
-    });
+    const mk=L.marker([d.lat,d.lng],{icon:makeIcon(d.emoji||'📍',col)}).addTo(map);
     const costHtml=d.cost?`<div class="popup-cost">💴 ${String(d.cost).replace(/\r\n/g,' · ')}</div>`:'';
     const openHtml=d.openClose?`<div class="popup-row">🕐 ${String(d.openClose).replace(/\r\n/g,' ')}</div>`:'';
-    const mapsLink=d.lat?`<a href="https://www.google.com/maps/search/?api=1&query=${d.lat},${d.lng}" target="_blank" rel="noopener" style="display:inline-block;margin-top:8px;color:#4285f4;font-size:0.68rem;font-weight:700;text-decoration:none;font-family:'Inter',sans-serif;letter-spacing:0.03em">📍 เปิดใน Google Maps →</a>`:'';
-    const iw=new google.maps.InfoWindow({content:`<div class="gm-popup"><div class="popup-title" style="color:${col}">Day ${d.day} — ${d.city}</div><div style="font-weight:700;margin-bottom:5px">${d.detail}</div>${d.start?`<div class="popup-row">⏱️ ${d.start} – ${d.end} (${d.dur||''})</div>`:''}${d.from&&d.to&&d.from!==d.to?`<div class="popup-row">📍 ${d.from} → ${d.to}</div>`:''}${openHtml}${costHtml}${mapsLink}</div>`});
-    mk.addListener('click',()=>{if(openInfoWindow)openInfoWindow.close();iw.open({anchor:mk,map});openInfoWindow=iw;});
-    mk._itemId=d.id; mk._infoWindow=iw; mapLayers.push(mk);
-  });
-}
-
-function initMap(){
-  map=new google.maps.Map(document.getElementById('map'),{
-    center:{lat:30,lng:135},zoom:4,
-    styles:DARK_MAP_STYLES,
-    zoomControl:true,mapTypeControl:false,streetViewControl:false,fullscreenControl:false,
-    gestureHandling:'greedy',
-  });
-  window.setMapTheme = (light) => map.setOptions({styles: light ? [] : DARK_MAP_STYLES});
-  if(document.documentElement.classList.contains('light')) window.setMapTheme(true);
-  drawMap(currentFilter);
-  // Day tab map navigation
-  document.querySelectorAll('.day-tab').forEach(tab=>{
-    tab.addEventListener('click',function(){
-      const views={0:[30,135,4],1:[30,135,4],2:[35.52,138.78,11],3:[35.665,139.700,13],4:[35.31,139.52,12],5:[30,135,4]};
-      const v=views[parseInt(this.dataset.day)]||views[0];
-      map.panTo({lat:v[0],lng:v[1]});map.setZoom(v[2]);
-    });
+    mk.bindPopup(`<div class="popup-title" style="color:${col}">Day ${d.day} — ${d.city}</div><div style="font-weight:700;margin-bottom:5px">${d.detail}</div>${d.start?`<div class="popup-row">⏱️ ${d.start} – ${d.end} (${d.dur||''})</div>`:''}${d.from&&d.to&&d.from!==d.to?`<div class="popup-row">📍 ${d.from} → ${d.to}</div>`:''}${openHtml}${costHtml}`);
+    mk._itemId=d.id; mapLayers.push(mk);
   });
 }
 
@@ -828,7 +638,7 @@ function closeModal(){ overlay.classList.remove('open'); }
 document.getElementById('modal-cancel').onclick = closeModal;
 overlay.addEventListener('click',e=>{ if(e.target===overlay) closeModal(); });
 
-document.getElementById('modal-save').onclick = async ()=>{
+document.getElementById('modal-save').onclick = ()=>{
   const detail = document.getElementById('f-detail').value.trim();
   if(!detail){ document.getElementById('f-detail').focus(); return; }
   const start=document.getElementById('f-start').value;
@@ -836,42 +646,45 @@ document.getElementById('modal-save').onclick = async ()=>{
   const lat=parseFloat(document.getElementById('f-lat').value)||0;
   const lng=parseFloat(document.getElementById('f-lng').value)||0;
 
-  const data = {
-    emoji:getSelectedEmoji(), detail,
-    city:document.getElementById('f-city').value,
-    start, end, dur:calcDur(start,end),
-    from:document.getElementById('f-from').value,
-    to:document.getElementById('f-to').value,
-    cost:document.getElementById('f-cost').value,
-    openClose:document.getElementById('f-open').value,
-    note:document.getElementById('f-note').value,
-    alert:document.getElementById('f-alert').checked,
-    lat, lng,
-  };
-
   if(editingId!==null){
-    const existing=itinerary.find(d=>d.id===editingId);
-    await updateDoc(doc(db,'itinerary',editingId), {
-      ...data,
-      lat: lat||existing?.lat||0,
-      lng: lng||existing?.lng||0,
-    });
+    const idx=itinerary.findIndex(d=>d.id===editingId);
+    if(idx>-1){
+      itinerary[idx]={...itinerary[idx],
+        emoji:getSelectedEmoji(), detail,
+        city:document.getElementById('f-city').value,
+        start, end, dur:calcDur(start,end),
+        from:document.getElementById('f-from').value,
+        to:document.getElementById('f-to').value,
+        cost:document.getElementById('f-cost').value,
+        openClose:document.getElementById('f-open').value,
+        note:document.getElementById('f-note').value,
+        alert:document.getElementById('f-alert').checked,
+        lat:lat||itinerary[idx].lat, lng:lng||itinerary[idx].lng,
+      };
+    }
   } else {
-    const maxOrder=itinerary.reduce((max,d)=>Math.max(max,d.order??0),-1);
-    await addDoc(itineraryCol, {
-      ...data,
-      day:editingDay,
-      date:DAY_DATES[editingDay]||'',
-      order:maxOrder+1,
+    itinerary.push({
+      id:nextId(), day:editingDay,
+      date: DAY_DATES[editingDay]||'',
+      emoji:getSelectedEmoji(), detail,
+      city:document.getElementById('f-city').value,
+      start, end, dur:calcDur(start,end),
+      from:document.getElementById('f-from').value,
+      to:document.getElementById('f-to').value,
+      cost:document.getElementById('f-cost').value,
+      openClose:document.getElementById('f-open').value,
+      note:document.getElementById('f-note').value,
+      alert:document.getElementById('f-alert').checked,
+      lat, lng,
     });
   }
-  closeModal(); // onSnapshot handles refresh
+  save(); closeModal(); refresh();
 };
 
-document.getElementById('modal-delete').onclick = async ()=>{
+document.getElementById('modal-delete').onclick = ()=>{
   if(!confirm('ลบกิจกรรมนี้?')) return;
-  await deleteDoc(doc(db,'itinerary',editingId));
-  closeModal(); // onSnapshot handles refresh
+  itinerary=itinerary.filter(d=>d.id!==editingId);
+  save(); closeModal(); refresh();
 };
 
 /* ══════════════════════════════════════════
@@ -953,7 +766,6 @@ function renderCards(container, items, col){
       </div>
       <div class="card-actions">
         <button class="btn-icon btn-drag" title="ลากเพื่อเรียง">⠿</button>
-        ${d.lat?`<a href="https://www.google.com/maps/search/?api=1&query=${d.lat},${d.lng}" target="_blank" rel="noopener" class="btn-icon" title="เปิดใน Google Maps" style="text-decoration:none" onclick="event.stopPropagation()">🗺️</a>`:''}
         <button class="btn-icon btn-edit" title="แก้ไข">✏️</button>
         <button class="btn-icon btn-delete" title="ลบ">🗑️</button>
       </div>
@@ -962,22 +774,22 @@ function renderCards(container, items, col){
     // Map click (card body)
     el.addEventListener('click',e=>{
       if(e.target.closest('.card-actions')) return;
-      if(d.lat&&map){
+      if(d.lat){
         if(activeCardEl) activeCardEl.classList.remove('active');
         el.classList.add('active'); activeCardEl=el;
-        map.panTo({lat:d.lat,lng:d.lng}); map.setZoom(14);
-        mapLayers.forEach(l=>{ if(l._itemId===d.id&&l._infoWindow){if(openInfoWindow)openInfoWindow.close();l._infoWindow.open({anchor:l,map});openInfoWindow=l._infoWindow;} });
+        map.flyTo([d.lat,d.lng],14,{duration:1.2});
+        mapLayers.forEach(l=>{ if(l._itemId===d.id&&l.openPopup) l.openPopup(); });
       }
     });
 
     // Edit
     el.querySelector('.btn-edit').addEventListener('click',e=>{ e.stopPropagation(); openModal(d, d.day); });
     // Delete
-    el.querySelector('.btn-delete').addEventListener('click',async e=>{
+    el.querySelector('.btn-delete').addEventListener('click',e=>{
       e.stopPropagation();
       if(!confirm(`ลบ "${d.detail}"?`)) return;
-      await deleteDoc(doc(db,'itinerary',d.id));
-      // onSnapshot handles refresh
+      itinerary=itinerary.filter(x=>x.id!==d.id);
+      save(); refresh();
     });
 
     // Drag to reorder
@@ -985,120 +797,26 @@ function renderCards(container, items, col){
     el.addEventListener('dragend',()=>{ el.style.opacity=''; });
     el.addEventListener('dragover',e=>{ e.preventDefault(); el.classList.add('drag-over'); });
     el.addEventListener('dragleave',()=>{ el.classList.remove('drag-over'); });
-    el.addEventListener('drop',async e=>{
+    el.addEventListener('drop',e=>{
       e.preventDefault(); el.classList.remove('drag-over');
-      const fromId=e.dataTransfer.getData('text/plain'); // Firestore string ID
+      const fromId=parseInt(e.dataTransfer.getData('text/plain'));
       const toId=d.id;
       if(fromId===toId) return;
       const fi=itinerary.findIndex(x=>x.id===fromId);
       const ti=itinerary.findIndex(x=>x.id===toId);
       if(fi<0||ti<0) return;
-      const reordered=[...itinerary];
-      const [moved]=reordered.splice(fi,1);
-      reordered.splice(ti,0,moved);
-      const batch=writeBatch(db);
-      reordered.forEach((item,i)=>{ batch.update(doc(db,'itinerary',item.id),{order:i}); });
-      await batch.commit();
-      // onSnapshot handles refresh
+      const [moved]=itinerary.splice(fi,1);
+      itinerary.splice(ti,0,moved);
+      save(); refresh();
     });
 
     container.appendChild(el);
   });
 }
 
-/* ══════════════════════════════════════════
-   PLACE SEARCH  (Nominatim / OpenStreetMap)
-══════════════════════════════════════════ */
-(function(){
-  const searchInput = document.getElementById('f-place-search');
-  const searchBtn   = document.getElementById('btn-place-search');
-  const resultsList = document.getElementById('place-results');
-  const statusEl    = document.getElementById('place-status');
-
-  function setStatus(msg, type=''){
-    statusEl.textContent = msg;
-    statusEl.className = 'place-status' + (type ? ' '+type : '');
-  }
-
-  function clearResults(){ resultsList.innerHTML = ''; }
-
-  function pickPlace(name, lat, lng){
-    document.getElementById('f-lat').value = lat.toFixed(6);
-    document.getElementById('f-lng').value = lng.toFixed(6);
-    setStatus('✅ เลือกแล้ว: ' + name, 'ok');
-    clearResults();
-    searchInput.value = name;
-  }
-
-  function renderResults(places){
-    clearResults();
-    if(!places.length){
-      setStatus('ไม่พบสถานที่', 'err');
-      return;
-    }
-    setStatus('พบ ' + places.length + ' ผลลัพธ์ — เลือกสถานที่ที่ต้องการ');
-    places.forEach(p => {
-      const name = p.name;
-      const addr = p.formatted_address;
-      const lat  = p.geometry.location.lat();
-      const lng  = p.geometry.location.lng();
-      const div  = document.createElement('div');
-      div.className = 'place-result-item';
-      div.innerHTML = `
-        <div class="place-result-name">${name}</div>
-        <div class="place-result-addr">${addr.substring(0,70)}${addr.length>70?'…':''}</div>
-        <div class="place-result-coords">📍 ${lat.toFixed(5)}, ${lng.toFixed(5)}</div>
-      `;
-      div.addEventListener('click', () => pickPlace(name, lat, lng));
-      resultsList.appendChild(div);
-    });
-  }
-
-  function doSearch(){
-    const q = searchInput.value.trim();
-    if(!q) return;
-    searchBtn.disabled = true;
-    setStatus('⏳ กำลังค้นหา…');
-    clearResults();
-    const service = new google.maps.places.PlacesService(document.createElement('div'));
-    service.textSearch({query: q}, (results, status) => {
-      searchBtn.disabled = false;
-      if(status === google.maps.places.PlacesServiceStatus.OK && results.length){
-        renderResults(results.slice(0,6));
-      } else {
-        setStatus('ไม่พบสถานที่', 'err');
-      }
-    });
-  }
-
-  searchBtn.addEventListener('click', doSearch);
-  searchInput.addEventListener('keydown', e => { if(e.key === 'Enter'){ e.preventDefault(); doSearch(); } });
-
-  // ปิด dropdown เมื่อคลิกข้างนอก
-  document.addEventListener('click', e => {
-    if(!e.target.closest('.place-search-wrap')) clearResults();
-  });
-
-  // Clear search field เมื่อเปิด modal ใหม่
-  const origOpen = window._origOpenModal;
-  const _patchModal = () => {
-    const origFn = window.openModal;
-    if(typeof origFn === 'function'){
-      window.openModal = function(...args){
-        origFn.apply(this, args);
-        searchInput.value = '';
-        clearResults();
-        setStatus('');
-      };
-    }
-  };
-  // patch หลัง script โหลดเสร็จ
-  requestAnimationFrame(_patchModal);
-})();
-
 /* ── REFRESH (re-draw everything) ── */
 function refresh(){
-  if(map) drawMap(currentFilter);
+  drawMap(currentFilter);
   buildSidebar(currentFilter);
   updateBudget(currentFilter);
 }
@@ -1111,56 +829,18 @@ document.querySelectorAll('.day-tab').forEach(tab=>{
     currentFilter=parseInt(this.dataset.day);
     activeCardEl=null;
     refresh();
-    // map pan/zoom handled inside initMap listener
+    const views={0:[30,135,4],1:[30,135,4],2:[35.52,138.78,11],3:[35.665,139.700,13],4:[35.31,139.52,12],5:[30,135,4]};
+    const v=views[currentFilter]||views[0];
+    map.flyTo([v[0],v[1]],v[2],{duration:1.5});
   });
 });
 
-// ── Connect module's initMap to the relay defined in the inline script ──
-window.__initMapReady = initMap;
-if (window.__initMapPending) initMap();
+/* ── RESET to default (safety) ── */
+itinerary=itinerary.map((d,i)=>d.id!=null?d:{...d,id:i});
+save();
 
-// ── INIT handled by onSnapshot listener above ──
-// sidebar+budget will render once Firestore data arrives
-
-// ── ถ้าอยู่ใน iframe ให้ back button ส่ง postMessage แทน navigate ──
-(function(){
-  const backBtn = document.getElementById('back-btn');
-  if(!backBtn) return;
-  try {
-    const inIframe = window.self !== window.top;
-    if(inIframe){
-      backBtn.removeAttribute('href');
-      backBtn.addEventListener('click', e => {
-        e.preventDefault();
-        window.parent.postMessage({ action: 'closeMapView' }, '*');
-      });
-    }
-  } catch(_){}
-})();
-</script>
-
-<script>
-(function(){
-  const K = 'japan2026_theme';
-  function applyTheme(t) {
-    document.documentElement.classList.toggle('light', t === 'light');
-    if(window.setMapTheme) window.setMapTheme(t === 'light');
-    const btn = document.getElementById('theme-toggle');
-    if (btn) {
-      const ico = btn.querySelector('.material-symbols-outlined');
-      if (ico) ico.textContent = t === 'light' ? 'dark_mode' : 'light_mode';
-      if (t === 'light') {
-        btn.onmouseout = null; // disable onmouseout hover reset in light mode
-      }
-    }
-  }
-  window.toggleTheme = function() {
-    const next = document.documentElement.classList.contains('light') ? 'dark' : 'light';
-    localStorage.setItem(K, next);
-    applyTheme(next);
-  };
-  applyTheme(localStorage.getItem(K) || 'dark');
-})();
+// ── INIT ──
+refresh();
 </script>
 </body>
 </html>

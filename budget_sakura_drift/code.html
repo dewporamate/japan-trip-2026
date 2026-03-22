@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Kyoto Zen - Budget &amp; Expenses</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;700;800&amp;family=Public+Sans:wght@300;400;600;700&amp;family=Inter:wght@400;500;700&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "surface": "#f9f9f9",
+              "on-error": "#ffffff",
+              "secondary": "#68577f",
+              "tertiary-container": "#ba9c00",
+              "primary-container": "#ff6b9d",
+              "on-secondary-fixed": "#231437",
+              "error": "#ba1a1a",
+              "secondary-fixed-dim": "#d4beec",
+              "primary": "#ac2a5d",
+              "outline-variant": "#ddbfc5",
+              "surface-container-low": "#f4f3f3",
+              "on-surface-variant": "#574146",
+              "on-primary-fixed": "#3f001b",
+              "inverse-on-surface": "#f1f1f1",
+              "on-tertiary-fixed-variant": "#544600",
+              "on-secondary-fixed-variant": "#503f66",
+              "surface-container-highest": "#e2e2e2",
+              "surface-container-lowest": "#ffffff",
+              "on-background": "#1a1c1c",
+              "background": "#f9f9f9",
+              "surface-variant": "#e2e2e2",
+              "inverse-primary": "#ffb1c5",
+              "on-surface": "#1a1c1c",
+              "primary-fixed-dim": "#ffb1c5",
+              "on-primary-fixed-variant": "#8c0a46",
+              "surface-tint": "#ac2a5d",
+              "surface-container": "#eeeeee",
+              "secondary-fixed": "#eedcff",
+              "on-tertiary": "#ffffff",
+              "on-tertiary-fixed": "#221b00",
+              "surface-bright": "#f9f9f9",
+              "inverse-surface": "#2f3131",
+              "on-secondary": "#ffffff",
+              "on-secondary-container": "#67567d",
+              "surface-container-high": "#e8e8e8",
+              "on-primary-container": "#6e0035",
+              "on-primary": "#ffffff",
+              "tertiary-fixed-dim": "#e9c400",
+              "error-container": "#ffdad6",
+              "primary-fixed": "#ffd9e1",
+              "tertiary-fixed": "#ffe16d",
+              "surface-dim": "#dadada",
+              "on-tertiary-container": "#403500",
+              "outline": "#8a7176",
+              "secondary-container": "#e5cefd",
+              "tertiary": "#705d00",
+              "on-error-container": "#93000a"
+            },
+            fontFamily: {
+              "headline": ["Manrope"],
+              "body": ["Public Sans"],
+              "label": ["Inter"]
+            },
+            borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+<style>
+      .material-symbols-outlined {
+        font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      }
+      .scrollbar-hide::-webkit-scrollbar { display: none; }
+      body { background-color: #09090b; color: #f4f4f5; }
+    </style>
+</head>
+<body class="font-body selection:bg-primary-container selection:text-on-primary-container overflow-hidden">
+<div class="flex h-screen overflow-hidden bg-zinc-950">
+<!-- SideNavBar -->
+<aside class="hidden md:flex flex-col h-full py-10 px-6 w-72 bg-zinc-900 text-[#ff6b9d] font-['Public_Sans'] leading-relaxed border-r border-zinc-800/50">
+<div class="mb-10 px-5">
+<h1 class="text-xl font-bold font-['Manrope'] text-[#ac2a5d]">Kyoto Zen</h1>
+<p class="text-xs text-zinc-500 font-label tracking-widest uppercase mt-1">Sakura Drift Edition</p>
+</div>
+<nav class="flex-1 space-y-1">
+<a class="flex items-center gap-3 py-3 text-zinc-500 pl-5 hover:bg-zinc-800 transition-all rounded-xl group" href="#">
+<span class="material-symbols-outlined text-xl group-hover:text-primary-container">event_note</span>
+<span>Itinerary</span>
+</a>
+<a class="flex items-center gap-3 py-3 text-zinc-500 pl-5 hover:bg-zinc-800 transition-all rounded-xl group" href="#">
+<span class="material-symbols-outlined text-xl group-hover:text-primary-container">train</span>
+<span>Transportation</span>
+</a>
+<a class="flex items-center gap-3 py-3 text-zinc-500 pl-5 hover:bg-zinc-800 transition-all rounded-xl group" href="#">
+<span class="material-symbols-outlined text-xl group-hover:text-primary-container">restaurant</span>
+<span>Dining</span>
+</a>
+<a class="flex items-center gap-3 py-3 text-zinc-500 pl-5 hover:bg-zinc-800 transition-all rounded-xl group" href="#">
+<span class="material-symbols-outlined text-xl group-hover:text-primary-container">museum</span>
+<span>Activities</span>
+</a>
+<a class="flex items-center gap-3 py-3 text-zinc-500 pl-5 hover:bg-zinc-800 transition-all rounded-xl group" href="#">
+<span class="material-symbols-outlined text-xl group-hover:text-primary-container">hotel</span>
+<span>Lodging</span>
+</a>
+<a class="flex items-center gap-3 py-3 text-zinc-500 pl-5 hover:bg-zinc-800 transition-all rounded-xl group" href="#">
+<span class="material-symbols-outlined text-xl group-hover:text-primary-container">map</span>
+<span>Map</span>
+</a>
+<a class="flex items-center gap-3 py-3 text-[#ff6b9d] font-bold border-l-4 border-[#ac2a5d] pl-4 translate-x-1 transition-all" href="#">
+<span class="material-symbols-outlined text-xl" style="font-variation-settings: 'FILL' 1;">payments</span>
+<span>Budget</span>
+</a>
+</nav>
+<div class="mt-auto px-4">
+<button class="w-full py-4 bg-gradient-to-r from-primary to-primary-container text-white rounded-full font-bold text-sm shadow-xl shadow-primary/20 hover:scale-[1.02] transition-transform flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-lg">add</span>
+                    Add New Stop
+                </button>
+</div>
+</aside>
+<main class="flex-1 overflow-y-auto scrollbar-hide bg-zinc-950 relative">
+<!-- TopAppBar -->
+<header class="sticky top-0 z-50 flex justify-between items-center px-8 h-20 w-full bg-zinc-950/70 backdrop-blur-xl border-b border-zinc-900/50">
+<div class="flex items-center gap-8">
+<span class="md:hidden text-2xl font-black text-zinc-100 italic">Zen Planner</span>
+<nav class="hidden md:flex gap-8 items-center">
+<a class="text-zinc-400 hover:text-zinc-100 transition-colors font-label text-sm uppercase tracking-widest" href="#">Itinerary</a>
+<a class="text-zinc-400 hover:text-zinc-100 transition-colors font-label text-sm uppercase tracking-widest" href="#">Map</a>
+<a class="text-[#ff6b9d] border-b-2 border-[#ac2a5d] pb-1 font-label text-sm uppercase tracking-widest" href="#">Budget</a>
+<a class="text-zinc-400 hover:text-zinc-100 transition-colors font-label text-sm uppercase tracking-widest" href="#">Explore</a>
+</nav>
+</div>
+<div class="flex items-center gap-6">
+<div class="relative hidden sm:block">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-zinc-500 text-lg">search</span>
+<input class="bg-zinc-900 border-none rounded-full pl-10 pr-4 py-2 text-sm text-zinc-300 w-64 focus:ring-1 focus:ring-primary-container transition-all" placeholder="Search expenses..." type="text"/>
+</div>
+<button class="material-symbols-outlined text-zinc-400 hover:text-primary-container transition-colors">notifications</button>
+<button class="material-symbols-outlined text-zinc-400 hover:text-primary-container transition-colors">settings</button>
+<div class="w-10 h-10 rounded-full bg-zinc-800 overflow-hidden border border-zinc-700">
+<img alt="User profile" class="w-full h-full object-cover" data-alt="Close up of a professional male user profile photo" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDlknCI59uMYXcScdYcxJhmeONGr5pIiPI4b9R07NtWsxAGTt8Mu8824T-12h_0r39_9twMQkrpnrtamDYQ1nE30Rv19oYNBg02Vd8IOx7067ipRS15ALzjw9pXGwOvI_h-G9fwtm8vvv7bZFUX1XV7n2ZnGF_49m0318X_a0-7Wy-MTusWVmaQ2a5o7f5lqYhnRKTijx8EsCZAqMdKM6lUDLYZDh81sr1wtAx-u1ELsKVvHoN7zceSwQ_8iXOJXQ0oPN1NpLD1XY0"/>
+</div>
+</div>
+</header>
+<div class="max-w-6xl mx-auto p-8 md:p-12 space-y-12">
+<!-- Hero Section / Budget Progress -->
+<section class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+<div class="lg:col-span-2 bg-zinc-900 rounded-[2rem] p-8 relative overflow-hidden group">
+<div class="absolute top-0 right-0 w-64 h-64 bg-primary/10 rounded-full blur-[100px] -mr-32 -mt-32"></div>
+<div class="relative z-10">
+<span class="text-xs font-label uppercase tracking-[0.2em] text-zinc-500 mb-4 block">Total Budget Progress</span>
+<div class="flex items-end gap-4 mb-8">
+<h2 class="text-5xl font-headline font-extrabold text-zinc-100">¥128,450</h2>
+<span class="text-zinc-500 mb-2 font-body">/ ¥250,000</span>
+</div>
+<!-- Progress Bar -->
+<div class="w-full h-3 bg-zinc-800 rounded-full overflow-hidden mb-4">
+<div class="h-full bg-gradient-to-r from-primary to-primary-container rounded-full" style="width: 51%;"></div>
+</div>
+<div class="flex justify-between text-xs font-label text-zinc-500 uppercase tracking-widest">
+<span>51.4% Spent</span>
+<span>¥121,550 Remaining</span>
+</div>
+</div>
+</div>
+<div class="bg-zinc-900 rounded-[2rem] p-8 flex flex-col justify-center border border-zinc-800/50">
+<span class="text-xs font-label uppercase tracking-[0.2em] text-zinc-500 mb-2 block">Daily Average</span>
+<h3 class="text-3xl font-headline font-bold text-primary-container mb-6">¥18,350</h3>
+<div class="space-y-4">
+<div class="flex items-center justify-between">
+<span class="text-sm text-zinc-400">Projected Total</span>
+<span class="text-sm text-zinc-200 font-bold">¥238,550</span>
+</div>
+<div class="flex items-center justify-between">
+<span class="text-sm text-zinc-400">Savings Target</span>
+<span class="text-sm text-zinc-200 font-bold text-emerald-500">¥11,450</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Categorized Spending & Chart -->
+<section class="grid grid-cols-1 md:grid-cols-2 gap-12">
+<div class="space-y-8">
+<h4 class="text-xl font-headline font-bold text-zinc-100">Categories</h4>
+<div class="space-y-6">
+<!-- Category: Food -->
+<div class="group">
+<div class="flex justify-between items-center mb-2">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center text-primary-container">
+<span class="material-symbols-outlined">restaurant</span>
+</div>
+<span class="font-bold text-zinc-200">Dining &amp; Food</span>
+</div>
+<span class="font-body text-zinc-100">¥45,200</span>
+</div>
+<div class="w-full h-1.5 bg-zinc-900 rounded-full">
+<div class="h-full bg-primary rounded-full" style="width: 35%;"></div>
+</div>
+</div>
+<!-- Category: Travel -->
+<div class="group">
+<div class="flex justify-between items-center mb-2">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-xl bg-zinc-800 flex items-center justify-center text-zinc-400">
+<span class="material-symbols-outlined">train</span>
+</div>
+<span class="font-bold text-zinc-200">Transport</span>
+</div>
+<span class="font-body text-zinc-100">¥32,800</span>
+</div>
+<div class="w-full h-1.5 bg-zinc-900 rounded-full">
+<div class="h-full bg-zinc-700 rounded-full" style="width: 25%;"></div>
+</div>
+</div>
+<!-- Category: Stays -->
+<div class="group">
+<div class="flex justify-between items-center mb-2">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-xl bg-zinc-800 flex items-center justify-center text-zinc-400">
+<span class="material-symbols-outlined">hotel</span>
+</div>
+<span class="font-bold text-zinc-200">Lodging</span>
+</div>
+<span class="font-body text-zinc-100">¥50,450</span>
+</div>
+<div class="w-full h-1.5 bg-zinc-900 rounded-full">
+<div class="h-full bg-zinc-700 rounded-full" style="width: 40%;"></div>
+</div>
+</div>
+</div>
+</div>
+<!-- Simplified Chart Visualization -->
+<div class="bg-zinc-900/50 rounded-[2rem] p-8 border border-zinc-800/30 flex flex-col">
+<div class="flex justify-between items-start mb-12">
+<div>
+<h4 class="text-xl font-headline font-bold text-zinc-100">Spending Trends</h4>
+<p class="text-xs text-zinc-500 font-label uppercase tracking-widest mt-1">Last 7 Days</p>
+</div>
+<div class="flex gap-2">
+<div class="flex items-center gap-1.5 text-[10px] text-zinc-500 font-label uppercase">
+<span class="w-2 h-2 rounded-full bg-primary"></span> Spent
+                                </div>
+<div class="flex items-center gap-1.5 text-[10px] text-zinc-500 font-label uppercase">
+<span class="w-2 h-2 rounded-full bg-zinc-700"></span> Budget
+                                </div>
+</div>
+</div>
+<div class="flex-1 flex items-end justify-between gap-4 h-48">
+<div class="flex-1 bg-zinc-800/50 rounded-t-lg relative h-[40%] group hover:bg-zinc-800 transition-all">
+<div class="absolute bottom-0 left-0 right-0 bg-primary rounded-t-lg h-[60%]"></div>
+</div>
+<div class="flex-1 bg-zinc-800/50 rounded-t-lg relative h-[60%] group hover:bg-zinc-800 transition-all">
+<div class="absolute bottom-0 left-0 right-0 bg-primary rounded-t-lg h-[80%]"></div>
+</div>
+<div class="flex-1 bg-zinc-800/50 rounded-t-lg relative h-[45%] group hover:bg-zinc-800 transition-all">
+<div class="absolute bottom-0 left-0 right-0 bg-primary rounded-t-lg h-[90%]"></div>
+</div>
+<div class="flex-1 bg-zinc-800/50 rounded-t-lg relative h-[75%] group hover:bg-zinc-800 transition-all">
+<div class="absolute bottom-0 left-0 right-0 bg-primary rounded-t-lg h-[30%]"></div>
+</div>
+<div class="flex-1 bg-zinc-800/50 rounded-t-lg relative h-[90%] group hover:bg-zinc-800 transition-all">
+<div class="absolute bottom-0 left-0 right-0 bg-primary rounded-t-lg h-[70%]"></div>
+</div>
+<div class="flex-1 bg-zinc-800/50 rounded-t-lg relative h-[65%] group hover:bg-zinc-800 transition-all">
+<div class="absolute bottom-0 left-0 right-0 bg-primary rounded-t-lg h-[50%]"></div>
+</div>
+<div class="flex-1 bg-zinc-800/50 rounded-t-lg relative h-[100%] group hover:bg-zinc-800 transition-all">
+<div class="absolute bottom-0 left-0 right-0 bg-primary rounded-t-lg h-[85%]"></div>
+</div>
+</div>
+<div class="flex justify-between mt-4 text-[10px] font-label text-zinc-600 uppercase">
+<span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span><span>Sun</span>
+</div>
+</div>
+</section>
+<!-- Recent Transactions (Bento-style list) -->
+<section class="space-y-6">
+<div class="flex items-center justify-between">
+<h4 class="text-xl font-headline font-bold text-zinc-100">Recent Transactions</h4>
+<button class="text-sm font-label text-primary-container hover:text-primary transition-colors uppercase tracking-widest">View All</button>
+</div>
+<div class="grid grid-cols-1 gap-4">
+<!-- Transaction 1 -->
+<div class="bg-zinc-900/40 p-5 rounded-2xl flex items-center justify-between hover:bg-zinc-900/60 transition-all group">
+<div class="flex items-center gap-5">
+<div class="w-12 h-12 rounded-full overflow-hidden border border-zinc-800">
+<img alt="Ippudo Ramen" class="w-full h-full object-cover" data-alt="Close up of a bowl of Japanese ramen" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCudfXSxlr8Rh-j8X2ZTUHhyKsUcmbbQQCeXgg5GZDAw6bunVHN_cSonRs4PXmhP_L2snLoPw0WUvmoa4TALX-s_1c-SEXpKb--wZIChFw5OVXNh23NBObODBp0xxk7UZEI-IzMHFgHQDM6lG-mAj0C3yPl2pJM9f-7ZIQut-aswr5tITXEWD6Yngb7yvW8sUdnZxqWzFFh7Y6LkO9rYvOnx2kSXpoV9DENQbasbgGfpX7hoiOoylsMLyXXWiys3amoR8rfo5FIrNY"/>
+</div>
+<div>
+<p class="font-bold text-zinc-100">Ippudo Ramen Nishiki</p>
+<p class="text-xs text-zinc-500 font-label uppercase tracking-wider">Dining • 2 Hours Ago</p>
+</div>
+</div>
+<div class="text-right">
+<p class="font-bold text-zinc-100">¥2,450</p>
+<p class="text-[10px] text-zinc-600 font-label uppercase">Personal Card</p>
+</div>
+</div>
+<!-- Transaction 2 -->
+<div class="bg-zinc-900/40 p-5 rounded-2xl flex items-center justify-between hover:bg-zinc-900/60 transition-all group">
+<div class="flex items-center gap-5">
+<div class="w-12 h-12 rounded-full overflow-hidden border border-zinc-800">
+<img alt="JR Rail Pass" class="w-full h-full object-cover" data-alt="High speed shinkansen train in Japan" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCIDILellPxGMNP-ZF-V05P_80d6OpoEm9nhX_LYSWgrlS7Byo9B2bQRbZov0nIJ87mpXMJagyui3EZ_q9CbHIe3uh0z83Jul4zWHQz49F8OntR4AEYQdi_HDEieKKgPYdSTBeA0WTP-wbGo0FkRnSmg3c92wwW3nmIxtjCJWYeZYJeC1tR4FTcF9gCdR7K3par7frjHUNq2tduy0eUeLPILBed64ICMQc6EnpsiB9cWvKwvd9qaLctNUS1O5jyjVlO4S4WE8BVXUc"/>
+</div>
+<div>
+<p class="font-bold text-zinc-100">JR West Shinkansen</p>
+<p class="text-xs text-zinc-500 font-label uppercase tracking-wider">Transport • Today, 10:30 AM</p>
+</div>
+</div>
+<div class="text-right">
+<p class="font-bold text-zinc-100">¥14,200</p>
+<p class="text-[10px] text-zinc-600 font-label uppercase">Travel Fund</p>
+</div>
+</div>
+<!-- Transaction 3 -->
+<div class="bg-zinc-900/40 p-5 rounded-2xl flex items-center justify-between hover:bg-zinc-900/60 transition-all group">
+<div class="flex items-center gap-5">
+<div class="w-12 h-12 rounded-full overflow-hidden border border-zinc-800">
+<img alt="Arashiyama Bamboo Forest" class="w-full h-full object-cover" data-alt="Dense green bamboo forest with sunlight" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCjnWhz00PAQZza_e2RrJSqJ_1t5rtLiTS-dLnA3wWDcNVzxIT5p9Q2UE2Oog62MxLLujVsl4h9JC7P_0Mfuv36nHccgaWZoIqRSAV0O-PaBaCjeC_BX7LUtrqomZ6uyPpa47pzavu_Tr3_mwqqzXQDlZA7CjMhX5lkj8ub58G-7lFj3WUtpDtjk9RBsOoe4DhbABk6AEGilDbaTmkPZQGXbBo2d6TqpmZgN53UUpNqBvhT64FmL_g7_XKhzbbC-JEfzLNk8P01Nys"/>
+</div>
+<div>
+<p class="font-bold text-zinc-100">Arashiyama Bamboo Grove</p>
+<p class="text-xs text-zinc-500 font-label uppercase tracking-wider">Activities • Yesterday</p>
+</div>
+</div>
+<div class="text-right">
+<p class="font-bold text-zinc-100">¥0</p>
+<p class="text-[10px] text-zinc-600 font-label uppercase">Free Attraction</p>
+</div>
+</div>
+</div>
+</section>
+</div>
+<div class="h-32"></div> <!-- Spacer for mobile bottom nav -->
+</main>
+<!-- BottomNavBar (Mobile Only) -->
+<nav class="md:hidden fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-6 py-4 pb-safe bg-zinc-900/80 backdrop-blur-2xl shadow-[0_-8px_32px_rgba(0,0,0,0.04)] rounded-t-3xl">
+<button class="flex flex-col items-center justify-center text-zinc-400 px-4 py-2 hover:text-[#ac2a5d] transition-all">
+<span class="material-symbols-outlined">calendar_today</span>
+<span class="font-['Public_Sans'] text-[10px] uppercase tracking-widest font-bold mt-1">Day 1</span>
+</button>
+<button class="flex flex-col items-center justify-center text-zinc-400 px-4 py-2 hover:text-[#ac2a5d] transition-all">
+<span class="material-symbols-outlined">calendar_today</span>
+<span class="font-['Public_Sans'] text-[10px] uppercase tracking-widest font-bold mt-1">Day 2</span>
+</button>
+<button class="flex flex-col items-center justify-center text-zinc-400 px-4 py-2 hover:text-[#ac2a5d] transition-all">
+<span class="material-symbols-outlined">calendar_today</span>
+<span class="font-['Public_Sans'] text-[10px] uppercase tracking-widest font-bold mt-1">Day 3</span>
+</button>
+<button class="flex flex-col items-center justify-center text-zinc-400 px-4 py-2 hover:text-[#ac2a5d] transition-all">
+<span class="material-symbols-outlined">calendar_today</span>
+<span class="font-['Public_Sans'] text-[10px] uppercase tracking-widest font-bold mt-1">Day 4</span>
+</button>
+<button class="flex flex-col items-center justify-center bg-[#ff6b9d]/10 text-[#ac2a5d] rounded-xl px-4 py-2">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">payments</span>
+<span class="font-['Public_Sans'] text-[10px] uppercase tracking-widest font-bold mt-1">¥128k</span>
+</button>
+</nav>
+</div>
+</body></html>

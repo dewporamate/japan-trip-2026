@@ -1,0 +1,20 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(open:*)",
+      "Bash(gh auth:*)",
+      "Bash(git init:*)",
+      "Bash(git checkout:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(gh repo:*)",
+      "Bash(git push:*)",
+      "Bash(python3 -c \":*)",
+      "Bash(for f:*)",
+      "Bash(do echo:*)",
+      "Read(//Users/dew/Desktop/Tokyo_Japan_No1/Web/**)",
+      "Skill(update-config)",
+      "Read(//Users/dew/.claude/**)"
+    ]
+  }
+}
