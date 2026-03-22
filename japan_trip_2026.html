@@ -637,6 +637,9 @@ onSnapshot(query(itineraryCol, orderBy('order')), snapshot => {
       if (a.day !== b.day) return a.day - b.day;
       const da = dateNum(a), db = dateNum(b);
       if (da !== db) return da - db;
+      // respect manual drag order; fall back to start time for new items
+      const oa = a.order ?? 9999, ob = b.order ?? 9999;
+      if (oa !== ob) return oa - ob;
       return (a.start||'').localeCompare(b.start||'');
     });
   refresh();
@@ -1005,22 +1008,10 @@ function buildTimeline(filter){
         const ids = els.map(el => el.dataset.id);
         const dayItems = itinerary.filter(x => x.day === day);
         const reordered = ids.map(id => dayItems.find(x => x.id === id)).filter(Boolean);
-
-        // keep time slots fixed — reassign start/end/dur/actDate in original order
-        const oldTimes = dayItems.map(x => ({ start: x.start, end: x.end, dur: x.dur, actDate: x.actDate }));
-        const batch = writeBatch(db);
-        reordered.forEach((item, i) => {
-          batch.update(doc(db, 'itinerary', item.id), {
-            order: i,
-            start:   oldTimes[i].start,
-            end:     oldTimes[i].end,
-            dur:     oldTimes[i].dur,
-            actDate: oldTimes[i].actDate,
-          });
-        });
-        // update order for other-day items too
         const others = itinerary.filter(x => x.day !== day);
-        others.forEach((item, i) => { batch.update(doc(db, 'itinerary', item.id), { order: reordered.length + i }); });
+        const allReordered = [...others, ...reordered];
+        const batch = writeBatch(db);
+        allReordered.forEach((item, i) => { batch.update(doc(db, 'itinerary', item.id), { order: i }); });
         await batch.commit();
       },
     });
