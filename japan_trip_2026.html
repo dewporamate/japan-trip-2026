@@ -932,13 +932,25 @@ function buildTimeline(filter){
       /* ── Drag to reorder ── */
       el.addEventListener('dragstart', e => {
         e.dataTransfer.setData('text/plain', d.id);
-        setTimeout(() => el.style.opacity = '.4', 0);
+        e.dataTransfer.effectAllowed = 'move';
+        setTimeout(() => { el.style.opacity = '.4'; }, 0);
       });
-      el.addEventListener('dragend', () => { el.style.opacity = ''; });
-      el.addEventListener('dragover', e => { e.preventDefault(); card.classList.add('drag-over'); });
-      el.addEventListener('dragleave', () => { card.classList.remove('drag-over'); });
+      el.addEventListener('dragend', () => {
+        el.style.opacity = '';
+        card.classList.remove('drag-over');
+      });
+      el.addEventListener('dragover', e => {
+        e.preventDefault();
+        e.dataTransfer.dropEffect = 'move';
+        card.classList.add('drag-over');
+      });
+      el.addEventListener('dragleave', e => {
+        // only remove highlight when cursor truly leaves this element (not into a child)
+        if (!el.contains(e.relatedTarget)) card.classList.remove('drag-over');
+      });
       el.addEventListener('drop', async e => {
-        e.preventDefault(); card.classList.remove('drag-over');
+        e.preventDefault();
+        card.classList.remove('drag-over');
         const fromId = e.dataTransfer.getData('text/plain');
         const toId = d.id;
         if (fromId === toId) return;
