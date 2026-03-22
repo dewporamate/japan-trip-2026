@@ -230,24 +230,28 @@
   </div>
   <div class="h-16"></div>
 
-<script>
-(function(){
-  const LS_KEY = 'japan2026_v3';
-  const TRANSPORT_EMOJI = new Set(['✈️','🚅','🚌','🚃','🚗','🚶','🚲','🛫','🛬']);
-  const FOOD_EMOJI = new Set(['🍽️','🍜','🍣','🍡','🦐','🍱','☕','🥩','🍺','🍚']);
-  const LODGING_EMOJI = new Set(['🏠','🧳']);
-  const DAY_COLORS = {1:'#ff6b9d',2:'#a78bfa',3:'#fbbf24',4:'#34d399',5:'#60a5fa'};
-  const DAY_NAMES = {1:'เดินทาง',2:'ฟูจิ',3:'Harajuku',4:'Kamakura',5:'กลับบ้าน'};
-  const DAY_DATES = {1:'9-10 ต.ค.',2:'11 ต.ค.',3:'12 ต.ค.',4:'13 ต.ค.',5:'14 ต.ค.'};
-  function loadData() { return JSON.parse(localStorage.getItem(LS_KEY)||'null')||[]; }
-  function parseCost(s) { if(!s||s==='Free')return 0; const m=s.match(/[\d,]+/); return m?parseInt(m[0].replace(/,/g,''),10):0; }
-  function isTransport(d) { return TRANSPORT_EMOJI.has(d.emoji); }
-  function isFood(d) { return FOOD_EMOJI.has(d.emoji); }
-  function isLodging(d) { return LODGING_EMOJI.has(d.emoji)||/check.in|check.out|ที่พัก/i.test(d.detail); }
-  const EMPTY = `<div class="text-center py-16 text-zinc-600"><span class="material-symbols-outlined block mb-3" style="font-size:40px">inbox</span><p class="text-sm font-['Public_Sans']">ยังไม่มีข้อมูล — เพิ่มจากหน้า Itinerary</p></div>`;
+<script type="module">
+import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js';
+import { getFirestore, collection, query, orderBy, onSnapshot } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
 
-  const data = loadData();
-  const items = data.filter(isTransport);
+const firebaseConfig = {
+  apiKey: "AIzaSyA48_2e-Ed3ss20V5yuTlLRb9vXx3V3OgY",
+  authDomain: "japan-trip-2026-b0275.firebaseapp.com",
+  projectId: "japan-trip-2026-b0275",
+  storageBucket: "japan-trip-2026-b0275.firebasestorage.app",
+  messagingSenderId: "551330402525",
+  appId: "1:551330402525:web:b1ccc22dbb76ac7c560b34"
+};
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+const TRANSPORT_EMOJI = new Set(['✈️','🚅','🚌','🚃','🚗','🚶','🚲','🛫','🛬']);
+const DAY_COLORS = {1:'#ff6b9d',2:'#a78bfa',3:'#fbbf24',4:'#34d399',5:'#60a5fa'};
+const DAY_NAMES = {1:'เดินทาง',2:'ฟูจิ',3:'Harajuku',4:'Kamakura',5:'กลับบ้าน'};
+const EMPTY = `<div class="text-center py-16 text-zinc-600"><span class="material-symbols-outlined block mb-3" style="font-size:40px">inbox</span><p class="text-sm font-['Public_Sans']">ยังไม่มีข้อมูล — เพิ่มจากหน้า Itinerary</p></div>`;
+
+function render(data) {
+  const items = data.filter(d => TRANSPORT_EMOJI.has(d.emoji));
   const container = document.getElementById('transport-list');
   if (!container) return;
   if (!items.length) { container.innerHTML = EMPTY; return; }
@@ -283,7 +287,14 @@
     });
   });
   container.innerHTML = html;
-})();
+}
+
+onSnapshot(query(collection(db, 'itinerary'), orderBy('order')), snapshot => {
+  const data = snapshot.docs
+    .map(d => ({ ...d.data(), id: d.id }))
+    .sort((a, b) => a.day !== b.day ? a.day - b.day : (a.start||'').localeCompare(b.start||''));
+  render(data);
+});
 </script>
 </main>
 

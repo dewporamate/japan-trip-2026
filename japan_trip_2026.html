@@ -8,6 +8,12 @@
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&family=Public+Sans:wght@300;400;600;700&family=Inter:wght@400;500;600;700&family=Noto+Sans+Thai:wght@300;400;600;700&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+<script>
+  window.initMap = function() {
+    if (window.__initMapReady) window.__initMapReady();
+    else window.__initMapPending = true;
+  };
+</script>
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBMEJI1GmX6i-ZaN-cgvu-yhaQrdRsnvCk&libraries=places&callback=initMap" defer></script>
 <script id="tailwind-config">
   tailwind.config = {
@@ -496,9 +502,28 @@
   </div>
 </div>
 
-<script>
+<script type="module">
+/* ─── Firebase v10 Modular SDK ─── */
+import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js';
+import {
+  getFirestore, collection, addDoc, updateDoc, deleteDoc,
+  doc, onSnapshot, writeBatch, query, orderBy
+} from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
+
+const firebaseConfig = {
+  apiKey: "AIzaSyA48_2e-Ed3ss20V5yuTlLRb9vXx3V3OgY",
+  authDomain: "japan-trip-2026-b0275.firebaseapp.com",
+  projectId: "japan-trip-2026-b0275",
+  storageBucket: "japan-trip-2026-b0275.firebasestorage.app",
+  messagingSenderId: "551330402525",
+  appId: "1:551330402525:web:b1ccc22dbb76ac7c560b34"
+};
+const firebaseApp = initializeApp(firebaseConfig);
+const db = getFirestore(firebaseApp);
+const itineraryCol = collection(db, 'itinerary');
+
 /* ══════════════════════════════════════════
-   DEFAULT ITINERARY DATA
+   DEFAULT ITINERARY DATA (seed if Firestore empty)
 ══════════════════════════════════════════ */
 const DEFAULT_DATA = [
   // DAY 1 — Bangkok Departure
@@ -565,11 +590,30 @@ const DAY_COLORS = {1:"#ff6b9d",2:"#a78bfa",3:"#fbbf24",4:"#34d399",5:"#60a5fa"}
 const DAY_NAMES  = {1:"✈️ เดินทาง + ถึงญี่ปุ่น",2:"🗻 ภูเขาไฟฟูจิ",3:"🛍️ Harajuku · Shibuya",4:"🏖️ Kamakura · Enoshima",5:"🛫 กลับบ้าน"};
 const DAY_DATES  = {1:"9-10 ต.ค. 2569",2:"11 ต.ค. 2569",3:"12 ต.ค. 2569",4:"13 ต.ค. 2569",5:"14 ต.ค. 2569"};
 
-/* ── localStorage ── */
-const LS_KEY = 'japan2026_v3';
-let itinerary = JSON.parse(localStorage.getItem(LS_KEY) || 'null') || DEFAULT_DATA.map((d,i)=>({...d,id:i}));
-function save(){ localStorage.setItem(LS_KEY, JSON.stringify(itinerary)); }
-function nextId(){ return Date.now(); }
+/* ── State ── */
+let itinerary = [];
+
+async function seedDefaultData() {
+  const batch = writeBatch(db);
+  DEFAULT_DATA.forEach((item, i) => {
+    const docRef = doc(itineraryCol);
+    batch.set(docRef, { ...item, order: i });
+  });
+  await batch.commit();
+}
+
+let _seeded = false;
+onSnapshot(query(itineraryCol, orderBy('order')), snapshot => {
+  if (snapshot.empty && !_seeded) {
+    _seeded = true;
+    seedDefaultData();
+    return;
+  }
+  itinerary = snapshot.docs
+    .map(d => ({ ...d.data(), id: d.id }))
+    .sort((a, b) => a.day !== b.day ? a.day - b.day : (a.start||'').localeCompare(b.start||''));
+  refresh();
+});
 
 
 /* ── MAP ── */
@@ -730,52 +774,43 @@ function closeModal(){ overlay.classList.remove('open'); }
 document.getElementById('modal-cancel').onclick = closeModal;
 overlay.addEventListener('click',e=>{ if(e.target===overlay) closeModal(); });
 
-document.getElementById('modal-save').onclick = ()=>{
+document.getElementById('modal-save').onclick = async ()=>{
   const detail = document.getElementById('f-detail').value.trim();
   if(!detail){ document.getElementById('f-detail').focus(); return; }
   const start=document.getElementById('f-start').value;
   const end=document.getElementById('f-end').value;
   const lat=parseFloat(document.getElementById('f-lat').value)||0;
   const lng=parseFloat(document.getElementById('f-lng').value)||0;
+  const data = {
+    emoji:getSelectedEmoji(), detail,
+    city:document.getElementById('f-city').value,
+    start, end, dur:calcDur(start,end),
+    from:document.getElementById('f-from').value,
+    to:document.getElementById('f-to').value,
+    cost:document.getElementById('f-cost').value,
+    openClose:document.getElementById('f-open').value,
+    note:document.getElementById('f-note').value,
+    alert:document.getElementById('f-alert').checked,
+    lat, lng,
+  };
   if(editingId!==null){
-    const idx=itinerary.findIndex(d=>d.id===editingId);
-    if(idx>-1){
-      itinerary[idx]={...itinerary[idx],
-        emoji:getSelectedEmoji(), detail,
-        city:document.getElementById('f-city').value,
-        start, end, dur:calcDur(start,end),
-        from:document.getElementById('f-from').value,
-        to:document.getElementById('f-to').value,
-        cost:document.getElementById('f-cost').value,
-        openClose:document.getElementById('f-open').value,
-        note:document.getElementById('f-note').value,
-        alert:document.getElementById('f-alert').checked,
-        lat:lat||itinerary[idx].lat, lng:lng||itinerary[idx].lng,
-      };
-    }
+    const existing=itinerary.find(d=>d.id===editingId);
+    await updateDoc(doc(db,'itinerary',editingId), {
+      ...data, lat:lat||existing?.lat||0, lng:lng||existing?.lng||0,
+    });
   } else {
-    itinerary.push({
-      id:nextId(), day:editingDay,
-      date: DAY_DATES[editingDay]||'',
-      emoji:getSelectedEmoji(), detail,
-      city:document.getElementById('f-city').value,
-      start, end, dur:calcDur(start,end),
-      from:document.getElementById('f-from').value,
-      to:document.getElementById('f-to').value,
-      cost:document.getElementById('f-cost').value,
-      openClose:document.getElementById('f-open').value,
-      note:document.getElementById('f-note').value,
-      alert:document.getElementById('f-alert').checked,
-      lat, lng,
+    const maxOrder=itinerary.reduce((max,d)=>Math.max(max,d.order??0),-1);
+    await addDoc(itineraryCol, {
+      ...data, day:editingDay, date:DAY_DATES[editingDay]||'', order:maxOrder+1,
     });
   }
-  save(); closeModal(); refresh();
+  closeModal();
 };
 
-document.getElementById('modal-delete').onclick = ()=>{
+document.getElementById('modal-delete').onclick = async ()=>{
   if(!confirm('ลบกิจกรรมนี้?')) return;
-  itinerary=itinerary.filter(d=>d.id!==editingId);
-  save(); closeModal(); refresh();
+  await deleteDoc(doc(db,'itinerary',editingId));
+  closeModal();
 };
 
 /* ══════════════════════════════════════════
@@ -879,11 +914,10 @@ function buildTimeline(filter){
         if(d.lat&&map){ map.panTo({lat:d.lat,lng:d.lng}); map.setZoom(14); mapLayers.forEach(l=>{if(l._itemId===d.id&&l._infoWindow){if(openInfoWindow)openInfoWindow.close();l._infoWindow.open({anchor:l,map});openInfoWindow=l._infoWindow;}}); }
       });
       card.querySelector('.btn-edit').addEventListener('click', e=>{ e.stopPropagation(); openModal(d, d.day); });
-      card.querySelector('.btn-delete').addEventListener('click', e=>{
+      card.querySelector('.btn-delete').addEventListener('click', async e=>{
         e.stopPropagation();
         if(!confirm(`ลบ "${d.detail}"?`)) return;
-        itinerary=itinerary.filter(x=>x.id!==d.id);
-        save(); refresh();
+        await deleteDoc(doc(db,'itinerary',d.id));
       });
 
       el.appendChild(dotEl);
@@ -1066,11 +1100,11 @@ function toggleSidebar(){
   icon.textContent = sidebar.classList.contains('sidebar-collapsed')?'chevron_right':'chevron_left';
 }
 
-/* ── INIT ── */
-itinerary = itinerary.map((d,i)=>d.id!=null?d:{...d,id:i});
-save();
-buildTimeline(currentFilter);
-updateBudget(currentFilter);
+/* ── Connect initMap relay ── */
+window.__initMapReady = initMap;
+if (window.__initMapPending) initMap();
+
+// ── INIT handled by onSnapshot; media slots init after first render ──
 initAllMediaSlots();
 </script>
 
