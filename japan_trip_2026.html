@@ -359,7 +359,7 @@
       </div>
 
       <!-- ── RIGHT PANEL ── -->
-      <div class="lg:col-span-5 space-y-5">
+      <div class="lg:col-span-5 space-y-5 lg:sticky lg:top-20 lg:self-start">
         <!-- MAP -->
         <div class="rounded-3xl overflow-hidden relative border border-white/5" style="height:400px">
           <div id="map"></div>
@@ -997,7 +997,7 @@ function buildTimeline(filter){
     /* ── SortableJS drag-to-reorder ── */
     Sortable.create(wrapper, {
       animation: 150,
-      handle: '.btn-drag',
+      handle: '.timeline-card',
       filter: '.add-activity-btn',
       draggable: '.timeline-wrapper',
       ghostClass: 'sortable-ghost',
