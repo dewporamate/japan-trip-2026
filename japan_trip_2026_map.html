@@ -694,6 +694,8 @@ function initMap(){
     zoomControl:true,mapTypeControl:false,streetViewControl:false,fullscreenControl:false,
     gestureHandling:'greedy',
   });
+  window.setMapTheme = (light) => map.setOptions({styles: light ? [] : DARK_MAP_STYLES});
+  if(document.documentElement.classList.contains('light')) window.setMapTheme(true);
   drawMap(currentFilter);
   // Day tab map navigation
   document.querySelectorAll('.day-tab').forEach(tab=>{
@@ -1091,6 +1093,7 @@ updateBudget(currentFilter);
   const K = 'japan2026_theme';
   function applyTheme(t) {
     document.documentElement.classList.toggle('light', t === 'light');
+    if(window.setMapTheme) window.setMapTheme(t === 'light');
     const btn = document.getElementById('theme-toggle');
     if (btn) {
       const ico = btn.querySelector('.material-symbols-outlined');
