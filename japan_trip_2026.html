@@ -165,6 +165,11 @@
   /* ── Timeline ── */
   .timeline-card:hover { transform:translateX(4px); }
   .timeline-card.active-card { box-shadow:0 8px 32px rgba(255,107,157,.15) !important; outline:1px solid rgba(255,107,157,.25); }
+  .timeline-card.drag-over { outline:1px dashed rgba(255,107,157,.4); background:rgba(255,107,157,.06)!important; transform:none!important; }
+  .timeline-wrapper[draggable] .timeline-card { cursor:grab; }
+  .timeline-wrapper[draggable]:active .timeline-card { cursor:grabbing; }
+  .btn-drag { background:rgba(255,255,255,0.05); color:#52525b; cursor:grab; transition:color .15s,background .15s; }
+  .btn-drag:hover { background:rgba(255,255,255,0.1); color:#e4e4e7; }
   /* ── CSS Variables ── */
   :root { --day-circle-bg: #09090b; }
   html.light { --day-circle-bg: #f4f4f5; }
@@ -854,8 +859,9 @@ function buildTimeline(filter){
 
     items.forEach(d => {
       const el = document.createElement('div');
-      el.className = 'relative';
+      el.className = 'relative timeline-wrapper';
       el.dataset.id = d.id;
+      el.draggable = true;
 
       /* dot */
       const dotEl = document.createElement('div');
@@ -875,7 +881,10 @@ function buildTimeline(filter){
       card.innerHTML = `
         <div class="flex justify-between items-start mb-3">
           <span class="font-['Inter'] text-[0.65rem] uppercase tracking-widest text-zinc-600 font-bold">${d.start||''}${d.end?' — '+d.end:''}</span>
-          <span class="text-lg">${d.emoji||'📍'}</span>
+          <div class="flex items-center gap-1.5">
+            <button class="btn-drag w-6 h-6 flex items-center justify-center rounded text-base leading-none select-none" title="ลากเพื่อเรียง" onclick="event.stopPropagation()">⠿</button>
+            <span class="text-lg">${d.emoji||'📍'}</span>
+          </div>
         </div>
         <h4 class="font-['Manrope'] font-bold text-base text-on-surface mb-1 leading-snug">${d.detail}</h4>
         ${d.from&&d.to&&d.from!==d.to?`<p class="text-zinc-600 text-xs mb-3 font-['Inter']">📍 ${d.from} → ${d.to}</p>`:''}
@@ -918,6 +927,30 @@ function buildTimeline(filter){
         e.stopPropagation();
         if(!confirm(`ลบ "${d.detail}"?`)) return;
         await deleteDoc(doc(db,'itinerary',d.id));
+      });
+
+      /* ── Drag to reorder ── */
+      el.addEventListener('dragstart', e => {
+        e.dataTransfer.setData('text/plain', d.id);
+        setTimeout(() => el.style.opacity = '.4', 0);
+      });
+      el.addEventListener('dragend', () => { el.style.opacity = ''; });
+      el.addEventListener('dragover', e => { e.preventDefault(); card.classList.add('drag-over'); });
+      el.addEventListener('dragleave', () => { card.classList.remove('drag-over'); });
+      el.addEventListener('drop', async e => {
+        e.preventDefault(); card.classList.remove('drag-over');
+        const fromId = e.dataTransfer.getData('text/plain');
+        const toId = d.id;
+        if (fromId === toId) return;
+        const fi = itinerary.findIndex(x => x.id === fromId);
+        const ti = itinerary.findIndex(x => x.id === toId);
+        if (fi < 0 || ti < 0) return;
+        const reordered = [...itinerary];
+        const [moved] = reordered.splice(fi, 1);
+        reordered.splice(ti, 0, moved);
+        const batch = writeBatch(db);
+        reordered.forEach((item, i) => { batch.update(doc(db, 'itinerary', item.id), { order: i }); });
+        await batch.commit();
       });
 
       el.appendChild(dotEl);
