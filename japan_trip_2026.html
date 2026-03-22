@@ -880,7 +880,26 @@ function buildTimeline(filter){
     rail.style.background = col;
     wrapper.appendChild(rail);
 
+    let lastActDate = null;
     items.forEach(d => {
+      /* ── Date divider when actDate changes within same day ── */
+      if (d.actDate && d.actDate !== lastActDate && lastActDate !== null) {
+        const divider = document.createElement('div');
+        divider.className = 'relative flex items-center gap-3 py-1 select-none';
+        divider.innerHTML = `
+          <div class="absolute -left-10 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full flex items-center justify-center z-10" style="background:var(--day-circle-bg,#09090b);border:1.5px dashed ${col}55">
+            <span style="font-size:9px;color:${col};font-weight:800;font-family:'Inter',sans-serif">+1</span>
+          </div>
+          <div class="flex-1 flex items-center gap-3">
+            <div class="h-px flex-1 opacity-20" style="background:${col}"></div>
+            <span class="text-[0.62rem] font-bold font-['Inter'] uppercase tracking-widest px-2.5 py-1 rounded-full" style="background:${col}18;color:${col}cc">${d.actDate}</span>
+            <div class="h-px flex-1 opacity-20" style="background:${col}"></div>
+          </div>
+        `;
+        wrapper.appendChild(divider);
+      }
+      lastActDate = d.actDate || lastActDate;
+
       const el = document.createElement('div');
       el.className = 'relative timeline-wrapper';
       el.dataset.id = d.id;
