@@ -433,6 +433,19 @@
       <div class="emoji-row" id="emoji-picker"></div>
     </div>
     <div class="modal-sep"></div>
+    <div class="modal-grid full" style="margin-bottom:4px">
+      <div class="form-group">
+        <label>วันที่</label>
+        <select id="f-date">
+          <option value="9 ต.ค.">9 ต.ค. 2569 (Day 1 — บิน + เดินทาง)</option>
+          <option value="10 ต.ค.">10 ต.ค. 2569 (Day 1 — ถึงญี่ปุ่น)</option>
+          <option value="11 ต.ค.">11 ต.ค. 2569 (Day 2 — ภูเขาไฟฟูจิ)</option>
+          <option value="12 ต.ค.">12 ต.ค. 2569 (Day 3 — Harajuku · Shibuya)</option>
+          <option value="13 ต.ค.">13 ต.ค. 2569 (Day 4 — Kamakura · Enoshima)</option>
+          <option value="14 ต.ค.">14 ต.ค. 2569 (Day 5 — กลับบ้าน)</option>
+        </select>
+      </div>
+    </div>
     <div class="modal-grid">
       <div class="form-group">
         <label>รายละเอียด *</label>
@@ -753,6 +766,8 @@ EMOJI_LIST.forEach(em=>{
 function getSelectedEmoji(){ const sel=picker.querySelector('.emoji-opt.selected'); return sel?sel.textContent:'📍'; }
 function setSelectedEmoji(em){ picker.querySelectorAll('.emoji-opt').forEach(b=>{b.classList.toggle('selected',b.textContent===em);}); }
 
+const DAY_DEFAULT_DATE = {1:'9 ต.ค.',2:'11 ต.ค.',3:'12 ต.ค.',4:'13 ต.ค.',5:'14 ต.ค.'};
+
 function openModal(item=null, dayNum=1){
   editingId = item?item.id:null;
   editingDay = dayNum;
@@ -769,6 +784,7 @@ function openModal(item=null, dayNum=1){
   document.getElementById('f-alert').checked = item?.alert||false;
   document.getElementById('f-lat').value     = item?.lat||'';
   document.getElementById('f-lng').value     = item?.lng||'';
+  document.getElementById('f-date').value    = item?.actDate||(DAY_DEFAULT_DATE[dayNum]||'9 ต.ค.');
   setSelectedEmoji(item?.emoji||'📍');
   document.getElementById('modal-delete').style.display = item?'':'none';
   overlay.classList.add('open');
@@ -797,6 +813,7 @@ document.getElementById('modal-save').onclick = async ()=>{
     note:document.getElementById('f-note').value,
     alert:document.getElementById('f-alert').checked,
     lat, lng,
+    actDate:document.getElementById('f-date').value,
   };
   if(editingId!==null){
     const existing=itinerary.find(d=>d.id===editingId);
@@ -880,7 +897,10 @@ function buildTimeline(filter){
 
       card.innerHTML = `
         <div class="flex justify-between items-start mb-3">
-          <span class="font-['Inter'] text-[0.65rem] uppercase tracking-widest text-zinc-600 font-bold">${d.start||''}${d.end?' — '+d.end:''}</span>
+          <div class="flex items-center gap-2">
+            <span class="font-['Inter'] text-[0.65rem] uppercase tracking-widest text-zinc-600 font-bold">${d.start||''}${d.end?' — '+d.end:''}</span>
+            ${d.actDate?`<span class="px-1.5 py-0.5 rounded text-[0.6rem] font-bold font-['Inter'] uppercase tracking-wide" style="background:rgba(255,107,157,0.12);color:#ff6b9d">${d.actDate}</span>`:''}
+          </div>
           <div class="flex items-center gap-1.5">
             <button class="btn-drag w-6 h-6 flex items-center justify-center rounded text-base leading-none select-none" title="ลากเพื่อเรียง" onclick="event.stopPropagation()">⠿</button>
             <span class="text-lg">${d.emoji||'📍'}</span>
