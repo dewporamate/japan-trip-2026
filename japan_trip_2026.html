@@ -635,8 +635,6 @@ onSnapshot(query(itineraryCol, orderBy('order')), snapshot => {
     .map(d => ({ ...d.data(), id: d.id }))
     .sort((a, b) => {
       if (a.day !== b.day) return a.day - b.day;
-      const da = dateNum(a), db = dateNum(b);
-      if (da !== db) return da - db;
       // respect manual drag order; fall back to start time for new items
       const oa = a.order ?? 9999, ob = b.order ?? 9999;
       if (oa !== ob) return oa - ob;
@@ -796,7 +794,7 @@ function openModal(item=null, dayNum=1){
   document.getElementById('f-alert').checked = item?.alert||false;
   document.getElementById('f-lat').value     = item?.lat||'';
   document.getElementById('f-lng').value     = item?.lng||'';
-  document.getElementById('f-date').value    = item?.actDate||(DAY_DEFAULT_DATE[dayNum]||'9 ต.ค.');
+  document.getElementById('f-date').value    = item ? (item.actDate||'') : (DAY_DEFAULT_DATE[dayNum]||'9 ต.ค.');
   setSelectedEmoji(item?.emoji||'📍');
   document.getElementById('modal-delete').style.display = item?'':'none';
   overlay.classList.add('open');
