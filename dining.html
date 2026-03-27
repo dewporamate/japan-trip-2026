@@ -74,9 +74,69 @@
   .sidebar-collapsed .nav-item { justify-content:center; padding-left:0; border-left:none; }
   .sidebar-collapsed .nav-item-active { border-left:none; }
   .sidebar-collapsed .add-btn { width:48px; height:48px; padding:0; border-radius:9999px; margin:0 auto; }
+  /* ── Mobile drawer ── */
+  #mobile-drawer { transform:translateX(-100%); transition:transform 0.3s cubic-bezier(0.4,0,0.2,1); }
+  #mobile-drawer.open { transform:translateX(0); }
+  #mobile-overlay { opacity:0; pointer-events:none; transition:opacity 0.3s; }
+  #mobile-overlay.open { opacity:1; pointer-events:auto; }
 </style>
 </head>
 <body class="text-on-surface flex h-screen overflow-hidden bg-[#09090b]">
+
+<!-- Mobile Overlay -->
+<div id="mobile-overlay" class="fixed inset-0 bg-black/60 z-40 md:hidden" onclick="closeMobileDrawer()"></div>
+
+<!-- Mobile Drawer -->
+<div id="mobile-drawer" class="fixed top-0 left-0 h-full w-72 bg-[#09090b] border-r border-white/5 z-50 md:hidden flex flex-col py-10 px-5">
+  <div class="mb-8 px-2 flex items-center justify-between">
+    <div class="flex items-center gap-3">
+      <div class="w-10 h-10 rounded-xl bg-primary/15 flex items-center justify-center shrink-0 border border-primary/25">
+        <span style="font-size:1.2rem">🌸</span>
+      </div>
+      <div>
+        <div class="text-base font-black font-['Manrope'] text-primary italic tracking-tight">Japan 2026</div>
+        <div class="text-[9px] text-zinc-600 font-['Inter'] uppercase tracking-widest font-bold">Friend Group Trip</div>
+      </div>
+    </div>
+    <button onclick="closeMobileDrawer()" class="w-8 h-8 flex items-center justify-center rounded-full hover:bg-white/5 text-zinc-500 hover:text-primary transition-colors">
+      <span class="material-symbols-outlined" style="font-size:20px">close</span>
+    </button>
+  </div>
+  <nav class="flex-1 space-y-1">
+    <a class="group flex items-center text-zinc-500 pl-5 py-2.5 hover:text-on-surface hover:bg-white/5 rounded-xl transition-all duration-200" href="japan_trip_2026.html">
+      <span class="material-symbols-outlined mr-3 shrink-0" style="font-size:20px">schedule</span>
+      <span class="text-sm font-['Public_Sans']">Itinerary</span>
+    </a>
+    <a class="group flex items-center text-zinc-500 pl-5 py-2.5 hover:text-on-surface hover:bg-white/5 rounded-xl transition-all duration-200" href="transportation.html">
+      <span class="material-symbols-outlined mr-3 shrink-0" style="font-size:20px">train</span>
+      <span class="text-sm font-['Public_Sans']">Transportation</span>
+    </a>
+    <a class="group flex items-center text-primary font-bold border-l-4 border-primary pl-4 py-2.5 rounded-r-xl bg-primary/5 transition-all duration-200" href="dining.html">
+      <span class="material-symbols-outlined mr-3 shrink-0" style="font-size:20px">restaurant</span>
+      <span class="text-sm font-['Public_Sans']">Dining</span>
+    </a>
+    <a class="group flex items-center text-zinc-500 pl-5 py-2.5 hover:text-on-surface hover:bg-white/5 rounded-xl transition-all duration-200" href="#">
+      <span class="material-symbols-outlined mr-3 shrink-0" style="font-size:20px">museum</span>
+      <span class="text-sm font-['Public_Sans']">Activities</span>
+    </a>
+    <a class="group flex items-center text-zinc-500 pl-5 py-2.5 hover:text-on-surface hover:bg-white/5 rounded-xl transition-all duration-200" href="lodging.html">
+      <span class="material-symbols-outlined mr-3 shrink-0" style="font-size:20px">hotel</span>
+      <span class="text-sm font-['Public_Sans']">Lodging</span>
+    </a>
+    <a class="group flex items-center text-zinc-500 pl-5 py-2.5 hover:text-on-surface hover:bg-white/5 rounded-xl transition-all duration-200" href="japan_trip_2026_map.html">
+      <span class="material-symbols-outlined mr-3 shrink-0" style="font-size:20px">map</span>
+      <span class="text-sm font-['Public_Sans']">Map</span>
+    </a>
+    <a class="group flex items-center text-zinc-500 pl-5 py-2.5 hover:text-on-surface hover:bg-white/5 rounded-xl transition-all duration-200" href="budget.html">
+      <span class="material-symbols-outlined mr-3 shrink-0" style="font-size:20px">payments</span>
+      <span class="text-sm font-['Public_Sans']">Budget</span>
+    </a>
+  </nav>
+  <button class="mt-auto bg-primary text-white rounded-full px-5 py-3 font-bold font-['Public_Sans'] text-sm hover:shadow-[0_0_24px_rgba(255,107,157,0.35)] transition-all active:scale-95 flex items-center justify-center gap-2">
+    <span class="material-symbols-outlined" style="font-size:20px">add</span>
+    <span>Add New Stop</span>
+  </button>
+</div>
 
 <!-- Sidebar -->
 <aside class="hidden md:flex flex-col h-screen py-10 px-5 bg-[#09090b] w-72 shrink-0 border-r border-white/5 sticky top-0 relative" id="sidebar">
@@ -136,7 +196,12 @@
 
   <!-- Top App Bar -->
   <header class="flex justify-between items-center px-5 md:px-8 h-16 w-full bg-[#09090b]/85 backdrop-blur-xl z-50 sticky top-0 border-b border-white/5 shrink-0">
-    <h1 class="text-lg font-black text-on-surface italic font-['Manrope'] tracking-tight">Dining</h1>
+    <div class="flex items-center gap-3">
+      <button onclick="openMobileDrawer()" class="md:hidden w-8 h-8 flex items-center justify-center rounded-full hover:bg-white/5 transition-colors text-zinc-400 hover:text-primary">
+        <span class="material-symbols-outlined" style="font-size:22px">menu</span>
+      </button>
+      <h1 class="text-lg font-black text-on-surface italic font-['Manrope'] tracking-tight">Dining</h1>
+    </div>
     <div class="flex items-center gap-2 md:gap-3">
       <button id="theme-toggle" onclick="toggleTheme()" class="w-8 h-8 flex items-center justify-center rounded-full hover:bg-white/5 transition-colors text-zinc-500 hover:text-primary" title="Toggle Light/Dark mode">
         <span class="material-symbols-outlined" style="font-size:20px">light_mode</span>
@@ -369,6 +434,19 @@ onSnapshot(query(collection(db, 'itinerary'), orderBy('order')), snapshot => {
     if(icon){ icon.textContent = 'chevron_right'; }
   }
 })();
+</script>
+<script>
+function openMobileDrawer() {
+  if (document.getElementById('mobile-drawer').classList.contains('open')) { closeMobileDrawer(); return; }
+  document.getElementById('mobile-drawer').classList.add('open');
+  document.getElementById('mobile-overlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeMobileDrawer() {
+  document.getElementById('mobile-drawer').classList.remove('open');
+  document.getElementById('mobile-overlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
 </script>
 </body>
 </html>
