@@ -591,7 +591,7 @@
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js';
 import {
   getFirestore, collection, addDoc, updateDoc, deleteDoc,
-  doc, onSnapshot, writeBatch, query, orderBy
+  doc, getDoc, getDocs, onSnapshot, writeBatch, query, orderBy
 } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
 
 const firebaseConfig = {
@@ -605,6 +605,7 @@ const firebaseConfig = {
 const firebaseApp = initializeApp(firebaseConfig);
 const db = getFirestore(firebaseApp);
 const itineraryCol = collection(db, 'itinerary');
+
 
 /* ══════════════════════════════════════════
    DEFAULT ITINERARY DATA (seed if Firestore empty)
@@ -630,16 +631,30 @@ const DEFAULT_DATA = [
   {day:1,date:"10 ต.ค.",city:"Akihabara",emoji:"🎮",start:"17:40",end:"19:40",dur:"2h",detail:"Akihabara anime / game / claw machine zone 🎮🕹️",from:"Shinjuku Station",to:"Akihabara",cost:"",lat:35.7023,lng:139.7745},
   {day:1,date:"10 ต.ค.",city:"Akihabara",emoji:"🍽️",start:"19:40",end:"21:00",dur:"1h 30m",detail:"Dinner: Yakiniku or Tonkatsu 🥩",from:"Akihabara",to:"Akihabara",cost:"max 2,000¥/person",lat:35.7023,lng:139.7750},
   {day:1,date:"10 ต.ค.",city:"Kita",emoji:"🚅",start:"21:00",end:"21:30",dur:"30m",detail:"กลับ Oku + แวะ convenience store 🏪",from:"Akihabara Station",to:"Oku Station",cost:"170¥",lat:35.7497,lng:139.7617},
-  // DAY 2 — MT FUJI
-  {day:2,date:"11 ต.ค.",city:"Kita",emoji:"🚅",start:"07:00",end:"07:20",dur:"20m",detail:"Yamanote Line → Shinjuku",from:"Tabata Station",to:"Shinjuku Station",cost:"180¥",lat:35.6896,lng:139.7006},
-  {day:2,date:"11 ต.ค.",city:"Shinjuku",emoji:"🚌",start:"07:30",end:"09:30",dur:"2h",detail:"Highway Bus → Kawaguchiko 🚌",from:"Shinjuku Highway Bus Terminal",to:"Kawaguchiko Station",cost:"~2,000¥/person",alert:true,lat:35.5105,lng:138.7636},
-  {day:2,date:"11 ต.ค.",city:"Kawaguchiko",emoji:"🚲",start:"09:30",end:"10:00",dur:"30m",detail:"เช่าจักรยาน / ซื้อ Red Line Bus Pass 🚲",from:"Kawaguchiko Station",to:"Kawaguchiko Station",cost:"~500-1,000¥",lat:35.5105,lng:138.7636},
-  {day:2,date:"11 ต.ค.",city:"Kawaguchiko",emoji:"🗻",start:"10:00",end:"12:00",dur:"2h",detail:"Oishi Park: Kochia grass + Mt Fuji view 🗻📸",from:"Kawaguchiko Station",to:"Oishi Park",openClose:"09:00-17:30",cost:"Free",lat:35.5197,lng:138.8034},
-  {day:2,date:"11 ต.ค.",city:"Fujiyoshida",emoji:"⛩️",start:"12:00",end:"14:00",dur:"2h",detail:"Chureito Pagoda: เจดีย์แดง + วิว Fuji (400 ขั้น!) ⛩️🗻",from:"Oishi Park",to:"Chureito Pagoda",openClose:"08:30-17:00",cost:"Free",lat:35.4937,lng:138.7893},
-  {day:2,date:"11 ต.ค.",city:"Kawaguchiko",emoji:"📸",start:"14:00",end:"14:30",dur:"30m",detail:"Lawson Fuji view photo spot ☕📸",from:"Chureito Pagoda",to:"Lawson Fujikawaguchiko",cost:"Buy snacks",lat:35.5135,lng:138.7570},
-  {day:2,date:"11 ต.ค.",city:"Kawaguchiko",emoji:"🚌",start:"15:00",end:"17:00",dur:"2h",detail:"Highway Bus กลับ Shinjuku 🚌",from:"Kawaguchiko Station",to:"Shinjuku Bus Terminal",cost:"~2,000¥/person",lat:35.6896,lng:139.7006},
-  {day:2,date:"11 ต.ค.",city:"Shinjuku",emoji:"🍜",start:"17:30",end:"19:00",dur:"1h 30m",detail:"Dinner: Izakaya or Ichiran ramen 🍜🍺",from:"Shinjuku",to:"Shinjuku",cost:"max 1,500¥",lat:35.6896,lng:139.7010},
-  {day:2,date:"11 ต.ค.",city:"Kita",emoji:"🚅",start:"19:30",end:"20:00",dur:"30m",detail:"กลับที่พัก Oku 🌙",from:"Shinjuku Station",to:"Oku Station",cost:"180¥",lat:35.7497,lng:139.7617},
+  // DAY 2 — MT FUJI ROAD TRIP (รถเช่า)
+  {day:2,date:"11 ต.ค.",city:"Kita",emoji:"⏰",start:"05:30",end:"06:00",dur:"30m",detail:"Wake-up + เตรียมอุปกรณ์ 📸 ชาร์จแบต, backup การ์ดคืนก่อน",from:"KETA House OKU",to:"KETA House OKU",cost:"",lat:35.7494,lng:139.7625},
+  {day:2,date:"11 ต.ค.",city:"Kita",emoji:"🍽️",start:"06:00",end:"06:30",dur:"30m",detail:"อาหารเช้า + โหลดเกียร์ 🏪 ร้านสะดวกซื้อ — เร็วเข้า",from:"KETA House OKU",to:"Convenience Store",cost:"",lat:35.7494,lng:139.7625},
+  {day:2,date:"11 ต.ค.",city:"Ueno",emoji:"🚗",start:"06:30",end:"07:00",dur:"30m",detail:"🚗 รับรถเช่า — Nippon/Toyota ใกล้ Ueno Stn | ยืนยันจองล่วงหน้า, เช็ค ETC card",from:"Ueno Station",to:"Nippon Rent-A-Car Ueno",openClose:"06:30-",cost:"",alert:true,lat:35.7141,lng:139.7774},
+  {day:2,date:"11 ต.ค.",city:"Ueno",emoji:"🎬",start:"07:00",end:"07:20",dur:"20m",detail:"B-roll เปิดตัว vlog ถนนเช้า Ueno Park 🌅 (20 นาที max)",from:"Nippon Rent-A-Car Ueno",to:"Ueno Park",cost:"",lat:35.7154,lng:139.7726},
+  {day:2,date:"11 ต.ค.",city:"On the Road",emoji:"🛣️",start:"07:20",end:"09:00",dur:"1h 40m",detail:"🛣️ ออกเดินทาง — Shuto → Chuo Expressway | In-car content: commentary, timelapse, scenery 🎥 GoPro mount กระจกหน้า",from:"Ueno",to:"Hachioji SA",cost:"Expressway toll (ETC)",lat:35.6488,lng:139.3329},
+  {day:2,date:"11 ต.ค.",city:"Hachioji",emoji:"⛽",start:"09:00",end:"09:20",dur:"20m",detail:"🛑 Hachioji SA — พักรถ + เติมน้ำมัน + combini snack haul 🍙 (20 นาที max)",from:"Hachioji SA",to:"Hachioji SA",cost:"",lat:35.6488,lng:139.3329},
+  {day:2,date:"11 ต.ค.",city:"Fujiyoshida",emoji:"🛣️",start:"09:25",end:"10:00",dur:"35m",detail:"Chuo → Fujiyoshida IC → ต่อ Route 139 🗻 วิวภูเขาเริ่มปรากฏ!",from:"Hachioji SA",to:"Fujiyoshida IC",cost:"",lat:35.4957,lng:138.7937},
+  {day:2,date:"11 ต.ค.",city:"Oshino",emoji:"💧",start:"10:00",end:"10:30",dur:"30m",detail:"💧 Oshino Hakkai — สระน้ำใส 8 แห่ง Hidden gem content 🎥 (20–30 นาที)",from:"Fujiyoshida IC",to:"Oshino Hakkai",openClose:"07:00-18:00",cost:"300¥",lat:35.4594,lng:138.8234},
+  {day:2,date:"11 ต.ค.",city:"Fujiyoshida",emoji:"⛩️",start:"10:30",end:"11:10",dur:"40m",detail:"⛩️ Arakurayama Sengen Park — เดิน 398 ขั้น | ⭐ HERO SHOOT #1 — ฟูจิ + ศาลา + ซากุระ 🌸 | เมฆ = risk หลัก",from:"Oshino Hakkai",to:"Chureito Pagoda",openClose:"08:30-17:00",cost:"Free",alert:true,lat:35.4937,lng:138.7893},
+  {day:2,date:"11 ต.ค.",city:"Fujiyoshida",emoji:"🎥",start:"11:10",end:"11:30",dur:"20m",detail:"B-roll Honcho-dori — ถนนเก่า fashion backdrop 📸 (15 นาที)",from:"Chureito Pagoda",to:"Honcho-dori",cost:"",lat:35.4957,lng:138.7937},
+  {day:2,date:"11 ต.ค.",city:"Fujiyoshida",emoji:"🍜",start:"11:30",end:"12:30",dur:"1h",detail:"🍜 LUNCH — Yoshida Udon อาหารท้องถิ่น Yamanashi 🥢 (45–60 นาที)",from:"Honcho-dori",to:"Yoshida Udon Restaurant",cost:"",lat:35.4940,lng:138.7910},
+  {day:2,date:"11 ต.ค.",city:"Kawaguchiko",emoji:"🚗",start:"12:30",end:"12:50",dur:"20m",detail:"🚗 Fujiyoshida → Kawaguchiko ขับตามริมทะเลสาบ 🎥 Capture Fuji reveal ผ่านกระจก",from:"Fujiyoshida",to:"Kawaguchiko",cost:"",lat:35.5105,lng:138.7636},
+  {day:2,date:"11 ต.ค.",city:"Kawaguchiko",emoji:"📸",start:"12:50",end:"13:30",dur:"40m",detail:"Kawaguchiko North Shore — Establishing shots 🗻📸 (30–40 นาที)",from:"Kawaguchiko",to:"Kawaguchiko North Shore",cost:"Free",lat:35.5197,lng:138.8034},
+  {day:2,date:"11 ต.ค.",city:"Kawaguchiko",emoji:"🚡",start:"13:30",end:"14:20",dur:"50m",detail:"🚡 Kachi Kachi Ropeway — มุมทางอากาศ + Panoramic Fuji view (~40 นาที รวมคิว)",from:"Kawaguchiko North Shore",to:"Kachi Kachi Ropeway",openClose:"09:00-17:20",cost:"~1,000¥",lat:35.5124,lng:138.7734},
+  {day:2,date:"11 ต.ค.",city:"Kawaguchiko",emoji:"🗻",start:"14:20",end:"14:50",dur:"30m",detail:"Oishi Park — Wide Fuji panoramic, walk-and-talk 🎥",from:"Kachi Kachi Ropeway",to:"Oishi Park",openClose:"09:00-17:30",cost:"Free",lat:35.5197,lng:138.8034},
+  {day:2,date:"11 ต.ค.",city:"Kawaguchiko",emoji:"☕",start:"15:00",end:"15:30",dur:"30m",detail:"☕ Buffer / Crew break — เช็ก footage, พัก host",from:"Oishi Park",to:"Kawaguchiko",cost:"",lat:35.5105,lng:138.7636},
+  {day:2,date:"11 ต.ค.",city:"Kawaguchiko",emoji:"🎵",start:"15:30",end:"15:50",dur:"20m",detail:"Kawaguchiko Music Forest — B-roll lakeside café 🎥",from:"Kawaguchiko",to:"Kawaguchiko Music Forest",openClose:"09:30-18:00",cost:"",lat:35.5091,lng:138.7637},
+  {day:2,date:"11 ต.ค.",city:"Kawaguchiko",emoji:"🌅",start:"16:00",end:"16:30",dur:"30m",detail:"Ubuyagasaki Peninsula — Scout + setup golden hour 📸 เช็กเมฆ, ตั้ง tripod",from:"Kawaguchiko Music Forest",to:"Ubuyagasaki Peninsula",cost:"Free",lat:35.5175,lng:138.7965},
+  {day:2,date:"11 ต.ค.",city:"Kawaguchiko",emoji:"🌇",start:"16:30",end:"17:30",dur:"1h",detail:"⭐ HERO SHOOT #2 — GOLDEN HOUR 🌇 Ubuyagasaki / Oishi Park | สำคัญที่สุด — ห้ามพลาด!",from:"Ubuyagasaki Peninsula",to:"Ubuyagasaki / Oishi Park",cost:"Free",alert:true,lat:35.5175,lng:138.7965},
+  {day:2,date:"11 ต.ค.",city:"Kawaguchiko",emoji:"🎬",start:"17:35",end:"17:55",dur:"20m",detail:"Wrap golden hour — Vlog outro, ขอบคุณ shot 🎥",from:"Ubuyagasaki",to:"Kawaguchiko",cost:"",lat:35.5105,lng:138.7636},
+  {day:2,date:"11 ต.ค.",city:"Kawaguchiko",emoji:"🍲",start:"18:00",end:"19:00",dur:"1h",detail:"🍲 DINNER — Houtou noodles (Yamanashi specialty) 🥢 (45–60 นาที)",from:"Kawaguchiko",to:"Houtou Restaurant Kawaguchiko",cost:"",lat:35.5105,lng:138.7636},
+  {day:2,date:"11 ต.ค.",city:"On the Road",emoji:"🛣️",start:"19:00",end:"21:30",dur:"2h 30m",detail:"🛣️ ออกเดินทางกลับ — Chuo Expressway ⚠️ ออกก่อน 19:00 — traffic วันอาทิตย์ +60–90 นาที",from:"Kawaguchiko",to:"Ueno",cost:"Expressway toll (ETC)",alert:true,lat:35.7141,lng:139.7774},
+  {day:2,date:"11 ต.ค.",city:"Ueno",emoji:"🔑",start:"21:30",end:"22:00",dur:"30m",detail:"คืนรถที่ Ueno 🔑 เช็ค ETC, โหลดเกียร์ | Backup การ์ดทันทีถึงโรงแรม",from:"Ueno",to:"Nippon Rent-A-Car Ueno",cost:"",lat:35.7141,lng:139.7774},
   // DAY 3 — HARAJUKU · SHIBUYA
   {day:3,date:"12 ต.ค.",city:"Kita",emoji:"🚅",start:"10:00",end:"10:20",dur:"20m",detail:"Yamanote Line → Harajuku",from:"Tabata Station",to:"Harajuku Station",cost:"220¥",lat:35.6702,lng:139.7027},
   {day:3,date:"12 ต.ค.",city:"Harajuku",emoji:"👗",start:"10:30",end:"12:00",dur:"1h 30m",detail:"Omotesando + Takeshita St. + trendy cafe photos ☕📸",from:"Harajuku Station",to:"Omotesando",cost:"",lat:35.6654,lng:139.7128},
@@ -671,11 +686,13 @@ const DEFAULT_DATA = [
 
 const EMOJI_LIST = ["🚗","🍽️","🚶","✈️","🚅","🚌","🎮","🏠","⛩️","🗻","📸","🛍️","🎸","🍜","🍣","🍡","🦐","🎟️","🚃","🏀","🌆","🔒","🛒","⚖️","🧳","🚲","🏖️","🌸","🎌","🗾","💴","🍱","☕","🎑","🎆"];
 const DAY_COLORS = {1:"#ff6b9d",2:"#a78bfa",3:"#fbbf24",4:"#34d399",5:"#60a5fa"};
-const DAY_NAMES  = {1:"✈️ เดินทาง + ถึงญี่ปุ่น",2:"🗻 ภูเขาไฟฟูจิ",3:"🛍️ Harajuku · Shibuya",4:"🏖️ Kamakura · Enoshima",5:"🛫 กลับบ้าน"};
+const DAY_NAMES  = {1:"✈️ เดินทาง + ถึงญี่ปุ่น",2:"🚗 Road Trip — ฟูจิ + Kawaguchiko",3:"🛍️ Harajuku · Shibuya",4:"🏖️ Kamakura · Enoshima",5:"🛫 กลับบ้าน"};
 const DAY_DATES  = {1:"9-10 ต.ค. 2569",2:"11 ต.ค. 2569",3:"12 ต.ค. 2569",4:"13 ต.ค. 2569",5:"14 ต.ค. 2569"};
 
 /* ── State ── */
 let itinerary = [];
+
+const DATA_VERSION = 3; // bump this to force a full reseed from DEFAULT_DATA
 
 async function seedDefaultData() {
   const batch = writeBatch(db);
@@ -683,16 +700,33 @@ async function seedDefaultData() {
     const docRef = doc(itineraryCol);
     batch.set(docRef, { ...item, order: i });
   });
+  // store version marker
+  batch.set(doc(db, 'meta', 'version'), { v: DATA_VERSION });
   await batch.commit();
 }
 
+async function resetAndReseed() {
+  // delete all existing itinerary docs
+  const snap = await getDocs(itineraryCol);
+  const batch = writeBatch(db);
+  snap.docs.forEach(d => batch.delete(d.ref));
+  await batch.commit();
+  await seedDefaultData();
+}
+
+// Check version and reseed if needed, then start listener
 let _seeded = false;
-onSnapshot(query(itineraryCol, orderBy('order')), snapshot => {
-  if (snapshot.empty && !_seeded) {
-    _seeded = true;
-    seedDefaultData();
-    return;
+(async () => {
+  const verDoc = await getDoc(doc(db, 'meta', 'version'));
+  if (!verDoc.exists() || verDoc.data().v !== DATA_VERSION) {
+    await resetAndReseed();
   }
+  onSnapshot(query(itineraryCol, orderBy('order')), snapshot => {
+    if (snapshot.empty && !_seeded) {
+      _seeded = true;
+      seedDefaultData();
+      return;
+    }
   const dateNum = d => parseInt((d.actDate||'').match(/\d+/)?.[0] || '0');
   itinerary = snapshot.docs
     .map(d => ({ ...d.data(), id: d.id }))
@@ -704,7 +738,8 @@ onSnapshot(query(itineraryCol, orderBy('order')), snapshot => {
       return (a.start||'').localeCompare(b.start||'');
     });
   refresh();
-});
+  });
+})();
 
 
 /* ── MAP ── */
