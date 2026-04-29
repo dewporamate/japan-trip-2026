@@ -367,7 +367,7 @@
       <button class="w-8 h-8 flex items-center justify-center rounded-full hover:bg-white/5 transition-colors text-zinc-500 hover:text-primary">
         <span class="material-symbols-outlined" style="font-size:20px">notifications</span>
       </button>
-      <button class="w-8 h-8 flex items-center justify-center rounded-full hover:bg-white/5 transition-colors text-zinc-500 hover:text-primary">
+      <button onclick="manualReset()" title="Reset ข้อมูลกลับ Default" class="w-8 h-8 flex items-center justify-center rounded-full hover:bg-white/5 transition-colors text-zinc-500 hover:text-primary">
         <span class="material-symbols-outlined" style="font-size:20px">settings</span>
       </button>
       <div class="w-8 h-8 rounded-full bg-primary/15 flex items-center justify-center border border-primary/25 cursor-pointer text-base">🧳</div>
@@ -714,13 +714,13 @@ async function resetAndReseed() {
   await seedDefaultData();
 }
 
-// Check version and reseed if needed, then start listener
+window.manualReset = async () => {
+  if (!confirm('⚠️ รีเซ็ตข้อมูลทั้งหมดกลับเป็น Default?\n\nกิจกรรมที่เพิ่ม/แก้ไขทั้งหมดจะหายไป ไม่สามารถกู้คืนได้')) return;
+  await resetAndReseed();
+};
+
 let _seeded = false;
 (async () => {
-  const verDoc = await getDoc(doc(db, 'meta', 'version'));
-  if (!verDoc.exists() || verDoc.data().v !== DATA_VERSION) {
-    await resetAndReseed();
-  }
   onSnapshot(query(itineraryCol, orderBy('order')), snapshot => {
     if (snapshot.empty && !_seeded) {
       _seeded = true;
