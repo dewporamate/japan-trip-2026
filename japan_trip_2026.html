@@ -725,25 +725,43 @@ async function resetAndReseed() {
   await seedDefaultData();
 }
 
+let _seeded = false;
+
 window.manualReset = async () => {
   if (!confirm('⚠️ รีเซ็ตข้อมูลทั้งหมดกลับเป็น Default?\n\nกิจกรรมที่เพิ่ม/แก้ไขทั้งหมดจะหายไป ไม่สามารถกู้คืนได้')) return;
+  _seeded = true; // block onSnapshot from seeding during delete
   await resetAndReseed();
+  _seeded = false;
 };
 
-let _seeded = false;
 (async () => {
-  onSnapshot(query(itineraryCol, orderBy('order')), snapshot => {
+  onSnapshot(query(itineraryCol, orderBy('order')), async snapshot => {
     if (snapshot.empty && !_seeded) {
       _seeded = true;
       seedDefaultData();
       return;
     }
-  const dateNum = d => parseInt((d.actDate||'').match(/\d+/)?.[0] || '0');
+
+    // Auto-dedup: remove docs with identical day+start+detail
+    const seen = new Set();
+    const dupes = [];
+    snapshot.docs.forEach(d => {
+      const v = d.data();
+      const key = `${v.day}|${v.start}|${v.detail}`;
+      if (seen.has(key)) dupes.push(d.ref);
+      else seen.add(key);
+    });
+    if (dupes.length > 0) {
+      const b = writeBatch(db);
+      dupes.forEach(ref => b.delete(ref));
+      await b.commit();
+      return; // onSnapshot will re-fire with clean data
+    }
+
   itinerary = snapshot.docs
     .map(d => ({ ...d.data(), id: d.id }))
     .sort((a, b) => {
       if (a.day !== b.day) return a.day - b.day;
-      // respect manual drag order; fall back to start time for new items
       const oa = a.order ?? 9999, ob = b.order ?? 9999;
       if (oa !== ob) return oa - ob;
       return (a.start||'').localeCompare(b.start||'');
