@@ -558,6 +558,17 @@
     </label>
     <div class="modal-sep"></div>
 
+    <!-- GOOGLE MAPS URL IMPORT -->
+    <div class="place-search-wrap">
+      <span class="place-label">🗺️ Import จาก Google Maps URL</span>
+      <div class="place-search-row">
+        <input type="text" id="f-gmaps-url" placeholder="วาง Google Maps URL ที่นี่…" autocomplete="off">
+        <button class="btn-search" id="btn-gmaps-import">Import</button>
+      </div>
+      <div class="place-status" id="gmaps-status"></div>
+    </div>
+    <div class="modal-sep"></div>
+
     <!-- PLACE SEARCH → auto-fill lat/lng -->
     <div class="place-search-wrap">
       <span class="place-label">🔍 ค้นหาสถานที่ (กรอกชื่อแล้วกดค้นหา)</span>
@@ -822,6 +833,7 @@ function initMap(){
   window.setMapTheme = (light) => map.setOptions({styles: light ? [] : DARK_MAP_STYLES});
 
   drawMap(currentFilter);
+  initGoogleMapsImport();
   initPlaceSearch();
   document.querySelectorAll('.day-tab').forEach(tab=>{
     tab.addEventListener('click',function(){
@@ -1177,6 +1189,97 @@ function initAllMediaSlots(){
     const id = el.dataset.id;
     renderMediaSlots(id);
   });
+}
+
+/* ── GOOGLE MAPS URL IMPORT ── */
+function initGoogleMapsImport(){
+  const urlInput  = document.getElementById('f-gmaps-url');
+  const importBtn = document.getElementById('btn-gmaps-import');
+  const statusEl  = document.getElementById('gmaps-status');
+
+  function setStatus(msg, type=''){
+    statusEl.textContent = msg;
+    statusEl.className = 'place-status' + (type ? ' '+type : '');
+  }
+
+  function parseGoogleMapsUrl(url){
+    const placeMatch = url.match(/\/place\/([^/@?#]+)/);
+    const name = placeMatch ? decodeURIComponent(placeMatch[1].replace(/\+/g,' ')) : null;
+    const coordMatch = url.match(/@(-?\d+\.?\d*),(-?\d+\.?\d*)/);
+    const lat = coordMatch ? parseFloat(coordMatch[1]) : null;
+    const lng = coordMatch ? parseFloat(coordMatch[2]) : null;
+    return { name, lat, lng };
+  }
+
+  const TYPE_EMOJI = {
+    restaurant:'🍽️', meal_takeaway:'🍽️', meal_delivery:'🍽️', food:'🍽️',
+    cafe:'☕', bakery:'☕', bar:'🍺', night_club:'🎸',
+    lodging:'🏠', tourist_attraction:'🎌', museum:'🏛️', art_gallery:'🏛️',
+    park:'🌸', shopping_mall:'🛍️', store:'🛍️', clothing_store:'🛍️',
+    train_station:'🚅', subway_station:'🚅', transit_station:'🚅', bus_station:'🚌',
+    amusement_park:'🎮', place_of_worship:'⛩️', natural_feature:'🗻',
+    aquarium:'🐟', zoo:'🦁', stadium:'🏟️', gym:'🏃', spa:'♨️',
+  };
+
+  function guessEmoji(types){
+    for(const t of (types||[])){ if(TYPE_EMOJI[t]) return TYPE_EMOJI[t]; }
+    return '📍';
+  }
+
+  function extractCity(components){
+    const sub = components?.find(c=>c.types.includes('sublocality_level_1')||c.types.includes('sublocality'));
+    const loc = components?.find(c=>c.types.includes('locality'));
+    return (sub||loc)?.long_name || '';
+  }
+
+  function formatHours(periods){
+    if(!periods?.length) return '';
+    const p = periods.find(x=>x.open&&x.close);
+    if(!p) return '';
+    const fmt = t=>`${String(t.hours).padStart(2,'0')}:${String(t.minutes||0).padStart(2,'0')}`;
+    return `${fmt(p.open)}-${fmt(p.close)}`;
+  }
+
+  function doImport(){
+    const url = urlInput.value.trim();
+    if(!url){ setStatus('กรุณาวาง Google Maps URL','err'); return; }
+    const {name, lat, lng} = parseGoogleMapsUrl(url);
+    if(!name && !lat){ setStatus('URL ไม่ถูกต้อง — ใช้ลิงก์จาก maps.google.com/maps/place/…','err'); return; }
+    setStatus('⏳ กำลังดึงข้อมูล…');
+    importBtn.disabled = true;
+    const service = new google.maps.places.PlacesService(document.createElement('div'));
+    const bias = lat && lng ? new google.maps.LatLng(lat, lng) : undefined;
+    service.textSearch({query: name||`${lat},${lng}`, location: bias, radius: 300}, (results, status)=>{
+      if(status !== google.maps.places.PlacesServiceStatus.OK || !results.length){
+        importBtn.disabled = false;
+        setStatus('ไม่พบสถานที่ กรุณาลองใหม่','err');
+        return;
+      }
+      service.getDetails({
+        placeId: results[0].place_id,
+        fields: ['name','geometry','address_components','opening_hours','types'],
+      }, (place, ds)=>{
+        importBtn.disabled = false;
+        if(ds !== google.maps.places.PlacesServiceStatus.OK){ setStatus('ดึงรายละเอียดไม่ได้','err'); return; }
+        document.getElementById('f-detail').value = place.name||'';
+        document.getElementById('f-to').value     = place.name||'';
+        document.getElementById('f-city').value   = extractCity(place.address_components);
+        document.getElementById('f-lat').value    = place.geometry.location.lat().toFixed(6);
+        document.getElementById('f-lng').value    = place.geometry.location.lng().toFixed(6);
+        if(place.opening_hours?.periods){
+          document.getElementById('f-open').value = formatHours(place.opening_hours.periods);
+        }
+        const emoji = guessEmoji(place.types);
+        Array.from(document.getElementById('emoji-picker').querySelectorAll('button'))
+          .find(b=>b.textContent===emoji)?.click();
+        setStatus(`✅ Import สำเร็จ: ${place.name}`,'ok');
+        urlInput.value = '';
+      });
+    });
+  }
+
+  importBtn.addEventListener('click', doImport);
+  urlInput.addEventListener('keydown', e=>{ if(e.key==='Enter'){ e.preventDefault(); doImport(); } });
 }
 
 /* ── PLACE SEARCH + AUTOCOMPLETE ── */
