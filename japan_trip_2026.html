@@ -813,7 +813,8 @@ function drawMap(filter){
     const mk=new google.maps.Marker({position:{lat:d.lat,lng:d.lng},map,icon:makeIcon(d.emoji||'📍',col),label:{text:d.emoji||'📍',fontSize:'13px',color:'#fff'},optimized:false});
     const costHtml=d.cost?`<div class="popup-cost">💴 ${String(d.cost).replace(/\r\n/g,' · ')}</div>`:'';
     const openHtml=d.openClose?`<div class="popup-row">🕐 ${String(d.openClose).replace(/\r\n/g,' ')}</div>`:'';
-    const mapsLink=`<a href="https://www.google.com/maps/search/?api=1&query=${d.lat},${d.lng}" target="_blank" rel="noopener" style="display:inline-block;margin-top:8px;color:#4285f4;font-size:0.68rem;font-weight:700;text-decoration:none;font-family:'Inter',sans-serif;letter-spacing:0.03em">📍 เปิดใน Google Maps →</a>`;
+    const mapsName=encodeURIComponent(d.to||d.detail||'');
+    const mapsLink=`<a href="https://www.google.com/maps/place/${mapsName}/@${d.lat},${d.lng},17z" target="_blank" rel="noopener" style="display:inline-block;margin-top:8px;color:#4285f4;font-size:0.68rem;font-weight:700;text-decoration:none;font-family:'Inter',sans-serif;letter-spacing:0.03em">📍 เปิดใน Google Maps →</a>`;
     const iw=new google.maps.InfoWindow({content:`<div class="gm-popup"><div style="display:flex;align-items:flex-start;justify-content:space-between;gap:8px;margin-bottom:2px"><div class="popup-title" style="color:${col}">Day ${d.day} — ${d.city}</div><button onclick="window.closeInfoWindow()" style="flex-shrink:0;width:20px;height:20px;border-radius:50%;background:rgba(255,255,255,0.1);border:none;cursor:pointer;color:#71717a;font-size:12px;display:flex;align-items:center;justify-content:center;line-height:1;margin-top:1px">✕</button></div><div style="font-weight:700;margin-bottom:5px">${d.detail}</div>${d.start?`<div class="popup-row">⏱️ ${d.start} – ${d.end} (${d.dur||''})</div>`:''}${d.from&&d.to&&d.from!==d.to?`<div class="popup-row">📍 ${d.from} → ${d.to}</div>`:''}${openHtml}${costHtml}${mapsLink}</div>`});
     mk.addListener('click',()=>{if(openInfoWindow)openInfoWindow.close();iw.open({anchor:mk,map});openInfoWindow=iw;});
     mk._itemId=d.id; mk._infoWindow=iw; mapLayers.push(mk);
@@ -1065,7 +1066,7 @@ function buildTimeline(filter){
             ${d.alert?`<span class="px-2 py-0.5 text-[10px] rounded-full font-['Inter'] uppercase tracking-wide font-bold" style="background:rgba(251,191,36,0.15);color:#fbbf24">⚠️ จองล่วงหน้า</span>`:''}
           </div>
           <div class="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-            ${d.lat?`<a href="https://www.google.com/maps/search/?api=1&query=${d.lat},${d.lng}" target="_blank" rel="noopener" class="btn-navigate w-7 h-7 flex items-center justify-center rounded-lg text-xs transition-colors" style="background:rgba(52,211,153,0.12);color:#34d399" title="Navigate" onclick="event.stopPropagation()"><span class="material-symbols-outlined" style="font-size:14px">navigation</span></a>`:''}
+            ${d.lat?`<a href="https://www.google.com/maps/place/${encodeURIComponent(d.to||d.detail||'')}/@${d.lat},${d.lng},17z" target="_blank" rel="noopener" class="btn-navigate w-7 h-7 flex items-center justify-center rounded-lg text-xs transition-colors" style="background:rgba(52,211,153,0.12);color:#34d399" title="Navigate" onclick="event.stopPropagation()"><span class="material-symbols-outlined" style="font-size:14px">navigation</span></a>`:''}
             <button class="btn-edit w-7 h-7 flex items-center justify-center rounded-lg text-xs transition-colors" style="background:rgba(77,150,255,0.12);color:#60a5fa">✏️</button>
             <button class="btn-delete w-7 h-7 flex items-center justify-center rounded-lg text-xs transition-colors" style="background:rgba(255,107,107,0.12);color:#f87171">🗑️</button>
           </div>
