@@ -429,17 +429,15 @@
 
     <!-- ── HERO SECTION ── -->
     <section class="relative h-[300px] md:h-[400px] w-full overflow-hidden shrink-0 bg-zinc-950">
-      <!-- Hero Swiper Carousel -->
-      <div class="swiper hero-swiper" id="hero-swiper">
-        <div class="swiper-wrapper">
-          <div class="swiper-slide"><img src="https://images.unsplash.com/photo-1490806843957-31f4c9a91c65?w=1800&q=85&fit=crop&crop=center" alt="Mount Fuji" loading="eager"></div>
-          <div class="swiper-slide"><img src="https://images.unsplash.com/photo-1528360983277-13d401cdc186?w=1800&q=85&fit=crop&crop=center" alt="Tokyo" loading="lazy"></div>
-          <div class="swiper-slide"><img src="https://images.unsplash.com/photo-1545569341-9eb8b30979d9?w=1800&q=85&fit=crop&crop=center" alt="Shibuya" loading="lazy"></div>
-          <div class="swiper-slide"><img src="https://images.unsplash.com/photo-1480796927426-f609979314bd?w=1800&q=85&fit=crop&crop=center" alt="Asakusa" loading="lazy"></div>
-          <div class="swiper-slide"><img src="https://images.unsplash.com/photo-1576675467640-a4def3af028e?w=1800&q=85&fit=crop&crop=center" alt="Kamakura" loading="lazy"></div>
-        </div>
-        <div class="swiper-pagination" style="bottom:52px"></div>
-      </div>
+      <!-- Background photo: Mt Fuji at sunset with lake reflection (Lake Kawaguchiko) -->
+      <img
+        src="https://images.unsplash.com/photo-1490806843957-31f4c9a91c65?w=1800&q=85&fit=crop&crop=center"
+        alt="Mount Fuji at sunset with lake reflection"
+        class="absolute inset-0 w-full h-full object-cover scale-[1.03] transition-transform duration-[8s] ease-out" style="object-position: center 75%"
+        loading="eager"
+        id="hero-bg"
+        onload="setTimeout(()=>this.classList.add('scale-100'),100)"
+      >
       <!-- Multi-layer dark overlay for readability -->
       <div class="absolute inset-0" style="background:linear-gradient(to right, rgba(9,9,11,0.82) 0%, rgba(9,9,11,0.55) 55%, rgba(9,9,11,0.25) 100%)"></div>
       <div class="absolute inset-0" style="background:linear-gradient(to top, rgba(9,9,11,0.80) 0%, rgba(9,9,11,0.15) 50%, transparent 100%)"></div>
@@ -1538,14 +1536,6 @@ window.updateBudget = function(f){ _origUpdateBudget(f); updateBudgetChart(); };
 
 /* 3. AOS init */
 AOS.init({ duration:380, once:true, offset:20, easing:'ease-out-cubic' });
-
-/* 4. Swiper — Hero carousel */
-new Swiper('#hero-swiper',{
-  loop:true, autoplay:{ delay:5000, disableOnInteraction:false },
-  effect:'fade', fadeEffect:{ crossFade:true },
-  pagination:{ el:'.swiper-pagination', clickable:true },
-  speed:1200,
-});
 
 /* 5. Tippy — Tooltips */
 function initTippy(){
