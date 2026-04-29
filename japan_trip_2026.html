@@ -1092,8 +1092,6 @@ function buildTimeline(filter){
       const el = document.createElement('div');
       el.className = 'relative timeline-wrapper';
       el.dataset.id = d.id;
-      el.setAttribute('data-aos','fade-up');
-      el.setAttribute('data-aos-duration','350');
 
       /* dot */
       const dotEl = document.createElement('div');
@@ -1417,8 +1415,8 @@ function refresh(){
   if(map) drawMap(currentFilter);
   buildTimeline(currentFilter);
   updateBudget(currentFilter);
+  updateBudgetChart();
   initAllMediaSlots();
-  if(typeof AOS!=='undefined') AOS.refresh();
   setTimeout(initTippy, 100);
 }
 
@@ -1529,10 +1527,6 @@ function updateBudgetChart(){
     }
   });
 }
-
-/* Hook Chart into updateBudget */
-const _origUpdateBudget = updateBudget;
-window.updateBudget = function(f){ _origUpdateBudget(f); updateBudgetChart(); };
 
 /* 3. AOS init */
 AOS.init({ duration:380, once:true, offset:20, easing:'ease-out-cubic' });
