@@ -5,6 +5,8 @@
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>Japan 2026 — Dining</title>
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script>window.initMap = function(){ if(window.__initMapReady) window.__initMapReady(); else window.__initMapPending=true; };</script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBMEJI1GmX6i-ZaN-cgvu-yhaQrdRsnvCk&libraries=places&callback=initMap" defer></script>
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&family=Public+Sans:wght@300;400;600;700&family=Inter:wght@400;500;600;700&family=Noto+Sans+Thai:wght@300;400;600;700&display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
 <script>
@@ -379,8 +381,12 @@ function render(data) {
       const isFree = d.cost==='Free';
       const costColor = isFree ? '#34d399' : '#ff6b9d';
       const costText = isFree ? 'Free' : d.cost ? d.cost.substring(0,28) : '';
+      const photoAttrs = d.lat ? `data-q="${encodeURIComponent((d.detail||'').substring(0,60))}" data-lat="${d.lat}" data-lng="${d.lng}"` : '';
       html += `<div class="bg-[#1a1a1a] rounded-xl p-4 ring-1 ring-white/5 flex items-center gap-4 hover:bg-[#242424] transition-all duration-200 mb-2">
-        <div class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-lg shrink-0">${d.emoji||'🍽️'}</div>
+        <div class="place-photo-slot w-12 h-12 rounded-xl bg-white/5 flex items-center justify-center text-xl shrink-0 overflow-hidden relative" ${photoAttrs}>
+          <span class="relative z-0">${d.emoji||'🍽️'}</span>
+          ${d.lat ? '<img class="w-full h-full object-cover absolute inset-0 hidden" alt="">' : ''}
+        </div>
         <div class="flex-1 min-w-0">
           <p class="font-bold text-on-surface text-sm font-['Public_Sans'] truncate">${d.detail}</p>
           <p class="text-[10px] text-zinc-500 font-['Inter'] mt-0.5 uppercase tracking-wider">${d.city||''} · ${d.start||''}${d.end?' — '+d.end:''}</p>
@@ -397,7 +403,80 @@ onSnapshot(query(collection(db, 'itinerary'), orderBy('order')), snapshot => {
     .map(d => ({ ...d.data(), id: d.id }))
     .sort((a, b) => a.day !== b.day ? a.day - b.day : (a.start||'').localeCompare(b.start||''));
   render(data);
+  observeDiningPhotos();
 });
+</script>
+
+<script>
+(function(){
+  const PHOTO_LS_KEY = 'japan2026_place_photos_v1';
+  let _photoMem = null;
+
+  function getPhotoMem() {
+    if (!_photoMem) {
+      try {
+        const raw = JSON.parse(localStorage.getItem(PHOTO_LS_KEY) || '{}');
+        const now = Date.now();
+        _photoMem = Object.fromEntries(
+          Object.entries(raw).filter(([, v]) => now - (v.ts || 0) < 6048e5)
+        );
+      } catch (_) { _photoMem = {}; }
+    }
+    return _photoMem;
+  }
+
+  function setPhotoMem(cKey, url) {
+    const m = getPhotoMem();
+    m[cKey] = { url, ts: Date.now() };
+    try { localStorage.setItem(PHOTO_LS_KEY, JSON.stringify(m)); } catch (_) {}
+  }
+
+  function applyPhotoSlot(slot, url) {
+    const img  = slot.querySelector('img');
+    const icon = slot.querySelector('span');
+    if (!img || !url) return;
+    img.onload = () => { img.classList.remove('hidden'); if (icon) icon.style.opacity = '0'; };
+    img.src = url;
+  }
+
+  const diningPhotoObs = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (!entry.isIntersecting) return;
+      diningPhotoObs.unobserve(entry.target);
+      const slot = entry.target;
+      const q   = slot.dataset.q || '';
+      const lat = parseFloat(slot.dataset.lat);
+      const lng = parseFloat(slot.dataset.lng);
+      if (!q || !lat || !lng) return;
+      const cKey = `${lat.toFixed(3)}_${lng.toFixed(3)}`;
+      const hit  = getPhotoMem()[cKey];
+      if (hit !== undefined) { if (hit.url) applyPhotoSlot(slot, hit.url); return; }
+      if (!window.google?.maps?.places) return;
+      const svc = new google.maps.places.PlacesService(document.createElement('div'));
+      svc.textSearch(
+        { query: decodeURIComponent(q), location: new google.maps.LatLng(lat, lng), radius: 300 },
+        (results, st) => {
+          if (st !== 'OK' || !results.length) { setPhotoMem(cKey, ''); return; }
+          svc.getDetails({ placeId: results[0].place_id, fields: ['photos'] }, (place, ds) => {
+            if (ds !== 'OK' || !place?.photos?.length) { setPhotoMem(cKey, ''); return; }
+            const url = place.photos[0].getUrl({ maxWidth: 160 });
+            setPhotoMem(cKey, url);
+            applyPhotoSlot(slot, url);
+          });
+        }
+      );
+    });
+  }, { rootMargin: '150px' });
+
+  window.observeDiningPhotos = function() {
+    document.querySelectorAll('#dining-list .place-photo-slot[data-lat]').forEach(slot => {
+      diningPhotoObs.observe(slot);
+    });
+  };
+
+  window.__initMapReady = function() { /* maps ready, observer already set */ };
+  if (window.__initMapPending) window.__initMapReady();
+})();
 </script>
 </main>
 

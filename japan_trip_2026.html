@@ -1038,6 +1038,68 @@ document.getElementById('modal-delete').onclick = async ()=>{
 };
 
 /* ══════════════════════════════════════════
+   PLACE PHOTOS
+══════════════════════════════════════════ */
+const PHOTO_LS_KEY = 'japan2026_place_photos_v1';
+let _photoMem = null;
+
+function getPhotoMem() {
+  if (!_photoMem) {
+    try {
+      const raw = JSON.parse(localStorage.getItem(PHOTO_LS_KEY) || '{}');
+      const now = Date.now();
+      _photoMem = Object.fromEntries(
+        Object.entries(raw).filter(([, v]) => now - (v.ts || 0) < 6048e5) // 7 days
+      );
+    } catch (_) { _photoMem = {}; }
+  }
+  return _photoMem;
+}
+
+function setPhotoMem(cKey, url) {
+  const m = getPhotoMem();
+  m[cKey] = { url, ts: Date.now() };
+  try { localStorage.setItem(PHOTO_LS_KEY, JSON.stringify(m)); } catch (_) {}
+}
+
+function applyPhotoSlot(slot, url) {
+  const img  = slot.querySelector('img');
+  const icon = slot.querySelector('.material-symbols-outlined');
+  if (!img || !url) return;
+  img.onload = () => { img.classList.remove('hidden'); if (icon) icon.style.display = 'none'; };
+  img.src = url;
+}
+
+const placePhotoObs = new IntersectionObserver(entries => {
+  entries.forEach(entry => {
+    if (!entry.isIntersecting) return;
+    placePhotoObs.unobserve(entry.target);
+    const slot = entry.target;
+    const q   = slot.dataset.q || '';
+    const lat = parseFloat(slot.dataset.lat);
+    const lng = parseFloat(slot.dataset.lng);
+    if (!q || !lat || !lng) return;
+    const cKey = `${lat.toFixed(3)}_${lng.toFixed(3)}`;
+    const hit  = getPhotoMem()[cKey];
+    if (hit !== undefined) { if (hit.url) applyPhotoSlot(slot, hit.url); return; }
+    if (!window.google?.maps?.places) return;
+    const svc = new google.maps.places.PlacesService(document.createElement('div'));
+    svc.textSearch(
+      { query: decodeURIComponent(q), location: new google.maps.LatLng(lat, lng), radius: 300 },
+      (results, st) => {
+        if (st !== 'OK' || !results.length) { setPhotoMem(cKey, ''); return; }
+        svc.getDetails({ placeId: results[0].place_id, fields: ['photos'] }, (place, ds) => {
+          if (ds !== 'OK' || !place?.photos?.length) { setPhotoMem(cKey, ''); return; }
+          const url = place.photos[0].getUrl({ maxWidth: 320 });
+          setPhotoMem(cKey, url);
+          applyPhotoSlot(slot, url);
+        });
+      }
+    );
+  });
+}, { rootMargin: '200px' });
+
+/* ══════════════════════════════════════════
    BUILD TIMELINE
 ══════════════════════════════════════════ */
 function buildTimeline(filter){
@@ -1126,7 +1188,10 @@ function buildTimeline(filter){
             <span class="text-lg">${d.emoji||'📍'}</span>
           </div>
         </div>
-        <h4 class="font-['Manrope'] font-bold text-base text-on-surface mb-1 leading-snug">${d.detail}</h4>
+        <div class="flex items-start gap-2 mb-1">
+          <h4 class="font-['Manrope'] font-bold text-base text-on-surface leading-snug flex-1">${d.detail}</h4>
+          ${d.lat ? `<div class="place-photo-slot relative w-[68px] h-[46px] rounded-lg overflow-hidden bg-zinc-800/60 flex-shrink-0 flex items-center justify-center" data-q="${encodeURIComponent((d.to||d.detail).substring(0,60))}" data-lat="${d.lat}" data-lng="${d.lng}"><span class="material-symbols-outlined text-zinc-700" style="font-size:14px">image</span><img class="w-full h-full object-cover absolute inset-0 hidden" alt=""></div>` : ''}
+        </div>
         ${d.from&&d.to&&d.from!==d.to?`<p class="text-zinc-600 text-xs mb-3 font-['Inter']">📍 ${d.from} → ${d.to}</p>`:''}
         ${d.note?`<p class="text-zinc-600 text-xs italic mb-3">${d.note}</p>`:''}
         <div class="media-slots flex gap-1.5 mt-3 mb-3" data-id="${d.id}">
@@ -1172,6 +1237,10 @@ function buildTimeline(filter){
 
       el.appendChild(dotEl);
       el.appendChild(card);
+      if (d.lat) {
+        const photoSlot = card.querySelector('.place-photo-slot');
+        if (photoSlot) placePhotoObs.observe(photoSlot);
+      }
       wrapper.appendChild(el);
     });
 
