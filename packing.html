@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html class="dark" lang="th">
+<head>
+<meta charset="UTF-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Japan 2026 — Packing List</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&family=Public+Sans:wght@300;400;600;700&family=Inter:wght@400;500;600;700&family=Noto+Sans+Thai:wght@300;400;600;700&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js"></script>
+<script>
+  tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        colors: {
+          "primary": "#ff6b9d",
+          "on-primary": "#ffffff",
+          "primary-container": "#6e0035",
+          "on-primary-container": "#ffd9e1",
+          "surface": "#09090b",
+          "surface-container-low": "#141414",
+          "surface-container": "#1a1a1a",
+          "surface-container-high": "#242424",
+          "on-surface": "#f1f1f1",
+          "on-surface-variant": "#d8c0c4",
+          "outline": "#4a4143",
+          "outline-variant": "#574146",
+          "inverse-primary": "#ac2a5d",
+        },
+        fontFamily: {
+          "headline": ["Manrope", "sans-serif"],
+          "body": ["Public Sans", "Noto Sans Thai", "sans-serif"],
+          "label": ["Inter", "sans-serif"],
+        },
+      },
+    },
+  }
+</script>
+<style>
+  .material-symbols-outlined { font-variation-settings:'FILL' 0,'wght' 300,'GRAD' 0,'opsz' 24; vertical-align:middle; }
+  body { font-family:'Public Sans','Noto Sans Thai',sans-serif; background:#09090b; color:#f1f1f1; }
+  ::-webkit-scrollbar { width:5px; }
+  ::-webkit-scrollbar-track { background:#09090b; }
+  ::-webkit-scrollbar-thumb { background:#2a2a2a; border-radius:3px; }
+
+  /* Light mode */
+  html.light body{background:#f4f4f5!important;color:#18181b!important}
+  html.light .bg-\[\#09090b\]{background:#f4f4f5!important}
+  html.light .bg-\[\#1a1a1a\]{background:#ffffff!important}
+  html.light .bg-\[\#242424\]{background:#e4e4e7!important}
+  html.light header{background:rgba(244,244,245,0.88)!important}
+  html.light aside{background:#f4f4f5!important}
+  html.light .border-white\/5{border-color:rgba(0,0,0,0.09)!important}
+  html.light .bg-white\/5{background:rgba(0,0,0,0.05)!important}
+  html.light .text-on-surface{color:#18181b!important}
+  html.light .text-zinc-400{color:#71717a!important}
+  html.light .text-zinc-500{color:#52525b!important}
+  html.light .text-zinc-600{color:#3f3f46!important}
+
+  /* Sidebar collapse */
+  #sidebar { transition:width 0.3s cubic-bezier(0.4,0,0.2,1); }
+  .sidebar-collapsed { width:76px !important; }
+  .sidebar-collapsed .nav-text, .sidebar-collapsed .logo-text, .sidebar-collapsed .btn-text { display:none; }
+  .sidebar-collapsed .nav-item { justify-content:center; padding-left:0; border-left:none; }
+  .sidebar-collapsed .nav-item-active { border-left:none; }
+  .sidebar-collapsed .add-btn { width:48px; height:48px; padding:0; border-radius:9999px; margin:0 auto; }
+
+  /* Mobile drawer */
+  #mobile-drawer { transform:translateX(-100%); transition:transform 0.3s cubic-bezier(0.4,0,0.2,1); }
+  #mobile-drawer.open { transform:translateX(0); }
+  #mobile-overlay { opacity:0; pointer-events:none; transition:opacity 0.3s; }
+  #mobile-overlay.open { opacity:1; pointer-events:auto; }
+
+  /* Checkbox */
+  .packing-checkbox {
+    appearance: none; -webkit-appearance: none;
+    width: 18px; height: 18px; border-radius: 6px;
+    border: 1.5px solid rgba(255,255,255,0.2);
+    background: transparent; cursor: pointer;
+    flex-shrink: 0; position: relative;
+    transition: all 0.15s ease;
+  }
+  .packing-checkbox:checked {
+    background: #ff6b9d; border-color: #ff6b9d;
+  }
+  .packing-checkbox:checked::after {
+    content: '';
+    position: absolute; left: 4px; top: 1px;
+    width: 6px; height: 10px;
+    border: 2px solid #fff; border-top: none; border-left: none;
+    transform: rotate(45deg);
+  }
+  .packing-checkbox:hover:not(:checked) {
+    border-color: rgba(255,107,157,0.5);
+    background: rgba(255,107,157,0.05);
+  }
+
+  /* Item row */
+  .item-row { transition: opacity 0.2s, background 0.15s; }
+  .item-row:hover { background: rgba(255,255,255,0.03); }
+  .item-row.packed .item-name { text-decoration: line-through; color: #52525b; }
+  .item-row.packed .item-qty { opacity: 0.4; }
+
+  /* Progress bar */
+  .progress-fill {
+    transition: width 0.5s cubic-bezier(0.4,0,0.2,1);
+    background: linear-gradient(90deg, #ff6b9d, #ac2a5d);
+  }
+
+  /* Filter tab */
+  .filter-tab { transition: all 0.15s; }
+  .filter-tab.active {
+    color: #ff6b9d;
+    border-bottom: 2px solid #ff6b9d;
+  }
+
+  /* Category section */
+  .cat-section { margin-bottom: 8px; }
+  .cat-header {
+    display: flex; align-items: center; gap: 8px;
+    padding: 10px 0 8px;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    margin-bottom: 4px;
+  }
+
+  /* Hidden filter states */
+  .item-row[data-hidden="true"] { display: none; }
+</style>
+</head>
+<body class="text-on-surface flex h-screen overflow-hidden bg-[#09090b]">
+
+<!-- Mobile Overlay -->
+<div id="mobile-overlay" class="fixed inset-0 bg-black/60 z-40 md:hidden" onclick="closeMobileDrawer()"></div>
+
+<!-- Mobile Drawer -->
+<div id="mobile-drawer" class="fixed top-0 left-0 h-full w-72 bg-[#09090b] border-r border-white/5 z-50 md:hidden flex flex-col py-10 px-5">
+  <div class="mb-8 px-2 flex items-center justify-between">
+    <div class="flex items-center gap-3">
+      <div class="w-10 h-10 rounded-xl bg-primary/15 flex items-center justify-center shrink-0 border border-primary/25">
+        <span style="font-size:1.2rem">🌸</span>
+      </div>
+      <div>
+        <div class="text-base font-black font-['Manrope'] text-primary italic tracking-tight">Japan 2026</div>
+        <div class="text-[9px] text-zinc-600 font-['Inter'] uppercase tracking-widest font-bold">Friend Group Trip</div>
+      </div>
+    </div>
+    <button onclick="closeMobileDrawer()" class="w-8 h-8 flex items-center justify-center rounded-full hover:bg-white/5 text-zinc-500 hover:text-primary transition-colors">
+      <span class="material-symbols-outlined" style="font-size:20px">close</span>
+    </button>
+  </div>
+  <nav class="flex-1 space-y-1">
+    <a class="group flex items-center text-zinc-500 pl-5 py-2.5 hover:text-on-surface hover:bg-white/5 rounded-xl transition-all duration-200" href="japan_trip_2026.html">
+      <span class="material-symbols-outlined mr-3 shrink-0" style="font-size:20px">schedule</span>
+      <span class="text-sm font-['Public_Sans']">Itinerary</span>
+    </a>
+    <a class="group flex items-center text-zinc-500 pl-5 py-2.5 hover:text-on-surface hover:bg-white/5 rounded-xl transition-all duration-200" href="transportation.html">
+      <span class="material-symbols-outlined mr-3 shrink-0" style="font-size:20px">train</span>
+      <span class="text-sm font-['Public_Sans']">Transportation</span>
+    </a>
+    <a class="group flex items-center text-zinc-500 pl-5 py-2.5 hover:text-on-surface hover:bg-white/5 rounded-xl transition-all duration-200" href="dining.html">
+      <span class="material-symbols-outlined mr-3 shrink-0" style="font-size:20px">restaurant</span>
+      <span class="text-sm font-['Public_Sans']">Dining</span>
+    </a>
+    <a class="group flex items-center text-zinc-500 pl-5 py-2.5 hover:text-on-surface hover:bg-white/5 rounded-xl transition-all duration-200" href="#">
+      <span class="material-symbols-outlined mr-3 shrink-0" style="font-size:20px">museum</span>
+      <span class="text-sm font-['Public_Sans']">Activities</span>
+    </a>
+    <a class="group flex items-center text-zinc-500 pl-5 py-2.5 hover:text-on-surface hover:bg-white/5 rounded-xl transition-all duration-200" href="lodging.html">
+      <span class="material-symbols-outlined mr-3 shrink-0" style="font-size:20px">hotel</span>
+      <span class="text-sm font-['Public_Sans']">Lodging</span>
+    </a>
+    <a class="group flex items-center text-zinc-500 pl-5 py-2.5 hover:text-on-surface hover:bg-white/5 rounded-xl transition-all duration-200" href="japan_trip_2026_map.html">
+      <span class="material-symbols-outlined mr-3 shrink-0" style="font-size:20px">map</span>
+      <span class="text-sm font-['Public_Sans']">Map</span>
+    </a>
+    <a class="group flex items-center text-zinc-500 pl-5 py-2.5 hover:text-on-surface hover:bg-white/5 rounded-xl transition-all duration-200" href="budget.html">
+      <span class="material-symbols-outlined mr-3 shrink-0" style="font-size:20px">payments</span>
+      <span class="text-sm font-['Public_Sans']">Budget</span>
+    </a>
+    <a class="group flex items-center text-primary font-bold border-l-4 border-primary pl-4 py-2.5 rounded-r-xl bg-primary/5 transition-all duration-200" href="packing.html">
+      <span class="material-symbols-outlined mr-3 shrink-0" style="font-size:20px">checklist</span>
+      <span class="text-sm font-['Public_Sans']">Packing</span>
+    </a>
+  </nav>
+</div>
+
+<!-- Sidebar -->
+<aside class="hidden md:flex flex-col h-screen py-10 px-5 bg-[#09090b] w-72 shrink-0 border-r border-white/5 sticky top-0 relative" id="sidebar">
+  <button class="absolute -right-3 top-24 bg-[#1a1a1a] border border-white/10 rounded-full w-6 h-6 flex items-center justify-center text-zinc-500 hover:text-primary transition-colors z-50" onclick="toggleSidebar()">
+    <span class="material-symbols-outlined" style="font-size:14px" id="toggleIcon">chevron_left</span>
+  </button>
+  <div class="mb-10 px-2 flex items-center gap-3">
+    <div class="w-10 h-10 rounded-xl bg-primary/15 flex items-center justify-center shrink-0 border border-primary/25">
+      <span style="font-size:1.2rem">🌸</span>
+    </div>
+    <div class="logo-text min-w-0">
+      <div class="text-base font-black font-['Manrope'] text-primary italic tracking-tight">Japan 2026</div>
+      <div class="text-[9px] text-zinc-600 font-['Inter'] uppercase tracking-widest font-bold">Friend Group Trip</div>
+    </div>
+  </div>
+  <nav class="flex-1 space-y-1">
+    <a class="nav-item group flex items-center text-zinc-500 pl-5 py-2.5 hover:text-on-surface hover:bg-white/5 rounded-xl transition-all duration-200" href="japan_trip_2026.html">
+      <span class="material-symbols-outlined mr-3 shrink-0" style="font-size:20px">schedule</span>
+      <span class="nav-text text-sm font-['Public_Sans']">Itinerary</span>
+    </a>
+    <a class="nav-item group flex items-center text-zinc-500 pl-5 py-2.5 hover:text-on-surface hover:bg-white/5 rounded-xl transition-all duration-200" href="transportation.html">
+      <span class="material-symbols-outlined mr-3 shrink-0" style="font-size:20px">train</span>
+      <span class="nav-text text-sm font-['Public_Sans']">Transportation</span>
+    </a>
+    <a class="nav-item group flex items-center text-zinc-500 pl-5 py-2.5 hover:text-on-surface hover:bg-white/5 rounded-xl transition-all duration-200" href="dining.html">
+      <span class="material-symbols-outlined mr-3 shrink-0" style="font-size:20px">restaurant</span>
+      <span class="nav-text text-sm font-['Public_Sans']">Dining</span>
+    </a>
+    <a class="nav-item group flex items-center text-zinc-500 pl-5 py-2.5 hover:text-on-surface hover:bg-white/5 rounded-xl transition-all duration-200" href="#">
+      <span class="material-symbols-outlined mr-3 shrink-0" style="font-size:20px">museum</span>
+      <span class="nav-text text-sm font-['Public_Sans']">Activities</span>
+    </a>
+    <a class="nav-item group flex items-center text-zinc-500 pl-5 py-2.5 hover:text-on-surface hover:bg-white/5 rounded-xl transition-all duration-200" href="lodging.html">
+      <span class="material-symbols-outlined mr-3 shrink-0" style="font-size:20px">hotel</span>
+      <span class="nav-text text-sm font-['Public_Sans']">Lodging</span>
+    </a>
+    <a class="nav-item group flex items-center text-zinc-500 pl-5 py-2.5 hover:text-on-surface hover:bg-white/5 rounded-xl transition-all duration-200" href="japan_trip_2026_map.html">
+      <span class="material-symbols-outlined mr-3 shrink-0" style="font-size:20px">map</span>
+      <span class="nav-text text-sm font-['Public_Sans']">Map</span>
+    </a>
+    <a class="nav-item group flex items-center text-zinc-500 pl-5 py-2.5 hover:text-on-surface hover:bg-white/5 rounded-xl transition-all duration-200" href="budget.html">
+      <span class="material-symbols-outlined mr-3 shrink-0" style="font-size:20px">payments</span>
+      <span class="nav-text text-sm font-['Public_Sans']">Budget</span>
+    </a>
+    <a class="nav-item nav-item-active group flex items-center text-primary font-bold border-l-4 border-primary pl-4 py-2.5 rounded-r-xl bg-primary/5 transition-all duration-200" href="packing.html">
+      <span class="material-symbols-outlined mr-3 shrink-0" style="font-size:20px">checklist</span>
+      <span class="nav-text text-sm font-['Public_Sans']">Packing</span>
+    </a>
+  </nav>
+  <button class="add-btn mt-auto bg-primary text-white rounded-full px-5 py-3 font-bold font-['Public_Sans'] text-sm hover:shadow-[0_0_24px_rgba(255,107,157,0.35)] transition-all active:scale-95 flex items-center justify-center gap-2" onclick="resetAll()">
+    <span class="material-symbols-outlined" style="font-size:20px">restart_alt</span>
+    <span class="btn-text">Reset All</span>
+  </button>
+</aside>
+
+<!-- Main -->
+<main class="flex-1 overflow-y-auto bg-[#09090b]">
+
+  <!-- Top App Bar -->
+  <header class="flex justify-between items-center px-5 md:px-8 h-16 w-full bg-[#09090b]/85 backdrop-blur-xl z-50 sticky top-0 border-b border-white/5 shrink-0">
+    <div class="flex items-center gap-3">
+      <button onclick="openMobileDrawer()" class="md:hidden w-9 h-9 flex items-center justify-center rounded-xl hover:bg-white/5 text-zinc-500 hover:text-primary transition-colors">
+        <span class="material-symbols-outlined" style="font-size:22px">menu</span>
+      </button>
+      <div>
+        <div class="text-sm font-black font-['Manrope'] text-on-surface">🎒 Packing List</div>
+        <div class="text-[10px] text-zinc-600 font-['Inter'] uppercase tracking-widest">Tokyo · 9–14 Oct 2026</div>
+      </div>
+    </div>
+    <div class="flex items-center gap-3">
+      <!-- Packed counter badge -->
+      <div class="flex items-center gap-1.5 bg-[#1a1a1a] rounded-full px-3 py-1.5">
+        <span class="text-primary font-black font-['Manrope'] text-sm" id="packed-count">3</span>
+        <span class="text-zinc-600 font-['Inter'] text-xs">/</span>
+        <span class="text-zinc-400 font-['Inter'] text-xs">43</span>
+        <span class="text-zinc-600 font-['Inter'] text-xs ml-1">packed</span>
+      </div>
+      <!-- Theme toggle -->
+      <button onclick="toggleTheme()" class="w-9 h-9 flex items-center justify-center rounded-xl hover:bg-white/5 text-zinc-500 hover:text-primary transition-colors">
+        <span class="material-symbols-outlined" style="font-size:20px" id="themeIcon">light_mode</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Content -->
+  <div class="px-5 md:px-8 py-6 max-w-2xl mx-auto">
+
+    <!-- Overall Progress -->
+    <div class="mb-6">
+      <div class="flex justify-between items-end mb-2">
+        <div>
+          <div class="text-xs font-['Inter'] uppercase tracking-widest text-zinc-600 mb-0.5">Overall Progress</div>
+          <div class="text-2xl font-black font-['Manrope'] text-on-surface" id="progress-pct">7%</div>
+        </div>
+        <div class="text-right">
+          <div class="text-xs font-['Inter'] text-zinc-600" id="progress-label">3 of 43 items packed</div>
+          <div class="text-xs font-['Inter'] text-zinc-700 mt-0.5">✈️ BKK → NRT · ZIPAIR ZG052</div>
+        </div>
+      </div>
+      <div class="h-2 bg-[#1a1a1a] rounded-full overflow-hidden">
+        <div class="progress-fill h-full rounded-full" id="progress-bar" style="width:7%"></div>
+      </div>
+    </div>
+
+    <!-- Filter Tabs -->
+    <div class="flex gap-0 border-b border-white/5 mb-6">
+      <button class="filter-tab active px-4 py-2.5 text-sm font-['Inter'] text-zinc-400 border-b-2 border-transparent -mb-px" onclick="setFilter('all', this)">ทั้งหมด</button>
+      <button class="filter-tab px-4 py-2.5 text-sm font-['Inter'] text-zinc-400 border-b-2 border-transparent -mb-px" onclick="setFilter('packed', this)">จัดแล้ว</button>
+      <button class="filter-tab px-4 py-2.5 text-sm font-['Inter'] text-zinc-400 border-b-2 border-transparent -mb-px" onclick="setFilter('unpacked', this)">ยังไม่จัด</button>
+    </div>
+
+    <!-- Categories -->
+    <div id="categories-container"></div>
+
+    <!-- Done state -->
+    <div id="all-done-banner" class="hidden text-center py-12">
+      <div style="font-size:3rem" class="mb-3">🎉</div>
+      <div class="text-xl font-black font-['Manrope'] text-primary mb-1">จัดกระเป๋าครบแล้ว!</div>
+      <div class="text-sm text-zinc-500 font-['Public_Sans']">พร้อมบินไปโตเกียว ✈️🗼</div>
+    </div>
+
+  </div>
+</main>
+
+<script>
+// ── Data ────────────────────────────────────────────────────────────────
+const CATEGORIES = [
+  {
+    id: 'docs',
+    emoji: '🪪',
+    label: 'เอกสารสำคัญ & เงิน',
+    icon: 'badge',
+    items: [
+      { id: 1,  name: 'Passport',                             qty: '1',         note: '' },
+      { id: 2,  name: 'บัตรประชาชน',                          qty: '1',         note: '' },
+      { id: 3,  name: '¥ Cash',                               qty: '~25,000¥',  note: 'ประมาณ 5,000 บาท' },
+      { id: 4,  name: 'Travel Card / Credit Card',            qty: '1',         note: '' },
+      { id: 5,  name: 'QR Code Visit Japan Web',              qty: '1',         note: 'Immigration procedures' },
+      { id: 6,  name: 'Take leave (วันที่ 12 & 14 ต.ค.)',    qty: '',          note: '' },
+      { id: 7,  name: 'Suica Card',                           qty: '1',         note: '' },
+      { id: 8,  name: 'Roaming Package / eSIM',               qty: '1',         note: '' },
+      { id: 9,  name: 'เอกสารจองตั๋วเครื่องบิน',              qty: '1',         note: '' },
+      { id: 10, name: 'เอกสารจองที่พัก Airbnb',               qty: '1',         note: '' },
+      { id: 11, name: 'กรมธรรม์ประกันการเดินทาง',             qty: '1',         note: '' },
+    ]
+  },
+  {
+    id: 'clothes',
+    emoji: '👕',
+    label: 'เสื้อผ้า & ของใช้',
+    icon: 'checkroom',
+    items: [
+      { id: 12, name: 'เสื้อยืด',                             qty: '3–4 ตัว',   note: '' },
+      { id: 13, name: 'เสื้อแขนยาว / แจ็กเก็ต / คาร์ดิแกน', qty: '1–2 ตัว',   note: 'Tokyo Oct ช่วง 14–22°C' },
+      { id: 14, name: 'กางเกงขายาว / ยีนส์',                  qty: '2–3 ตัว',   note: '' },
+      { id: 15, name: 'ชุดนอน',                               qty: '1',         note: '' },
+      { id: 16, name: 'กางเกงใน / ชุดชั้นใน',                 qty: '5',         note: '' },
+      { id: 17, name: 'ถุงเท้า',                              qty: '5 คู่',     note: '' },
+      { id: 18, name: 'รองเท้าผ้าใบ',                         qty: '1 คู่',     note: 'เดินเยอะมาก' },
+      { id: 19, name: 'เข็มขัด / หมวก / แว่นกันแดด',          qty: '1',         note: '' },
+    ]
+  },
+  {
+    id: 'gadget',
+    emoji: '📱',
+    label: 'Gadget & Electronics',
+    icon: 'devices',
+    items: [
+      { id: 20, name: 'โทรศัพท์',                             qty: '1',         note: '' },
+      { id: 21, name: 'Travel Adapter (Type A ญี่ปุ่น)',      qty: '1',         note: '' },
+      { id: 22, name: 'ปลั๊กพ่วง',                            qty: '1',         note: 'ดิวเอาไปให้ ✓' },
+      { id: 23, name: 'Power Bank',                           qty: '1',         note: '' },
+      { id: 24, name: 'สายชาร์จ (Type C / Lightning)',        qty: '1',         note: '' },
+      { id: 25, name: 'หูฟัง',                                qty: '1',         note: '' },
+    ]
+  },
+  {
+    id: 'skincare',
+    emoji: '🧴',
+    label: 'ของใช้ส่วนตัว & สกินแคร์',
+    icon: 'soap',
+    items: [
+      { id: 26, name: 'แปรงสีฟัน + ยาสีฟัน',                 qty: '1',         note: '' },
+      { id: 27, name: 'โฟมล้างหน้า / คลีนซิ่ง',               qty: '1',         note: '' },
+      { id: 28, name: 'ครีมบำรุงผิว / โลชั่น',                qty: '1',         note: '' },
+      { id: 29, name: 'ครีมกันแดด',                           qty: '1',         note: '' },
+      { id: 30, name: 'ลิปมัน',                               qty: '1',         note: '' },
+      { id: 31, name: 'ทิชชู่เปียก / ทิชชู่แห้งแบบพกพา',      qty: '2–3',       note: '' },
+      { id: 32, name: 'โรลออน / สเปรย์ระงับกลิ่นกาย / น้ำหอม', qty: '1',        note: '' },
+      { id: 33, name: 'มีดโกนหนวด / ที่โกนหนวดไฟฟ้า',         qty: '1',         note: '' },
+    ]
+  },
+  {
+    id: 'med',
+    emoji: '💊',
+    label: 'ยา & สุขภาพ',
+    icon: 'medication',
+    items: [
+      { id: 34, name: 'ยาสามัญประจำตัว',                      qty: '1',         note: '' },
+      { id: 35, name: 'ยาแก้ปวด / ลดไข้ (พาราเซตามอล)',       qty: '1',         note: '' },
+      { id: 36, name: 'ยาแก้แพ้อากาศ',                        qty: '1',         note: '' },
+      { id: 37, name: 'พลาสเตอร์ยา',                          qty: '1',         note: '' },
+    ]
+  },
+  {
+    id: 'misc',
+    emoji: '👜',
+    label: 'ของใช้อื่น ๆ',
+    icon: 'luggage',
+    items: [
+      { id: 38, name: 'Baggage / Luggage',                    qty: '1–2',       note: '30KG + 1 Carry-on (max 7kg)' },
+      { id: 39, name: 'ถุงพลาสติก / ซิปล็อก',                qty: '3–4',       note: '' },
+      { id: 40, name: 'ถุงสุญญากาศ',                          qty: '2–3',       note: '' },
+      { id: 41, name: 'เครื่องดูดสูญญากาศพกพา',               qty: '1',         note: 'พี่แจ็ค พี่ไปป์ มี — รอ recheck' },
+      { id: 42, name: 'ร่มพับคันเล็ก',                        qty: '1',         note: '' },
+      { id: 43, name: 'ที่ชั่งน้ำหนักกระเป๋า',                qty: '1',         note: 'พี่หมูมี ✓' },
+    ]
+  },
+];
+
+// Default checked from spreadsheet
+const DEFAULT_CHECKED = new Set([22, 41, 43]);
+const LS_KEY = 'japan2026_packing';
+
+// ── State ────────────────────────────────────────────────────────────────
+function loadState() {
+  try {
+    const saved = JSON.parse(localStorage.getItem(LS_KEY) || 'null');
+    if (saved && typeof saved === 'object') return new Set(saved);
+  } catch(e) {}
+  return new Set(DEFAULT_CHECKED);
+}
+
+function saveState(checked) {
+  localStorage.setItem(LS_KEY, JSON.stringify([...checked]));
+}
+
+let checkedIds = loadState();
+let currentFilter = 'all';
+
+// ── Render ────────────────────────────────────────────────────────────────
+function getTotalPacked() {
+  return CATEGORIES.reduce((sum, cat) =>
+    sum + cat.items.filter(i => checkedIds.has(i.id)).length, 0);
+}
+
+function getTotalItems() {
+  return CATEGORIES.reduce((sum, cat) => sum + cat.items.length, 0);
+}
+
+function updateProgress() {
+  const packed = getTotalPacked();
+  const total = getTotalItems();
+  const pct = Math.round((packed / total) * 100);
+
+  document.getElementById('packed-count').textContent = packed;
+  document.getElementById('progress-pct').textContent = pct + '%';
+  document.getElementById('progress-label').textContent = `${packed} of ${total} items packed`;
+  document.getElementById('progress-bar').style.width = pct + '%';
+
+  // Update all category count badges
+  CATEGORIES.forEach(cat => {
+    const el = document.getElementById(`cat-count-${cat.id}`);
+    if (el) {
+      const catPacked = cat.items.filter(i => checkedIds.has(i.id)).length;
+      el.textContent = `${catPacked}/${cat.items.length}`;
+      el.className = catPacked === cat.items.length
+        ? 'text-[10px] font-["Inter"] font-bold px-2 py-0.5 rounded-full bg-primary/20 text-primary'
+        : 'text-[10px] font-["Inter"] font-bold px-2 py-0.5 rounded-full bg-white/5 text-zinc-500';
+    }
+  });
+
+  // All done
+  const banner = document.getElementById('all-done-banner');
+  if (packed === total) {
+    banner.classList.remove('hidden');
+    confetti({ particleCount: 150, spread: 80, origin: { y: 0.6 }, colors: ['#ff6b9d','#ac2a5d','#ffd9e1','#ffffff'] });
+  } else {
+    banner.classList.add('hidden');
+  }
+}
+
+function applyFilter() {
+  document.querySelectorAll('.item-row').forEach(row => {
+    const id = parseInt(row.dataset.id);
+    const packed = checkedIds.has(id);
+    let hide = false;
+    if (currentFilter === 'packed' && !packed) hide = true;
+    if (currentFilter === 'unpacked' && packed) hide = true;
+    row.setAttribute('data-hidden', hide ? 'true' : 'false');
+  });
+}
+
+function renderCategories() {
+  const container = document.getElementById('categories-container');
+  container.innerHTML = '';
+
+  CATEGORIES.forEach(cat => {
+    const catPacked = cat.items.filter(i => checkedIds.has(i.id)).length;
+    const allDone = catPacked === cat.items.length;
+
+    const section = document.createElement('div');
+    section.className = 'cat-section';
+    section.id = `cat-section-${cat.id}`;
+
+    // Category header
+    const header = document.createElement('div');
+    header.className = 'cat-header';
+    header.innerHTML = `
+      <span style="font-size:1rem">${cat.emoji}</span>
+      <span class="text-[11px] font-['Inter'] font-bold uppercase tracking-widest text-zinc-500 flex-1">${cat.label}</span>
+      <span id="cat-count-${cat.id}" class="text-[10px] font-['Inter'] font-bold px-2 py-0.5 rounded-full ${allDone ? 'bg-primary/20 text-primary' : 'bg-white/5 text-zinc-500'}">
+        ${catPacked}/${cat.items.length}
+      </span>
+      <button onclick="toggleCategory('${cat.id}')" class="ml-2 text-[10px] font-['Inter'] text-zinc-600 hover:text-primary transition-colors px-2 py-0.5 rounded-md hover:bg-white/5" title="Toggle all">
+        <span class="material-symbols-outlined" style="font-size:14px">done_all</span>
+      </button>
+    `;
+    section.appendChild(header);
+
+    // Items
+    cat.items.forEach(item => {
+      const packed = checkedIds.has(item.id);
+      const row = document.createElement('div');
+      row.className = `item-row flex items-center gap-3 px-1 py-3 border-b border-white/[0.04] rounded-lg cursor-pointer ${packed ? 'packed' : ''}`;
+      row.dataset.id = item.id;
+      row.dataset.hidden = 'false';
+
+      const noteHtml = item.note
+        ? `<span class="text-[10px] font-['Inter'] text-zinc-600 bg-white/5 px-2 py-0.5 rounded-full ml-1 shrink-0">${item.note}</span>`
+        : '';
+      const qtyHtml = item.qty
+        ? `<span class="item-qty text-[10px] font-['Inter'] font-bold text-zinc-600 bg-white/5 px-2 py-0.5 rounded-full shrink-0">${item.qty}</span>`
+        : '';
+
+      row.innerHTML = `
+        <input type="checkbox" class="packing-checkbox" ${packed ? 'checked' : ''} data-id="${item.id}" onclick="event.stopPropagation()">
+        <span class="item-name flex-1 text-sm font-['Public_Sans'] min-w-0">${item.name}</span>
+        <div class="flex items-center gap-1 shrink-0">
+          ${qtyHtml}
+          ${noteHtml}
+        </div>
+      `;
+
+      row.addEventListener('click', () => toggleItem(item.id));
+      row.querySelector('.packing-checkbox').addEventListener('change', (e) => {
+        e.stopPropagation();
+        toggleItem(item.id);
+      });
+
+      section.appendChild(row);
+    });
+
+    container.appendChild(section);
+  });
+
+  applyFilter();
+}
+
+// ── Actions ────────────────────────────────────────────────────────────────
+function toggleItem(id) {
+  if (checkedIds.has(id)) {
+    checkedIds.delete(id);
+  } else {
+    checkedIds.add(id);
+  }
+  saveState(checkedIds);
+
+  const row = document.querySelector(`.item-row[data-id="${id}"]`);
+  if (row) {
+    const cb = row.querySelector('.packing-checkbox');
+    if (checkedIds.has(id)) {
+      row.classList.add('packed');
+      cb.checked = true;
+    } else {
+      row.classList.remove('packed');
+      cb.checked = false;
+    }
+  }
+
+  applyFilter();
+  updateProgress();
+}
+
+function toggleCategory(catId) {
+  const cat = CATEGORIES.find(c => c.id === catId);
+  if (!cat) return;
+  const allPacked = cat.items.every(i => checkedIds.has(i.id));
+  cat.items.forEach(i => {
+    if (allPacked) checkedIds.delete(i.id);
+    else checkedIds.add(i.id);
+  });
+  saveState(checkedIds);
+  renderCategories();
+  updateProgress();
+}
+
+function setFilter(filter, btn) {
+  currentFilter = filter;
+  document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
+  btn.classList.add('active');
+  applyFilter();
+}
+
+function resetAll() {
+  if (!confirm('รีเซ็ต packing list ทั้งหมดไหม?')) return;
+  checkedIds = new Set(DEFAULT_CHECKED);
+  saveState(checkedIds);
+  renderCategories();
+  updateProgress();
+}
+
+// ── Sidebar ────────────────────────────────────────────────────────────────
+function toggleSidebar() {
+  const sidebar = document.getElementById('sidebar');
+  const icon = document.getElementById('toggleIcon');
+  sidebar.classList.toggle('sidebar-collapsed');
+  icon.textContent = sidebar.classList.contains('sidebar-collapsed') ? 'chevron_right' : 'chevron_left';
+}
+function openMobileDrawer() {
+  document.getElementById('mobile-drawer').classList.add('open');
+  document.getElementById('mobile-overlay').classList.add('open');
+}
+function closeMobileDrawer() {
+  document.getElementById('mobile-drawer').classList.remove('open');
+  document.getElementById('mobile-overlay').classList.remove('open');
+}
+
+// ── Theme ────────────────────────────────────────────────────────────────
+function toggleTheme() {
+  const html = document.documentElement;
+  const icon = document.getElementById('themeIcon');
+  if (html.classList.contains('dark')) {
+    html.classList.replace('dark', 'light');
+    icon.textContent = 'dark_mode';
+  } else {
+    html.classList.replace('light', 'dark');
+    icon.textContent = 'light_mode';
+  }
+}
+
+// ── Init ────────────────────────────────────────────────────────────────
+renderCategories();
+updateProgress();
+</script>
+</body>
+</html>
