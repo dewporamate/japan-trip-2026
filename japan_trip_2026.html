@@ -308,7 +308,7 @@
       <span class="material-symbols-outlined mr-3 shrink-0" style="font-size:20px">restaurant</span>
       <span class="text-sm font-['Public_Sans']">Dining</span>
     </a>
-    <a class="group flex items-center text-zinc-500 pl-5 py-2.5 hover:text-on-surface hover:bg-white/5 rounded-xl transition-all duration-200" href="#">
+    <a class="group flex items-center text-zinc-500 pl-5 py-2.5 hover:text-on-surface hover:bg-white/5 rounded-xl transition-all duration-200" href="activities.html">
       <span class="material-symbols-outlined mr-3 shrink-0" style="font-size:20px">museum</span>
       <span class="text-sm font-['Public_Sans']">Activities</span>
     </a>
@@ -366,7 +366,7 @@
       <span class="material-symbols-outlined mr-3 shrink-0" style="font-size:20px">restaurant</span>
       <span class="nav-text text-sm font-['Public_Sans']">Dining</span>
     </a>
-    <a class="nav-item group flex items-center text-zinc-500 pl-5 py-2.5 hover:text-on-surface hover:bg-white/5 rounded-xl transition-all duration-200" href="#">
+    <a class="nav-item group flex items-center text-zinc-500 pl-5 py-2.5 hover:text-on-surface hover:bg-white/5 rounded-xl transition-all duration-200" href="activities.html">
       <span class="material-symbols-outlined mr-3 shrink-0" style="font-size:20px">museum</span>
       <span class="nav-text text-sm font-['Public_Sans']">Activities</span>
     </a>
@@ -460,9 +460,13 @@
       </div>
       <button onclick="fireConfetti()" class="absolute top-5 right-5 bg-black/30 backdrop-blur-xl px-3 py-1.5 rounded-full border border-white/10 text-xs font-bold font-['Inter'] text-white hover:bg-white/10 transition-all" data-tippy-content="🎉 Celebrate!">🎊</button>
       <div class="absolute bottom-10 right-8 md:right-14 bg-black/30 backdrop-blur-2xl p-5 rounded-2xl border border-white/15 shadow-2xl hidden sm:block">
-        <p class="font-['Inter'] text-[0.6rem] text-zinc-400 uppercase tracking-widest mb-1">Friend Group</p>
+        <p class="font-['Inter'] text-[0.6rem] text-zinc-400 uppercase tracking-widest mb-1">Friend Group · 9 คน</p>
         <p class="font-['Manrope'] text-2xl font-black text-white">5 วัน 4 คืน</p>
         <p class="font-['Inter'] text-[0.6rem] text-primary mt-1.5 font-bold uppercase tracking-wide">✈️ BKK → NRT → BKK</p>
+        <div class="mt-3 pt-3 border-t border-white/10">
+          <p class="font-['Inter'] text-[0.6rem] text-zinc-500 uppercase tracking-widest mb-0.5">เหลืออีก</p>
+          <p class="font-['Manrope'] text-lg font-black text-primary" id="hero-countdown">—</p>
+        </div>
       </div>
     </section>
 
@@ -515,6 +519,62 @@
             <canvas id="budget-chart" height="90"></canvas>
           </div>
         </div>
+
+        <!-- WEATHER CARD -->
+        <div class="bg-surface-container-low p-5 rounded-3xl border border-white/5">
+          <div class="flex items-center justify-between mb-3">
+            <p class="text-[0.6rem] font-bold text-zinc-600 uppercase tracking-widest font-['Inter']">Tokyo Weather · Oct</p>
+            <span class="material-symbols-outlined text-sky-400" style="font-size:20px">partly_cloudy_day</span>
+          </div>
+          <div class="flex items-end gap-3">
+            <div>
+              <p class="font-['Manrope'] text-2xl font-black text-white">16–22°C</p>
+              <p class="text-[0.6rem] text-zinc-500 font-['Inter'] mt-1 uppercase tracking-wide">เย็นสบาย · เตรียม Light Jacket</p>
+            </div>
+            <div class="ml-auto flex gap-2">
+              <div class="text-center">
+                <span class="text-base">☀️</span>
+                <p class="text-[0.55rem] text-zinc-600 font-['Inter']">D1–3</p>
+              </div>
+              <div class="text-center">
+                <span class="text-base">🌤</span>
+                <p class="text-[0.55rem] text-zinc-600 font-['Inter']">D4</p>
+              </div>
+              <div class="text-center">
+                <span class="text-base">🌂</span>
+                <p class="text-[0.55rem] text-zinc-600 font-['Inter']">เผื่อไว้</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- CURRENCY CARD -->
+        <div class="bg-surface-container-low p-5 rounded-3xl border border-white/5">
+          <div class="flex items-center justify-between mb-3">
+            <p class="text-[0.6rem] font-bold text-zinc-600 uppercase tracking-widest font-['Inter']">Currency</p>
+            <span class="text-base">💴</span>
+          </div>
+          <div class="flex items-baseline gap-2">
+            <p class="font-['Manrope'] text-2xl font-black text-white">฿1 ≈ ¥4.2</p>
+            <p class="text-[0.6rem] text-zinc-500 font-['Inter'] uppercase tracking-wide" id="fx-updated">approx</p>
+          </div>
+          <div class="mt-3 grid grid-cols-3 gap-2">
+            <div class="bg-white/5 rounded-xl p-2 text-center">
+              <p class="text-[0.65rem] font-['Inter'] text-zinc-400">฿1,000</p>
+              <p class="text-xs font-bold text-on-surface font-['Manrope']">¥4,200</p>
+            </div>
+            <div class="bg-white/5 rounded-xl p-2 text-center">
+              <p class="text-[0.65rem] font-['Inter'] text-zinc-400">฿5,000</p>
+              <p class="text-xs font-bold text-on-surface font-['Manrope']">¥21,000</p>
+            </div>
+            <div class="bg-white/5 rounded-xl p-2 text-center">
+              <p class="text-[0.65rem] font-['Inter'] text-zinc-400">฿10,000</p>
+              <p class="text-xs font-bold text-on-surface font-['Manrope']">¥42,000</p>
+            </div>
+          </div>
+          <p class="text-[0.55rem] text-zinc-700 font-['Inter'] mt-3">อัตราโดยประมาณ — ตรวจสอบก่อนแลก</p>
+        </div>
+
       </div>
 
     </div><!-- /grid -->
@@ -1646,6 +1706,12 @@ window.openPhotoSwipe = openPhotoSwipe;
   const tripStart = new Date('2026-10-09T00:00:00');
   const now = new Date();
   const daysLeft = Math.ceil((tripStart - now)/(1000*60*60*24));
+  const el = document.getElementById('hero-countdown');
+  if(el){
+    if(daysLeft > 0) el.textContent = `${daysLeft} วัน ✈️`;
+    else if(daysLeft === 0) el.textContent = `Let's go! 🎉`;
+    else el.textContent = `Trip ended`;
+  }
   if(daysLeft===0){
     confetti({ particleCount:200, spread:80, origin:{y:0.6} });
     setTimeout(()=>toast('🎉 วันนี้คือวันเดินทาง! Let\'s go! ✈️','ok'), 1200);

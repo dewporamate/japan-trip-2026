@@ -115,7 +115,7 @@
       <span class="material-symbols-outlined mr-3 shrink-0" style="font-size:20px">restaurant</span>
       <span class="text-sm font-['Public_Sans']">Dining</span>
     </a>
-    <a class="group flex items-center text-zinc-500 pl-5 py-2.5 hover:text-on-surface hover:bg-white/5 rounded-xl transition-all duration-200" href="#">
+    <a class="group flex items-center text-zinc-500 pl-5 py-2.5 hover:text-on-surface hover:bg-white/5 rounded-xl transition-all duration-200" href="activities.html">
       <span class="material-symbols-outlined mr-3 shrink-0" style="font-size:20px">museum</span>
       <span class="text-sm font-['Public_Sans']">Activities</span>
     </a>
@@ -171,7 +171,7 @@
       <span class="material-symbols-outlined mr-3 shrink-0" style="font-size:20px">restaurant</span>
       <span class="nav-text text-sm font-['Public_Sans']">Dining</span>
     </a>
-    <a class="nav-item group flex items-center text-zinc-500 pl-5 py-2.5 hover:text-on-surface hover:bg-white/5 rounded-xl transition-all duration-200" href="#">
+    <a class="nav-item group flex items-center text-zinc-500 pl-5 py-2.5 hover:text-on-surface hover:bg-white/5 rounded-xl transition-all duration-200" href="activities.html">
       <span class="material-symbols-outlined mr-3 shrink-0" style="font-size:20px">museum</span>
       <span class="nav-text text-sm font-['Public_Sans']">Activities</span>
     </a>
@@ -241,6 +241,37 @@
 
       <!-- Main Column -->
       <div class="col-span-12 lg:col-span-8 space-y-6">
+
+        <!-- ZIPAIR Pinned Flight Card -->
+        <div class="bg-[#1a1a1a] rounded-xl ring-1 ring-primary/20 shadow-[0_8px_32px_rgba(255,107,157,0.08)] overflow-hidden">
+          <div class="flex items-center gap-2 px-5 pt-4 pb-2">
+            <span class="text-[9px] font-bold uppercase tracking-[0.2em] font-['Inter'] text-primary bg-primary/10 px-2.5 py-1 rounded-full">✈️ Confirmed Flight</span>
+            <span class="text-[9px] font-['Inter'] text-zinc-600 uppercase tracking-widest ml-auto">ZG052</span>
+          </div>
+          <div class="px-5 pb-5">
+            <div class="flex items-center justify-between gap-4 mt-1">
+              <div class="text-center">
+                <p class="font-['Manrope'] text-2xl font-black text-white">23:40</p>
+                <p class="text-[10px] text-zinc-500 font-['Inter'] mt-0.5 uppercase tracking-wide">BKK · Suvarnabhumi</p>
+                <p class="text-[9px] text-zinc-600 font-['Inter']">Oct 9, 2026</p>
+              </div>
+              <div class="flex-1 flex flex-col items-center">
+                <div class="w-full flex items-center gap-1">
+                  <div class="flex-1 h-px bg-zinc-700"></div>
+                  <span class="text-zinc-500 text-xs">✈️</span>
+                  <div class="flex-1 h-px bg-zinc-700"></div>
+                </div>
+                <p class="text-[9px] text-zinc-600 font-['Inter'] mt-1">7h 50m · ZIPAIR</p>
+              </div>
+              <div class="text-center">
+                <p class="font-['Manrope'] text-2xl font-black text-white">07:30</p>
+                <p class="text-[10px] text-zinc-500 font-['Inter'] mt-0.5 uppercase tracking-wide">NRT · Narita</p>
+                <p class="text-[9px] text-zinc-600 font-['Inter']">Oct 10, 2026 +1</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
         <div id="transport-list" class="space-y-2"></div>
       </div>
 
@@ -256,44 +287,87 @@
                 <span class="material-symbols-outlined text-primary" style="font-variation-settings:'FILL' 1; font-size:44px">location_on</span>
               </div>
             </div>
-            <div class="absolute bottom-3 left-3 right-3 bg-[#09090b]/80 backdrop-blur-md p-3 rounded-xl border border-white/5 flex justify-between items-center">
-              <span class="text-[10px] font-bold uppercase tracking-widest text-zinc-300 font-['Inter']">Live Route Map</span>
+            <a href="japan_trip_2026_map.html" class="absolute bottom-3 left-3 right-3 bg-[#09090b]/80 backdrop-blur-md p-3 rounded-xl border border-white/5 flex justify-between items-center hover:border-primary/30 transition-colors">
+              <span class="text-[10px] font-bold uppercase tracking-widest text-zinc-300 font-['Inter']">Route Map</span>
               <span class="material-symbols-outlined text-zinc-400" style="font-size:16px">open_in_new</span>
+            </a>
+          </div>
+        </div>
+
+        <!-- Suica Card Guide -->
+        <div class="bg-[#1a1a1a] rounded-xl p-5 ring-1 ring-white/5 shadow-[0_8px_32px_rgba(0,0,0,0.25)]">
+          <h4 class="font-['Manrope'] text-base font-bold text-on-surface mb-4 flex items-center justify-between">
+            IC Card (Suica)
+            <span class="text-xl">🐧</span>
+          </h4>
+          <div class="space-y-3">
+            <div class="flex items-start gap-3 p-3 bg-white/5 rounded-xl border border-white/5">
+              <div class="w-8 h-8 bg-sky-500/10 rounded-lg flex items-center justify-center shrink-0 mt-0.5">
+                <span class="text-sky-400 font-bold text-xs font-['Inter']">1</span>
+              </div>
+              <div>
+                <p class="text-xs font-bold text-on-surface font-['Public_Sans']">ซื้อที่ Narita Airport</p>
+                <p class="text-[10px] text-zinc-500 font-['Inter'] mt-0.5">ตู้ Suica / Welcome Suica · ชั้น B1</p>
+              </div>
+            </div>
+            <div class="flex items-start gap-3 p-3 bg-white/5 rounded-xl border border-white/5">
+              <div class="w-8 h-8 bg-sky-500/10 rounded-lg flex items-center justify-center shrink-0 mt-0.5">
+                <span class="text-sky-400 font-bold text-xs font-['Inter']">2</span>
+              </div>
+              <div>
+                <p class="text-xs font-bold text-on-surface font-['Public_Sans']">เติมขั้นต้น ¥3,000+</p>
+                <p class="text-[10px] text-zinc-500 font-['Inter'] mt-0.5">ใช้ได้ทั้ง BTS·รถบัส·ร้านสะดวกซื้อ</p>
+              </div>
+            </div>
+            <div class="flex items-start gap-3 p-3 bg-white/5 rounded-xl border border-white/5">
+              <div class="w-8 h-8 bg-sky-500/10 rounded-lg flex items-center justify-center shrink-0 mt-0.5">
+                <span class="text-sky-400 font-bold text-xs font-['Inter']">3</span>
+              </div>
+              <div>
+                <p class="text-xs font-bold text-on-surface font-['Public_Sans']">เติมได้ที่ตู้สีเขียว</p>
+                <p class="text-[10px] text-zinc-500 font-['Inter'] mt-0.5">7-Eleven / FamilyMart ก็เติมได้</p>
+              </div>
             </div>
           </div>
         </div>
 
-        <!-- Digital Wallet -->
+        <!-- Emergency Contacts -->
         <div class="bg-[#1a1a1a] rounded-xl p-5 ring-1 ring-white/5 shadow-[0_8px_32px_rgba(0,0,0,0.25)]">
-          <h4 class="font-['Manrope'] text-base font-bold text-on-surface mb-5 flex items-center justify-between">
-            Digital Wallet
-            <span class="material-symbols-outlined text-zinc-500" style="font-size:18px">qr_code_2</span>
+          <h4 class="font-['Manrope'] text-base font-bold text-on-surface mb-4 flex items-center gap-2">
+            <span class="material-symbols-outlined text-red-400" style="font-size:18px">emergency</span>
+            Emergency
           </h4>
-          <div class="space-y-3">
-            <!-- QR -->
-            <div class="aspect-[4/3] bg-white/5 rounded-xl border-2 border-dashed border-white/10 flex flex-col items-center justify-center p-5 group hover:border-primary/40 transition-colors cursor-pointer">
-              <div class="w-24 h-24 bg-white/10 rounded-lg mb-3 flex items-center justify-center group-hover:bg-white/15 transition-colors">
-                <span class="material-symbols-outlined text-zinc-400" style="font-size:44px">qr_code</span>
+          <div class="space-y-2">
+            <a href="tel:110" class="flex items-center justify-between p-3 bg-red-500/5 border border-red-500/15 rounded-xl hover:bg-red-500/10 transition-colors">
+              <div class="flex items-center gap-3">
+                <span class="text-lg">🚔</span>
+                <div>
+                  <p class="text-xs font-bold text-on-surface font-['Public_Sans']">ตำรวจ (Police)</p>
+                  <p class="text-[9px] text-zinc-500 font-['Inter']">ทั่วญี่ปุ่น</p>
+                </div>
               </div>
-              <p class="text-[10px] font-['Inter'] uppercase tracking-widest text-zinc-500 group-hover:text-zinc-300 transition-colors">Tap to Enlarge</p>
-            </div>
-            <!-- Attachment -->
-            <div class="flex items-center gap-3 p-3 bg-white/5 rounded-xl border border-white/5">
-              <div class="w-10 h-10 bg-white/5 rounded-xl flex items-center justify-center shrink-0">
-                <span class="material-symbols-outlined text-zinc-400" style="font-size:18px">image</span>
+              <span class="text-sm font-black text-red-400 font-['Manrope']">110</span>
+            </a>
+            <a href="tel:119" class="flex items-center justify-between p-3 bg-orange-500/5 border border-orange-500/15 rounded-xl hover:bg-orange-500/10 transition-colors">
+              <div class="flex items-center gap-3">
+                <span class="text-lg">🚑</span>
+                <div>
+                  <p class="text-xs font-bold text-on-surface font-['Public_Sans']">รถพยาบาล / ดับเพลิง</p>
+                  <p class="text-[9px] text-zinc-500 font-['Inter']">ทั่วญี่ปุ่น</p>
+                </div>
               </div>
-              <div class="flex-1 min-w-0">
-                <p class="text-xs font-bold truncate font-['Public_Sans'] text-on-surface">jr-pass-confirmation.jpg</p>
-                <p class="text-[9px] text-zinc-500 uppercase font-['Inter'] mt-0.5">2.4 MB · Uploaded 2d ago</p>
+              <span class="text-sm font-black text-orange-400 font-['Manrope']">119</span>
+            </a>
+            <a href="tel:+81332224101" class="flex items-center justify-between p-3 bg-white/5 border border-white/5 rounded-xl hover:bg-white/10 transition-colors">
+              <div class="flex items-center gap-3">
+                <span class="text-lg">🇹🇭</span>
+                <div>
+                  <p class="text-xs font-bold text-on-surface font-['Public_Sans']">สถานทูตไทย · โตเกียว</p>
+                  <p class="text-[9px] text-zinc-500 font-['Inter']">+81-3-3222-4101</p>
+                </div>
               </div>
-              <button class="text-zinc-600 hover:text-on-surface transition-colors shrink-0">
-                <span class="material-symbols-outlined" style="font-size:18px">download</span>
-              </button>
-            </div>
-            <!-- Add Screenshot -->
-            <button class="w-full py-3 border border-dashed border-white/10 rounded-xl text-zinc-500 font-bold text-xs font-['Public_Sans'] flex items-center justify-center gap-2 hover:bg-white/5 hover:text-on-surface transition-all">
-              <span class="material-symbols-outlined" style="font-size:16px">add_a_photo</span> Add Screenshot
-            </button>
+              <span class="material-symbols-outlined text-zinc-500" style="font-size:16px">call</span>
+            </a>
           </div>
         </div>
 

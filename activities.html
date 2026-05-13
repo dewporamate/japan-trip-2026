@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Japan 2026 — Activities</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&family=Public+Sans:wght@300;400;600;700&family=Inter:wght@400;500;600;700&family=Noto+Sans+Thai:wght@300;400;600;700&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<script>
+  tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        colors: {
+          "primary": "#ff6b9d",
+          "on-primary": "#ffffff",
+          "primary-container": "#6e0035",
+          "on-primary-container": "#ffd9e1",
+          "surface": "#09090b",
+          "surface-container-low": "#141414",
+          "surface-container": "#1a1a1a",
+          "surface-container-high": "#242424",
+          "on-surface": "#f1f1f1",
+          "on-surface-variant": "#d8c0c4",
+          "outline": "#4a4143",
+          "outline-variant": "#574146",
+          "inverse-primary": "#ac2a5d",
+        },
+        fontFamily: {
+          "headline": ["Manrope", "sans-serif"],
+          "body": ["Public Sans", "Noto Sans Thai", "sans-serif"],
+          "label": ["Inter", "sans-serif"],
+        },
+      },
+    },
+  }
+</script>
+<style>
+  .material-symbols-outlined { font-variation-settings:'FILL' 0,'wght' 300,'GRAD' 0,'opsz' 24; vertical-align:middle; }
+  body { font-family:'Public Sans','Noto Sans Thai',sans-serif; background:#09090b; color:#f1f1f1; }
+  ::-webkit-scrollbar { width:5px; }
+  ::-webkit-scrollbar-track { background:#09090b; }
+  ::-webkit-scrollbar-thumb { background:#2a2a2a; border-radius:3px; }
+  /* ── Light Mode ── */
+  html.light body{background:#f4f4f5!important;color:#18181b!important}
+  html.light .bg-\[\#09090b\]{background:#f4f4f5!important}
+  html.light .bg-\[\#1a1a1a\]{background:#ffffff!important}
+  html.light .bg-\[\#242424\]{background:#e4e4e7!important}
+  html.light header{background:rgba(244,244,245,0.88)!important}
+  html.light aside{background:#f4f4f5!important}
+  html.light .border-white\/5{border-color:rgba(0,0,0,0.09)!important}
+  html.light .ring-white\/5{--tw-ring-color:rgba(0,0,0,0.09)!important}
+  html.light .ring-1{box-shadow:0 0 0 1px rgba(0,0,0,0.09)!important}
+  html.light .bg-white\/5{background:rgba(0,0,0,0.05)!important}
+  html.light .hover\:bg-white\/5:hover{background:rgba(0,0,0,0.05)!important}
+  html.light .hover\:bg-\[\#242424\]:hover{background:#e4e4e7!important}
+  html.light .text-on-surface{color:#18181b!important}
+  html.light .text-zinc-400{color:#71717a!important}
+  html.light .text-zinc-500{color:#52525b!important}
+  html.light .text-zinc-600{color:#3f3f46!important}
+  html.light [class*="shadow-\[0_8px"]{box-shadow:0 2px 16px rgba(0,0,0,0.09)!important}
+  html.light .bg-primary\/5{background:rgba(255,107,157,0.07)!important}
+  html.light .bg-primary\/10{background:rgba(255,107,157,0.12)!important}
+  html.light .bg-primary\/15{background:rgba(255,107,157,0.15)!important}
+  html.light .border-primary\/25{border-color:rgba(255,107,157,0.25)!important}
+  html.light .bg-white\/8{background:rgba(0,0,0,0.06)!important}
+  html.light .bg-zinc-700{background:#d4d4d8!important}
+  html.light .text-zinc-300{color:#52525b!important}
+  /* ── Sidebar collapse ── */
+  #sidebar { transition:width 0.3s cubic-bezier(0.4,0,0.2,1); }
+  .sidebar-collapsed { width:76px !important; }
+  .sidebar-collapsed .nav-text, .sidebar-collapsed .logo-text, .sidebar-collapsed .btn-text { display:none; }
+  .sidebar-collapsed .nav-item { justify-content:center; padding-left:0; border-left:none; }
+  .sidebar-collapsed .nav-item-active { border-left:none; }
+  .sidebar-collapsed .add-btn { width:48px; height:48px; padding:0; border-radius:9999px; margin:0 auto; }
+  /* ── Mobile drawer ── */
+  #mobile-drawer { transform:translateX(-100%); transition:transform 0.3s cubic-bezier(0.4,0,0.2,1); }
+  #mobile-drawer.open { transform:translateX(0); }
+  #mobile-overlay { opacity:0; pointer-events:none; transition:opacity 0.3s; }
+  #mobile-overlay.open { opacity:1; pointer-events:auto; }
+</style>
+</head>
+<body class="text-on-surface flex h-screen overflow-hidden bg-[#09090b]">
+
+<!-- Mobile Overlay -->
+<div id="mobile-overlay" class="fixed inset-0 bg-black/60 z-40 md:hidden" onclick="closeMobileDrawer()"></div>
+
+<!-- Mobile Drawer -->
+<div id="mobile-drawer" class="fixed top-0 left-0 h-full w-72 bg-[#09090b] border-r border-white/5 z-50 md:hidden flex flex-col py-10 px-5">
+  <div class="mb-8 px-2 flex items-center justify-between">
+    <div class="flex items-center gap-3">
+      <div class="w-10 h-10 rounded-xl bg-primary/15 flex items-center justify-center shrink-0 border border-primary/25">
+        <span style="font-size:1.2rem">🌸</span>
+      </div>
+      <div>
+        <div class="text-base font-black font-['Manrope'] text-primary italic tracking-tight">Japan 2026</div>
+        <div class="text-[9px] text-zinc-600 font-['Inter'] uppercase tracking-widest font-bold">Friend Group Trip</div>
+      </div>
+    </div>
+    <button onclick="closeMobileDrawer()" class="w-8 h-8 flex items-center justify-center rounded-full hover:bg-white/5 text-zinc-500 hover:text-primary transition-colors">
+      <span class="material-symbols-outlined" style="font-size:20px">close</span>
+    </button>
+  </div>
+  <nav class="flex-1 space-y-1">
+    <a class="group flex items-center text-zinc-500 pl-5 py-2.5 hover:text-on-surface hover:bg-white/5 rounded-xl transition-all duration-200" href="japan_trip_2026.html">
+      <span class="material-symbols-outlined mr-3 shrink-0" style="font-size:20px">schedule</span>
+      <span class="text-sm font-['Public_Sans']">Itinerary</span>
+    </a>
+    <a class="group flex items-center text-zinc-500 pl-5 py-2.5 hover:text-on-surface hover:bg-white/5 rounded-xl transition-all duration-200" href="transportation.html">
+      <span class="material-symbols-outlined mr-3 shrink-0" style="font-size:20px">train</span>
+      <span class="text-sm font-['Public_Sans']">Transportation</span>
+    </a>
+    <a class="group flex items-center text-zinc-500 pl-5 py-2.5 hover:text-on-surface hover:bg-white/5 rounded-xl transition-all duration-200" href="dining.html">
+      <span class="material-symbols-outlined mr-3 shrink-0" style="font-size:20px">restaurant</span>
+      <span class="text-sm font-['Public_Sans']">Dining</span>
+    </a>
+    <a class="group flex items-center text-primary font-bold border-l-4 border-primary pl-4 py-2.5 rounded-r-xl bg-primary/5 transition-all duration-200" href="activities.html">
+      <span class="material-symbols-outlined mr-3 shrink-0" style="font-size:20px">museum</span>
+      <span class="text-sm font-['Public_Sans']">Activities</span>
+    </a>
+    <a class="group flex items-center text-zinc-500 pl-5 py-2.5 hover:text-on-surface hover:bg-white/5 rounded-xl transition-all duration-200" href="lodging.html">
+      <span class="material-symbols-outlined mr-3 shrink-0" style="font-size:20px">hotel</span>
+      <span class="text-sm font-['Public_Sans']">Lodging</span>
+    </a>
+    <a class="group flex items-center text-zinc-500 pl-5 py-2.5 hover:text-on-surface hover:bg-white/5 rounded-xl transition-all duration-200" href="japan_trip_2026_map.html">
+      <span class="material-symbols-outlined mr-3 shrink-0" style="font-size:20px">map</span>
+      <span class="text-sm font-['Public_Sans']">Map</span>
+    </a>
+    <a class="group flex items-center text-zinc-500 pl-5 py-2.5 hover:text-on-surface hover:bg-white/5 rounded-xl transition-all duration-200" href="budget.html">
+      <span class="material-symbols-outlined mr-3 shrink-0" style="font-size:20px">payments</span>
+      <span class="text-sm font-['Public_Sans']">Budget</span>
+    </a>
+    <a class="group flex items-center text-zinc-500 pl-5 py-2.5 hover:text-on-surface hover:bg-white/5 rounded-xl transition-all duration-200" href="packing.html">
+      <span class="material-symbols-outlined mr-3 shrink-0" style="font-size:20px">checklist</span>
+      <span class="text-sm font-['Public_Sans']">Packing</span>
+    </a>
+  </nav>
+</div>
+
+<!-- Sidebar -->
+<aside class="hidden md:flex flex-col h-screen py-10 px-5 bg-[#09090b] w-72 shrink-0 border-r border-white/5 sticky top-0 relative" id="sidebar">
+  <button class="absolute -right-3 top-24 bg-[#1a1a1a] border border-white/10 rounded-full w-6 h-6 flex items-center justify-center text-zinc-500 hover:text-primary transition-colors z-50" onclick="toggleSidebar()">
+    <span class="material-symbols-outlined" style="font-size:14px" id="toggleIcon">chevron_left</span>
+  </button>
+  <!-- Logo -->
+  <div class="mb-10 px-2 flex items-center gap-3">
+    <div class="w-10 h-10 rounded-xl bg-primary/15 flex items-center justify-center shrink-0 border border-primary/25">
+      <span style="font-size:1.2rem">🌸</span>
+    </div>
+    <div class="logo-text min-w-0">
+      <div class="text-base font-black font-['Manrope'] text-primary italic tracking-tight">Japan 2026</div>
+      <div class="text-[9px] text-zinc-600 font-['Inter'] uppercase tracking-widest font-bold">Friend Group Trip</div>
+    </div>
+  </div>
+  <!-- Nav -->
+  <nav class="flex-1 space-y-1">
+    <a class="nav-item group flex items-center text-zinc-500 pl-5 py-2.5 hover:text-on-surface hover:bg-white/5 rounded-xl transition-all duration-200" href="japan_trip_2026.html">
+      <span class="material-symbols-outlined mr-3 shrink-0" style="font-size:20px">schedule</span>
+      <span class="nav-text text-sm font-['Public_Sans']">Itinerary</span>
+    </a>
+    <a class="nav-item group flex items-center text-zinc-500 pl-5 py-2.5 hover:text-on-surface hover:bg-white/5 rounded-xl transition-all duration-200" href="transportation.html">
+      <span class="material-symbols-outlined mr-3 shrink-0" style="font-size:20px">train</span>
+      <span class="nav-text text-sm font-['Public_Sans']">Transportation</span>
+    </a>
+    <a class="nav-item group flex items-center text-zinc-500 pl-5 py-2.5 hover:text-on-surface hover:bg-white/5 rounded-xl transition-all duration-200" href="dining.html">
+      <span class="material-symbols-outlined mr-3 shrink-0" style="font-size:20px">restaurant</span>
+      <span class="nav-text text-sm font-['Public_Sans']">Dining</span>
+    </a>
+    <a class="nav-item nav-item-active group flex items-center text-primary font-bold border-l-4 border-primary pl-4 py-2.5 rounded-r-xl bg-primary/5 transition-all duration-200" href="activities.html">
+      <span class="material-symbols-outlined mr-3 shrink-0" style="font-size:20px">museum</span>
+      <span class="nav-text text-sm font-['Public_Sans']">Activities</span>
+    </a>
+    <a class="nav-item group flex items-center text-zinc-500 pl-5 py-2.5 hover:text-on-surface hover:bg-white/5 rounded-xl transition-all duration-200" href="lodging.html">
+      <span class="material-symbols-outlined mr-3 shrink-0" style="font-size:20px">hotel</span>
+      <span class="nav-text text-sm font-['Public_Sans']">Lodging</span>
+    </a>
+    <a class="nav-item group flex items-center text-zinc-500 pl-5 py-2.5 hover:text-on-surface hover:bg-white/5 rounded-xl transition-all duration-200" href="japan_trip_2026_map.html">
+      <span class="material-symbols-outlined mr-3 shrink-0" style="font-size:20px">map</span>
+      <span class="nav-text text-sm font-['Public_Sans']">Map</span>
+    </a>
+    <a class="nav-item group flex items-center text-zinc-500 pl-5 py-2.5 hover:text-on-surface hover:bg-white/5 rounded-xl transition-all duration-200" href="budget.html">
+      <span class="material-symbols-outlined mr-3 shrink-0" style="font-size:20px">payments</span>
+      <span class="nav-text text-sm font-['Public_Sans']">Budget</span>
+    </a>
+    <a class="nav-item group flex items-center text-zinc-500 pl-5 py-2.5 hover:text-on-surface hover:bg-white/5 rounded-xl transition-all duration-200" href="packing.html">
+      <span class="material-symbols-outlined mr-3 shrink-0" style="font-size:20px">checklist</span>
+      <span class="nav-text text-sm font-['Public_Sans']">Packing</span>
+    </a>
+  </nav>
+</aside>
+
+<!-- Main -->
+<main class="flex-1 overflow-y-auto bg-[#09090b]">
+
+  <!-- Top App Bar -->
+  <header class="flex justify-between items-center px-5 md:px-8 h-16 w-full bg-[#09090b]/85 backdrop-blur-xl z-50 sticky top-0 border-b border-white/5 shrink-0">
+    <div class="flex items-center gap-3">
+      <button onclick="openMobileDrawer()" class="md:hidden w-8 h-8 flex items-center justify-center rounded-full hover:bg-white/5 transition-colors text-zinc-400 hover:text-primary">
+        <span class="material-symbols-outlined" style="font-size:22px">menu</span>
+      </button>
+      <h1 class="text-lg font-black text-on-surface italic font-['Manrope'] tracking-tight">Activities</h1>
+    </div>
+    <div class="flex items-center gap-2 md:gap-3">
+      <button id="theme-toggle" onclick="toggleTheme()" class="w-8 h-8 flex items-center justify-center rounded-full hover:bg-white/5 transition-colors text-zinc-500 hover:text-primary" title="Toggle Light/Dark mode">
+        <span class="material-symbols-outlined" style="font-size:20px">light_mode</span>
+      </button>
+      <button class="w-8 h-8 flex items-center justify-center rounded-full hover:bg-white/5 transition-colors text-zinc-500 hover:text-primary">
+        <span class="material-symbols-outlined" style="font-size:20px">notifications</span>
+      </button>
+      <div class="w-8 h-8 rounded-full bg-primary/15 flex items-center justify-center border border-primary/25 cursor-pointer text-base">🧳</div>
+    </div>
+  </header>
+
+  <div class="max-w-7xl mx-auto p-6 md:p-10 space-y-10">
+
+    <!-- Hero -->
+    <section class="relative h-[300px] rounded-xl overflow-hidden ring-1 ring-white/5">
+      <div class="absolute inset-0 bg-[#1a1a1a]"></div>
+      <div class="absolute inset-0 flex items-center justify-center opacity-10">
+        <span class="text-[16rem] leading-none">🗾</span>
+      </div>
+      <div class="absolute inset-0 bg-gradient-to-t from-[#09090b] via-[#09090b]/20 to-transparent"></div>
+      <div class="absolute bottom-8 left-8 right-8">
+        <span class="px-3 py-1 bg-primary text-white text-[9px] font-bold tracking-[0.2em] rounded-full uppercase mb-3 inline-block font-['Inter']">5 Days · 9 คน · Oct 2026</span>
+        <h2 class="text-4xl md:text-5xl font-['Manrope'] font-extrabold text-white tracking-tighter leading-none">Things To Do 🎌</h2>
+        <p class="text-zinc-300 mt-3 max-w-lg text-sm leading-relaxed font-['Public_Sans']">กิจกรรมทุกวันของทริปนี้ — เรียงตาม Day ตั้งแต่ลงเครื่องถึงกลับบ้าน</p>
+      </div>
+    </section>
+
+    <!-- Stats Row -->
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+      <div class="bg-[#1a1a1a] rounded-xl p-4 ring-1 ring-white/5 text-center">
+        <p class="text-2xl font-black font-['Manrope'] text-on-surface">17</p>
+        <p class="text-[10px] text-zinc-500 font-['Inter'] uppercase tracking-widest mt-1">กิจกรรมทั้งหมด</p>
+      </div>
+      <div class="bg-[#1a1a1a] rounded-xl p-4 ring-1 ring-white/5 text-center">
+        <p class="text-2xl font-black font-['Manrope'] text-on-surface">5</p>
+        <p class="text-[10px] text-zinc-500 font-['Inter'] uppercase tracking-widest mt-1">วัน</p>
+      </div>
+      <div class="bg-[#1a1a1a] rounded-xl p-4 ring-1 ring-white/5 text-center">
+        <p class="text-2xl font-black font-['Manrope'] text-primary">9</p>
+        <p class="text-[10px] text-zinc-500 font-['Inter'] uppercase tracking-widest mt-1">คน</p>
+      </div>
+      <div class="bg-[#1a1a1a] rounded-xl p-4 ring-1 ring-white/5 text-center">
+        <p class="text-2xl font-black font-['Manrope'] text-on-surface">3</p>
+        <p class="text-[10px] text-zinc-500 font-['Inter'] uppercase tracking-widest mt-1">จังหวัด</p>
+      </div>
+    </div>
+
+    <!-- Day-by-Day Activities -->
+    <div class="space-y-12">
+
+      <!-- Day 1 -->
+      <section>
+        <div class="flex items-center gap-3 mb-6">
+          <div class="px-4 py-2 rounded-full font-bold font-['Inter'] text-xs uppercase tracking-widest" style="background:#ff6b9d20;color:#ff6b9d">Day 1 · Oct 9–10</div>
+          <div class="h-px flex-1 bg-white/5"></div>
+          <span class="text-[10px] text-zinc-600 font-['Inter'] uppercase tracking-widest">เดินทาง · Arrive Tokyo</span>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div class="bg-[#1a1a1a] rounded-xl p-5 ring-1 ring-white/5 hover:ring-primary/20 transition-all group">
+            <div class="text-3xl mb-3">✈️</div>
+            <h4 class="font-['Manrope'] font-bold text-on-surface mb-1">ZIPAIR ZG052 · BKK → NRT</h4>
+            <p class="text-xs text-zinc-500 font-['Public_Sans']">23:40 Suvarnabhumi · 7h 50m · Arrive 07:30 Narita +1</p>
+            <div class="flex gap-2 mt-3">
+              <span class="text-[9px] font-['Inter'] bg-white/5 px-2 py-1 rounded-full text-zinc-400">✈️ Direct</span>
+              <span class="text-[9px] font-['Inter'] bg-emerald-500/10 px-2 py-1 rounded-full text-emerald-400">Confirmed</span>
+            </div>
+          </div>
+          <div class="bg-[#1a1a1a] rounded-xl p-5 ring-1 ring-white/5 hover:ring-primary/20 transition-all group">
+            <div class="text-3xl mb-3">🚅</div>
+            <h4 class="font-['Manrope'] font-bold text-on-surface mb-1">Narita Express (N'EX)</h4>
+            <p class="text-xs text-zinc-500 font-['Public_Sans']">Narita Airport → Shinjuku → Akabane (แวะ Kita-ku)</p>
+            <div class="flex gap-2 mt-3">
+              <span class="text-[9px] font-['Inter'] bg-white/5 px-2 py-1 rounded-full text-zinc-400">🐧 Suica</span>
+              <span class="text-[9px] font-['Inter'] bg-white/5 px-2 py-1 rounded-full text-zinc-400">~80 นาที</span>
+            </div>
+          </div>
+          <div class="bg-[#1a1a1a] rounded-xl p-5 ring-1 ring-white/5 hover:ring-primary/20 transition-all group">
+            <div class="text-3xl mb-3">🏠</div>
+            <h4 class="font-['Manrope'] font-bold text-on-surface mb-1">Check-in · KETA House OKU</h4>
+            <p class="text-xs text-zinc-500 font-['Public_Sans']">Kita-ku, Tokyo · Check-in 16:00 · 4 คืน · 9 คน</p>
+            <div class="flex gap-2 mt-3">
+              <span class="text-[9px] font-['Inter'] bg-primary/10 px-2 py-1 rounded-full text-primary">¥44,116 รวม</span>
+            </div>
+          </div>
+          <div class="bg-[#1a1a1a] rounded-xl p-5 ring-1 ring-white/5 hover:ring-primary/20 transition-all group">
+            <div class="text-3xl mb-3">🛕</div>
+            <h4 class="font-['Manrope'] font-bold text-on-surface mb-1">Sensoji Temple</h4>
+            <p class="text-xs text-zinc-500 font-['Public_Sans']">Asakusa · วัดเก่าแก่ที่สุดในโตเกียว · Nakamise Shopping St.</p>
+            <div class="flex gap-2 mt-3">
+              <span class="text-[9px] font-['Inter'] bg-emerald-500/10 px-2 py-1 rounded-full text-emerald-400">ฟรี</span>
+              <span class="text-[9px] font-['Inter'] bg-white/5 px-2 py-1 rounded-full text-zinc-400">เช้า–เย็น</span>
+            </div>
+          </div>
+          <div class="bg-[#1a1a1a] rounded-xl p-5 ring-1 ring-white/5 hover:ring-primary/20 transition-all group">
+            <div class="text-3xl mb-3">🛍️</div>
+            <h4 class="font-['Manrope'] font-bold text-on-surface mb-1">Ameyoko Market</h4>
+            <p class="text-xs text-zinc-500 font-['Public_Sans']">Ueno · ตลาดของถูก ขนม ของสด ร้าน vintage</p>
+            <div class="flex gap-2 mt-3">
+              <span class="text-[9px] font-['Inter'] bg-emerald-500/10 px-2 py-1 rounded-full text-emerald-400">ฟรี เข้า</span>
+              <span class="text-[9px] font-['Inter'] bg-white/5 px-2 py-1 rounded-full text-zinc-400">10:00–20:00</span>
+            </div>
+          </div>
+          <div class="bg-[#1a1a1a] rounded-xl p-5 ring-1 ring-white/5 hover:ring-primary/20 transition-all group">
+            <div class="text-3xl mb-3">🕹️</div>
+            <h4 class="font-['Manrope'] font-bold text-on-surface mb-1">Akihabara Electric Town</h4>
+            <p class="text-xs text-zinc-500 font-['Public_Sans']">Anime · Manga · Retro games · Yodobashi Camera</p>
+            <div class="flex gap-2 mt-3">
+              <span class="text-[9px] font-['Inter'] bg-emerald-500/10 px-2 py-1 rounded-full text-emerald-400">ฟรี เข้า</span>
+              <span class="text-[9px] font-['Inter'] bg-white/5 px-2 py-1 rounded-full text-zinc-400">ทุกวัน</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Day 2 -->
+      <section>
+        <div class="flex items-center gap-3 mb-6">
+          <div class="px-4 py-2 rounded-full font-bold font-['Inter'] text-xs uppercase tracking-widest" style="background:#a78bfa20;color:#a78bfa">Day 2 · Oct 11</div>
+          <div class="h-px flex-1 bg-white/5"></div>
+          <span class="text-[10px] text-zinc-600 font-['Inter'] uppercase tracking-widest">Mt. Fuji Area · Yamanashi</span>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div class="bg-[#1a1a1a] rounded-xl p-5 ring-1 ring-white/5 hover:ring-purple-500/20 transition-all group">
+            <div class="text-3xl mb-3">⛩️</div>
+            <h4 class="font-['Manrope'] font-bold text-on-surface mb-1">Chureito Pagoda</h4>
+            <p class="text-xs text-zinc-500 font-['Public_Sans']">Fujiyoshida · 398 ขั้น · วิว Fuji + Pagoda ในเฟรมเดียว</p>
+            <div class="flex gap-2 mt-3">
+              <span class="text-[9px] font-['Inter'] bg-white/5 px-2 py-1 rounded-full text-zinc-400">¥500</span>
+              <span class="text-[9px] font-['Inter'] bg-white/5 px-2 py-1 rounded-full text-zinc-400">เช้าตรู่ดีสุด</span>
+            </div>
+          </div>
+          <div class="bg-[#1a1a1a] rounded-xl p-5 ring-1 ring-white/5 hover:ring-purple-500/20 transition-all group">
+            <div class="text-3xl mb-3">💧</div>
+            <h4 class="font-['Manrope'] font-bold text-on-surface mb-1">Oshino Hakkai</h4>
+            <p class="text-xs text-zinc-500 font-['Public_Sans']">8 บ่อน้ำใสจาก Fuji · หมู่บ้านชาวบ้านดั้งเดิม</p>
+            <div class="flex gap-2 mt-3">
+              <span class="text-[9px] font-['Inter'] bg-white/5 px-2 py-1 rounded-full text-zinc-400">¥500</span>
+              <span class="text-[9px] font-['Inter'] bg-white/5 px-2 py-1 rounded-full text-zinc-400">09:00–17:00</span>
+            </div>
+          </div>
+          <div class="bg-[#1a1a1a] rounded-xl p-5 ring-1 ring-white/5 hover:ring-purple-500/20 transition-all group">
+            <div class="text-3xl mb-3">🗻</div>
+            <h4 class="font-['Manrope'] font-bold text-on-surface mb-1">Lake Kawaguchiko</h4>
+            <p class="text-xs text-zinc-500 font-['Public_Sans']">Fuji Five Lakes · ทะเลสาบ + reflection Fuji ที่สวยที่สุด</p>
+            <div class="flex gap-2 mt-3">
+              <span class="text-[9px] font-['Inter'] bg-emerald-500/10 px-2 py-1 rounded-full text-emerald-400">ฟรี</span>
+              <span class="text-[9px] font-['Inter'] bg-white/5 px-2 py-1 rounded-full text-zinc-400">ตลอดวัน</span>
+            </div>
+          </div>
+          <div class="bg-[#1a1a1a] rounded-xl p-5 ring-1 ring-white/5 hover:ring-purple-500/20 transition-all group">
+            <div class="text-3xl mb-3">🚡</div>
+            <h4 class="font-['Manrope'] font-bold text-on-surface mb-1">Kachi Kachi Ropeway</h4>
+            <p class="text-xs text-zinc-500 font-['Public_Sans']">กระเช้าขึ้น Mt. Tenjo · วิว Fuji + Kawaguchiko จากบนสุด</p>
+            <div class="flex gap-2 mt-3">
+              <span class="text-[9px] font-['Inter'] bg-white/5 px-2 py-1 rounded-full text-zinc-400">¥1,000 ไป-กลับ</span>
+              <span class="text-[9px] font-['Inter'] bg-white/5 px-2 py-1 rounded-full text-zinc-400">09:00–17:00</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Day 3 -->
+      <section>
+        <div class="flex items-center gap-3 mb-6">
+          <div class="px-4 py-2 rounded-full font-bold font-['Inter'] text-xs uppercase tracking-widest" style="background:#fbbf2420;color:#fbbf24">Day 3 · Oct 12</div>
+          <div class="h-px flex-1 bg-white/5"></div>
+          <span class="text-[10px] text-zinc-600 font-['Inter'] uppercase tracking-widest">Harajuku · Shibuya · Shimokitazawa</span>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div class="bg-[#1a1a1a] rounded-xl p-5 ring-1 ring-white/5 hover:ring-amber-500/20 transition-all group">
+            <div class="text-3xl mb-3">🛍️</div>
+            <h4 class="font-['Manrope'] font-bold text-on-surface mb-1">Omotesando Hills</h4>
+            <p class="text-xs text-zinc-500 font-['Public_Sans']">ถนน luxury brand · Cat Street · Takeshita Street</p>
+            <div class="flex gap-2 mt-3">
+              <span class="text-[9px] font-['Inter'] bg-emerald-500/10 px-2 py-1 rounded-full text-emerald-400">ฟรี เข้า</span>
+              <span class="text-[9px] font-['Inter'] bg-white/5 px-2 py-1 rounded-full text-zinc-400">ทุกวัน</span>
+            </div>
+          </div>
+          <div class="bg-[#1a1a1a] rounded-xl p-5 ring-1 ring-white/5 hover:ring-amber-500/20 transition-all group">
+            <div class="text-3xl mb-3">🌆</div>
+            <h4 class="font-['Manrope'] font-bold text-on-surface mb-1">Shibuya Sky</h4>
+            <p class="text-xs text-zinc-500 font-['Public_Sans']">ชั้น 45-46 · วิว 360° Shibuya Crossing + Tokyo Tower</p>
+            <div class="flex gap-2 mt-3">
+              <span class="text-[9px] font-['Inter'] bg-white/5 px-2 py-1 rounded-full text-zinc-400">¥2,000</span>
+              <span class="text-[9px] font-['Inter'] bg-white/5 px-2 py-1 rounded-full text-zinc-400">จอง ล่วงหน้า</span>
+            </div>
+          </div>
+          <div class="bg-[#1a1a1a] rounded-xl p-5 ring-1 ring-white/5 hover:ring-amber-500/20 transition-all group">
+            <div class="text-3xl mb-3">🎸</div>
+            <h4 class="font-['Manrope'] font-bold text-on-surface mb-1">Shimokitazawa</h4>
+            <p class="text-xs text-zinc-500 font-['Public_Sans']">ย่าน indie · ร้าน vintage · Live music · ร้านกาแฟเล็กๆ</p>
+            <div class="flex gap-2 mt-3">
+              <span class="text-[9px] font-['Inter'] bg-emerald-500/10 px-2 py-1 rounded-full text-emerald-400">ฟรี เข้า</span>
+              <span class="text-[9px] font-['Inter'] bg-white/5 px-2 py-1 rounded-full text-zinc-400">บ่าย–ดึก</span>
+            </div>
+          </div>
+          <div class="bg-[#1a1a1a] rounded-xl p-5 ring-1 ring-white/5 hover:ring-amber-500/20 transition-all group">
+            <div class="text-3xl mb-3">🐦‍⬛</div>
+            <h4 class="font-['Manrope'] font-bold text-on-surface mb-1">Shibuya Crossing</h4>
+            <p class="text-xs text-zinc-500 font-['Public_Sans']">ทางม้าลายที่คนข้ามมากที่สุดในโลก · ถ่ายรูปจาก Mag's Park</p>
+            <div class="flex gap-2 mt-3">
+              <span class="text-[9px] font-['Inter'] bg-emerald-500/10 px-2 py-1 rounded-full text-emerald-400">ฟรี</span>
+              <span class="text-[9px] font-['Inter'] bg-white/5 px-2 py-1 rounded-full text-zinc-400">ค่ำดีสุด</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Day 4 -->
+      <section>
+        <div class="flex items-center gap-3 mb-6">
+          <div class="px-4 py-2 rounded-full font-bold font-['Inter'] text-xs uppercase tracking-widest" style="background:#34d39920;color:#34d399">Day 4 · Oct 13</div>
+          <div class="h-px flex-1 bg-white/5"></div>
+          <span class="text-[10px] text-zinc-600 font-['Inter'] uppercase tracking-widest">Kamakura · Kanagawa</span>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div class="bg-[#1a1a1a] rounded-xl p-5 ring-1 ring-white/5 hover:ring-emerald-500/20 transition-all group">
+            <div class="text-3xl mb-3">🗿</div>
+            <h4 class="font-['Manrope'] font-bold text-on-surface mb-1">Kotoku-in · Great Buddha</h4>
+            <p class="text-xs text-zinc-500 font-['Public_Sans']">พระพุทธรูปสำริดยักษ์ สูง 13.35m · สัญลักษณ์ Kamakura</p>
+            <div class="flex gap-2 mt-3">
+              <span class="text-[9px] font-['Inter'] bg-white/5 px-2 py-1 rounded-full text-zinc-400">¥300</span>
+              <span class="text-[9px] font-['Inter'] bg-white/5 px-2 py-1 rounded-full text-zinc-400">08:00–17:30</span>
+            </div>
+          </div>
+          <div class="bg-[#1a1a1a] rounded-xl p-5 ring-1 ring-white/5 hover:ring-emerald-500/20 transition-all group">
+            <div class="text-3xl mb-3">🌸</div>
+            <h4 class="font-['Manrope'] font-bold text-on-surface mb-1">Hase-dera Temple</h4>
+            <p class="text-xs text-zinc-500 font-['Public_Sans']">วัดดอกไม้ · เจ้าแม่ Kannon สูง 9.18m · วิวทะเล Sagami</p>
+            <div class="flex gap-2 mt-3">
+              <span class="text-[9px] font-['Inter'] bg-white/5 px-2 py-1 rounded-full text-zinc-400">¥400</span>
+              <span class="text-[9px] font-['Inter'] bg-white/5 px-2 py-1 rounded-full text-zinc-400">08:00–17:00</span>
+            </div>
+          </div>
+          <div class="bg-[#1a1a1a] rounded-xl p-5 ring-1 ring-white/5 hover:ring-emerald-500/20 transition-all group">
+            <div class="text-3xl mb-3">🏖️</div>
+            <h4 class="font-['Manrope'] font-bold text-on-surface mb-1">Yuigahama Beach</h4>
+            <p class="text-xs text-zinc-500 font-['Public_Sans']">หาดทราย Kamakura · เดินริมทะเล · พระอาทิตย์ตก</p>
+            <div class="flex gap-2 mt-3">
+              <span class="text-[9px] font-['Inter'] bg-emerald-500/10 px-2 py-1 rounded-full text-emerald-400">ฟรี</span>
+              <span class="text-[9px] font-['Inter'] bg-white/5 px-2 py-1 rounded-full text-zinc-400">ตลอดวัน</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Day 5 -->
+      <section>
+        <div class="flex items-center gap-3 mb-6">
+          <div class="px-4 py-2 rounded-full font-bold font-['Inter'] text-xs uppercase tracking-widest" style="background:#60a5fa20;color:#60a5fa">Day 5 · Oct 14</div>
+          <div class="h-px flex-1 bg-white/5"></div>
+          <span class="text-[10px] text-zinc-600 font-['Inter'] uppercase tracking-widest">Free Morning · กลับบ้าน</span>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div class="bg-[#1a1a1a] rounded-xl p-5 ring-1 ring-white/5 hover:ring-sky-500/20 transition-all group">
+            <div class="text-3xl mb-3">🛒</div>
+            <h4 class="font-['Manrope'] font-bold text-on-surface mb-1">Last Minute Shopping</h4>
+            <p class="text-xs text-zinc-500 font-['Public_Sans']">Don Quijote · ซื้อของฝาก · Check-out ก่อน 10:00</p>
+            <div class="flex gap-2 mt-3">
+              <span class="text-[9px] font-['Inter'] bg-white/5 px-2 py-1 rounded-full text-zinc-400">เช้า</span>
+            </div>
+          </div>
+          <div class="bg-[#1a1a1a] rounded-xl p-5 ring-1 ring-white/5 hover:ring-sky-500/20 transition-all group">
+            <div class="text-3xl mb-3">🚅</div>
+            <h4 class="font-['Manrope'] font-bold text-on-surface mb-1">Transfer to Narita</h4>
+            <p class="text-xs text-zinc-500 font-['Public_Sans']">Kita-ku → Narita Airport · N'EX หรือ Keisei Limited Express</p>
+            <div class="flex gap-2 mt-3">
+              <span class="text-[9px] font-['Inter'] bg-white/5 px-2 py-1 rounded-full text-zinc-400">~80 นาที</span>
+              <span class="text-[9px] font-['Inter'] bg-white/5 px-2 py-1 rounded-full text-zinc-400">เผื่อเวลา 3h</span>
+            </div>
+          </div>
+          <div class="bg-[#1a1a1a] rounded-xl p-5 ring-1 ring-white/5 hover:ring-sky-500/20 transition-all group">
+            <div class="text-3xl mb-3">✈️</div>
+            <h4 class="font-['Manrope'] font-bold text-on-surface mb-1">ZIPAIR กลับ BKK</h4>
+            <p class="text-xs text-zinc-500 font-['Public_Sans']">NRT → Suvarnabhumi · ดูตาม itinerary สำหรับเวลาที่แน่นอน</p>
+            <div class="flex gap-2 mt-3">
+              <span class="text-[9px] font-['Inter'] bg-primary/10 px-2 py-1 rounded-full text-primary">Return Flight</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </div><!-- /days -->
+
+  </div>
+  <div class="h-16"></div>
+
+</main>
+
+<script>
+(function(){
+  const K = 'japan2026_theme';
+  function applyTheme(t) {
+    document.documentElement.classList.toggle('light', t === 'light');
+    const btn = document.getElementById('theme-toggle');
+    if (btn) {
+      const ico = btn.querySelector('.material-symbols-outlined');
+      if (ico) ico.textContent = t === 'light' ? 'dark_mode' : 'light_mode';
+    }
+  }
+  window.toggleTheme = function() {
+    const next = document.documentElement.classList.contains('light') ? 'dark' : 'light';
+    localStorage.setItem(K, next);
+    applyTheme(next);
+  };
+  applyTheme(localStorage.getItem(K) || 'dark');
+})();
+</script>
+<script>
+(function(){
+  const SK = 'japan2026_sidebar';
+  function toggleSidebar(){
+    const sidebar = document.getElementById('sidebar');
+    const icon = document.getElementById('toggleIcon');
+    const collapsed = sidebar.classList.toggle('sidebar-collapsed');
+    icon.textContent = collapsed ? 'chevron_right' : 'chevron_left';
+    localStorage.setItem(SK, collapsed ? '1' : '0');
+  }
+  window.toggleSidebar = toggleSidebar;
+  if(localStorage.getItem(SK) === '1'){
+    const sidebar = document.getElementById('sidebar');
+    const icon = document.getElementById('toggleIcon');
+    if(sidebar){ sidebar.classList.add('sidebar-collapsed'); }
+    if(icon){ icon.textContent = 'chevron_right'; }
+  }
+})();
+</script>
+<script>
+function openMobileDrawer() {
+  if (document.getElementById('mobile-drawer').classList.contains('open')) { closeMobileDrawer(); return; }
+  document.getElementById('mobile-drawer').classList.add('open');
+  document.getElementById('mobile-overlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeMobileDrawer() {
+  document.getElementById('mobile-drawer').classList.remove('open');
+  document.getElementById('mobile-overlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+</script>
+
+</body>
+</html>
