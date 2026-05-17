@@ -7,26 +7,22 @@ export default async function handler(req, res) {
 
   const { day, dayName, date, activities = [] } = req.body || {};
 
-  const apiKey = process.env.ANTHROPIC_API_KEY;
-  if (!apiKey) return res.status(500).json({ error: 'ANTHROPIC_API_KEY not configured' });
+  const apiKey = process.env.GOOGLE_AI_API_KEY;
+  if (!apiKey) return res.status(500).json({ error: 'GOOGLE_AI_API_KEY not configured' });
 
   const schedule = activities.length
     ? activities.map(a => `  - ${a.start || '??:??'} ${a.detail} → ${a.to || a.city || ''}`).join('\n')
     : '  (ยังไม่มีกิจกรรม)';
 
-  const response = await fetch('https://api.anthropic.com/v1/messages', {
-    method: 'POST',
-    headers: {
-      'x-api-key': apiKey,
-      'anthropic-version': '2023-06-01',
-      'content-type': 'application/json',
-    },
-    body: JSON.stringify({
-      model: 'claude-haiku-4-5-20251001',
-      max_tokens: 1800,
-      messages: [{
-        role: 'user',
-        content: `You are a Japan travel expert helping plan a trip to Tokyo in October 2026.
+  const response = await fetch(
+    `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`,
+    {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        contents: [{
+          parts: [{
+            text: `You are a Japan travel expert helping plan a trip to Tokyo in October 2026.
 
 Current Day ${day} itinerary (${dayName || ''}, ${date || ''}):
 ${schedule}
@@ -52,16 +48,19 @@ Return ONLY a valid JSON array (no markdown, no explanation):
     "why": "short reason in Thai why this fits the day, max 45 chars"
   }
 ]`
-      }]
-    })
-  });
+          }]
+        }],
+        generationConfig: { temperature: 0.7, maxOutputTokens: 1800 }
+      })
+    }
+  );
 
   if (!response.ok) {
-    return res.status(502).json({ error: 'Claude API error' });
+    return res.status(502).json({ error: 'Gemini API error' });
   }
 
   const data = await response.json();
-  const raw = (data.content?.[0]?.text || '').trim();
+  const raw = (data.candidates?.[0]?.content?.parts?.[0]?.text || '').trim();
 
   try {
     const cleaned = raw.replace(/^```json?\s*/i, '').replace(/\s*```$/i, '').trim();

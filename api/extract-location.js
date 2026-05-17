@@ -10,26 +10,20 @@ export default async function handler(req, res) {
   const { imageBase64, mimeType } = req.body || {};
   if (!imageBase64 || !mimeType) return res.status(400).json({ error: 'Missing imageBase64 or mimeType' });
 
-  const apiKey = process.env.ANTHROPIC_API_KEY;
-  if (!apiKey) return res.status(500).json({ error: 'ANTHROPIC_API_KEY not configured' });
+  const apiKey = process.env.GOOGLE_AI_API_KEY;
+  if (!apiKey) return res.status(500).json({ error: 'GOOGLE_AI_API_KEY not configured' });
 
-  const response = await fetch('https://api.anthropic.com/v1/messages', {
-    method: 'POST',
-    headers: {
-      'x-api-key': apiKey,
-      'anthropic-version': '2023-06-01',
-      'content-type': 'application/json',
-    },
-    body: JSON.stringify({
-      model: 'claude-haiku-4-5-20251001',
-      max_tokens: 700,
-      messages: [{
-        role: 'user',
-        content: [
-          { type: 'image', source: { type: 'base64', media_type: mimeType, data: imageBase64 } },
-          {
-            type: 'text',
-            text: `Analyze this image (Google Maps screenshot, Instagram, travel blog, etc.) and extract the main location.
+  const response = await fetch(
+    `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`,
+    {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        contents: [{
+          parts: [
+            { inline_data: { mime_type: mimeType, data: imageBase64 } },
+            {
+              text: `Analyze this image (Google Maps screenshot, Instagram, travel blog, etc.) and extract the main location.
 Return ONLY a valid JSON object, no markdown, no explanation:
 {
   "name": "place name in English",
@@ -44,19 +38,21 @@ Return ONLY a valid JSON object, no markdown, no explanation:
   "cost": "admission cost if visible e.g. Free or 2200¥, or empty string"
 }
 If you cannot identify a location from this image, return: {"error": "Cannot identify location"}`
-          }
-        ]
-      }]
-    })
-  });
+            }
+          ]
+        }],
+        generationConfig: { temperature: 0.1, maxOutputTokens: 700 }
+      })
+    }
+  );
 
   if (!response.ok) {
     const errText = await response.text();
-    return res.status(502).json({ error: 'Claude API error', detail: errText });
+    return res.status(502).json({ error: 'Gemini API error', detail: errText });
   }
 
   const data = await response.json();
-  const raw = (data.content?.[0]?.text || '').trim();
+  const raw = (data.candidates?.[0]?.content?.parts?.[0]?.text || '').trim();
 
   try {
     const cleaned = raw.replace(/^```json?\s*/i, '').replace(/\s*```$/i, '').trim();
