@@ -1182,7 +1182,7 @@ function getPhotoMem() {
       const raw = JSON.parse(localStorage.getItem(PHOTO_LS_KEY) || '{}');
       const now = Date.now();
       _photoMem = Object.fromEntries(
-        Object.entries(raw).filter(([, v]) => now - (v.ts || 0) < 6048e5) // 7 days
+        Object.entries(raw).filter(([, v]) => now - (v.ts || 0) < 864e5) // 1 day (Google URLs expire fast)
       );
     } catch (_) { _photoMem = {}; }
   }
@@ -1199,7 +1199,12 @@ function applyPhotoSlot(slot, url) {
   const img  = slot.querySelector('img');
   const icon = slot.querySelector('.material-symbols-outlined');
   if (!img || !url) return;
-  img.onload = () => { img.classList.remove('hidden'); if (icon) icon.style.display = 'none'; };
+  img.onload = () => {
+    if (img.naturalWidth > 0) {
+      img.classList.remove('hidden');
+      if (icon) icon.style.display = 'none';
+    }
+  };
   img.onerror = () => { img.classList.add('hidden'); if (icon) icon.style.display = ''; };
   img.src = url;
 }
