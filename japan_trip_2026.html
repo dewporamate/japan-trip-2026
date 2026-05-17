@@ -163,6 +163,44 @@
   .place-status.ok{color:#4ade80}
   .place-status.err{color:#f87171}
 
+  /* ── AI Image Import ── */
+  .ai-drop-zone{border:2px dashed rgba(255,107,157,.25);border-radius:12px;padding:22px 16px;text-align:center;cursor:pointer;transition:all .2s;background:rgba(255,107,157,.03)}
+  .ai-drop-zone:hover,.ai-drop-zone.drag-over{border-color:rgba(255,107,157,.65);background:rgba(255,107,157,.07)}
+  .ai-drop-icon{font-size:1.7rem;display:block;margin-bottom:5px}
+  .ai-drop-text{font-size:.7rem;color:#52525b;font-family:'Inter',sans-serif}
+  .ai-image-preview{display:flex;align-items:center;gap:10px;background:rgba(255,255,255,.04);border-radius:10px;padding:8px;margin-top:8px}
+  .ai-image-preview img{width:80px;height:56px;object-fit:cover;border-radius:8px;flex-shrink:0}
+  .ai-preview-actions{display:flex;gap:6px;flex-wrap:wrap;flex:1}
+
+  /* ── AI Recommend Panel ── */
+  .btn-ai-rec{padding:6px 12px;border-radius:10px;border:none;cursor:pointer;background:rgba(167,139,250,.12);color:#a78bfa;font-size:.72rem;font-weight:700;font-family:'Inter',sans-serif;white-space:nowrap;transition:all .2s;flex-shrink:0}
+  .btn-ai-rec:hover{background:rgba(167,139,250,.25)}
+  #ai-rec-overlay{display:none;position:fixed;inset:0;z-index:4000;background:rgba(0,0,0,.65);backdrop-filter:blur(4px)}
+  .ai-rec-panel{position:absolute;top:0;right:0;bottom:0;width:min(460px,100vw);background:#111113;border-left:1px solid rgba(255,255,255,.08);display:flex;flex-direction:column;animation:slideRight .25s ease}
+  @keyframes slideRight{from{transform:translateX(100%)}to{transform:translateX(0)}}
+  .ai-rec-header{display:flex;align-items:center;justify-content:space-between;padding:18px 20px;border-bottom:1px solid rgba(255,255,255,.06)}
+  .ai-rec-title{font-family:'Manrope',sans-serif;font-weight:700;font-size:.95rem;color:#f1f1f1}
+  .ai-rec-day{font-size:.65rem;color:#a78bfa;font-family:'Inter',sans-serif;font-weight:700;text-transform:uppercase;letter-spacing:.08em}
+  .ai-rec-close{width:28px;height:28px;border-radius:50%;background:rgba(255,255,255,.06);border:none;cursor:pointer;color:#71717a;font-size:14px;display:flex;align-items:center;justify-content:center}
+  .ai-rec-close:hover{background:rgba(255,255,255,.12);color:#f1f1f1}
+  .ai-rec-body{flex:1;overflow-y:auto;padding:16px}
+  .ai-rec-hint{font-size:.68rem;color:#52525b;font-family:'Inter',sans-serif;margin-bottom:12px;padding:8px 10px;background:rgba(167,139,250,.06);border-radius:8px;border-left:2px solid rgba(167,139,250,.3)}
+  .ai-suggest-card{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);border-radius:14px;padding:14px;display:flex;gap:10px;align-items:flex-start;margin-bottom:10px;transition:border-color .2s}
+  .ai-suggest-card:hover{border-color:rgba(167,139,250,.3)}
+  .ai-suggest-emoji{font-size:1.6rem;flex-shrink:0;width:40px;text-align:center}
+  .ai-suggest-content{flex:1;min-width:0}
+  .ai-suggest-title{font-family:'Manrope',sans-serif;font-weight:700;font-size:.85rem;color:#f1f1f1;line-height:1.3;margin-bottom:5px}
+  .ai-suggest-meta{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:5px}
+  .ai-suggest-meta span{font-size:.65rem;color:#71717a;font-family:'Inter',sans-serif;background:rgba(255,255,255,.05);padding:2px 7px;border-radius:20px}
+  .ai-suggest-why{font-size:.68rem;color:#a78bfa;font-family:'Inter',sans-serif;font-style:italic}
+  .ai-suggest-add{width:32px;height:32px;border-radius:50%;border:none;background:rgba(167,139,250,.15);color:#a78bfa;font-size:1.1rem;font-weight:700;cursor:pointer;flex-shrink:0;transition:all .2s;display:flex;align-items:center;justify-content:center}
+  .ai-suggest-add:hover{background:rgba(167,139,250,.35)}
+  .ai-suggest-add:disabled{background:rgba(52,211,153,.15);color:#34d399;cursor:default}
+  .ai-rec-loading{display:flex;flex-direction:column;align-items:center;justify-content:center;height:200px;gap:14px;color:#52525b;font-family:'Inter',sans-serif;font-size:.8rem}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  .ai-spin{width:30px;height:30px;border:3px solid rgba(167,139,250,.15);border-top-color:#a78bfa;border-radius:50%;animation:spin .7s linear infinite}
+  .ai-rec-error{padding:20px;text-align:center;color:#f87171;font-family:'Inter',sans-serif;font-size:.8rem}
+
   /* ── Google Places Autocomplete dropdown dark theme ── */
   .pac-container{
     background:#1c1c1f!important;border:1px solid rgba(255,255,255,.1)!important;
@@ -604,6 +642,22 @@
 </nav>
 
 <!-- ═══════════════ MAP VIEW OVERLAY ═══════════════ -->
+<!-- ═══════════════ AI RECOMMEND PANEL ═══════════════ -->
+<div id="ai-rec-overlay">
+  <div class="ai-rec-panel">
+    <div class="ai-rec-header">
+      <div>
+        <div class="ai-rec-title">🤖 AI แนะนำกิจกรรม</div>
+        <div class="ai-rec-day" id="ai-rec-day-label"></div>
+      </div>
+      <button class="ai-rec-close" id="ai-rec-close">✕</button>
+    </div>
+    <div class="ai-rec-body" id="ai-rec-body">
+      <div class="ai-rec-loading"><div class="ai-spin"></div><span>กำลังวิเคราะห์...</span></div>
+    </div>
+  </div>
+</div>
+
 <div id="map-view-overlay" style="display:none;position:fixed;inset:0;z-index:3000;background:#09090b;">
   <iframe id="map-iframe" src="" style="border:none;width:100%;height:100%;display:block;"></iframe>
 </div>
@@ -678,6 +732,25 @@
       <input type="checkbox" id="f-alert">
       ⚠️ ต้องจองล่วงหน้า
     </label>
+    <div class="modal-sep"></div>
+
+    <!-- AI IMAGE IMPORT -->
+    <div class="place-search-wrap">
+      <span class="place-label">🤖 AI อ่านรูปภาพ — Screenshot จาก Google Maps / IG / Blog</span>
+      <div class="ai-drop-zone" id="ai-drop-zone">
+        <span class="ai-drop-icon">📷</span>
+        <span class="ai-drop-text">วางรูปที่นี่ หรือคลิกเพื่อเลือกไฟล์</span>
+        <input type="file" id="ai-image-input" accept="image/*" style="display:none">
+      </div>
+      <div class="ai-image-preview" id="ai-image-preview" style="display:none">
+        <img id="ai-preview-img" alt="">
+        <div class="ai-preview-actions">
+          <button class="btn-search" id="ai-analyze-btn">🤖 วิเคราะห์</button>
+          <button class="btn-search" id="ai-clear-btn" style="background:rgba(248,113,113,.15);color:#f87171">✕</button>
+        </div>
+      </div>
+      <div class="place-status" id="ai-img-status"></div>
+    </div>
     <div class="modal-sep"></div>
 
     <!-- GOOGLE MAPS URL IMPORT -->
@@ -1127,6 +1200,7 @@ function applyPhotoSlot(slot, url) {
   const icon = slot.querySelector('.material-symbols-outlined');
   if (!img || !url) return;
   img.onload = () => { img.classList.remove('hidden'); if (icon) icon.style.display = 'none'; };
+  img.onerror = () => { img.classList.add('hidden'); if (icon) icon.style.display = ''; };
   img.src = url;
 }
 
@@ -1182,10 +1256,11 @@ function buildTimeline(filter){
         <span class="text-[8px] tracking-widest uppercase font-['Inter'] font-bold" style="color:${col}99">Day</span>
         <span class="font-['Manrope'] font-black text-lg leading-none" style="color:${col}">${String(day).padStart(2,'0')}</span>
       </div>
-      <div>
+      <div class="flex-1">
         <h2 class="text-base font-['Manrope'] font-bold text-on-surface leading-tight">${DAY_NAMES[day]}</h2>
         <p class="text-[10px] text-zinc-600 uppercase tracking-widest font-['Inter'] font-bold mt-0.5">${DAY_DATES[day]} · ${items.length} กิจกรรม</p>
       </div>
+      <button class="btn-ai-rec" onclick="openAIRecommend(${day})">🤖 แนะนำ</button>
     `;
     container.appendChild(header);
 
@@ -1232,50 +1307,60 @@ function buildTimeline(filter){
 
       /* card */
       const card = document.createElement('div');
-      card.className = 'timeline-card bg-surface-container-low rounded-xl p-5 ring-1 ring-white/5 shadow-[0_8px_32px_rgba(0,0,0,0.25)] transition-all duration-200 cursor-pointer group';
+      card.className = 'timeline-card bg-surface-container-low rounded-xl ring-1 ring-white/5 shadow-[0_8px_32px_rgba(0,0,0,0.25)] transition-all duration-200 cursor-pointer group overflow-hidden';
 
       const costStr = String(d.cost||'').replace(/\r\n/g,' · ');
       const isFree = d.cost==='Free';
 
       card.innerHTML = `
-        <div class="flex justify-between items-start mb-3">
-          <div class="flex items-center gap-2">
-            <span class="font-['Inter'] text-[0.65rem] uppercase tracking-widest text-zinc-600 font-bold">${d.start||''}${d.end?' — '+d.end:''}</span>
-            ${d.actDate?`<span class="px-1.5 py-0.5 rounded text-[0.6rem] font-bold font-['Inter'] uppercase tracking-wide" style="background:rgba(255,107,157,0.12);color:#ff6b9d">${d.actDate}</span>`:''}
-          </div>
-          <div class="flex items-center gap-1.5">
-            <button class="btn-drag w-6 h-6 flex items-center justify-center rounded text-base leading-none select-none" data-tippy-content="ลากเพื่อเรียง" onclick="event.stopPropagation()">⠿</button>
-            <span class="text-lg">${d.emoji||'📍'}</span>
+        ${d.lat ? `
+        <div class="place-photo-slot relative w-full h-[130px] bg-zinc-900 flex items-center justify-center overflow-hidden" data-q="${encodeURIComponent((d.to||d.detail).substring(0,60))}" data-lat="${d.lat}" data-lng="${d.lng}">
+          <span class="material-symbols-outlined text-zinc-800" style="font-size:36px">image</span>
+          <img class="w-full h-full object-cover absolute inset-0 hidden" alt="">
+          <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent"></div>
+          <div class="absolute bottom-2.5 left-4 right-4 flex items-end justify-between">
+            <span class="text-white/80 text-[10px] font-['Inter'] font-bold uppercase tracking-widest drop-shadow truncate max-w-[70%]">${(d.to||'').split('(')[0].trim()}</span>
+            <span class="text-xl drop-shadow">${d.emoji||'📍'}</span>
           </div>
         </div>
-        <div class="flex items-start gap-2 mb-1">
-          <h4 class="font-['Manrope'] font-bold text-base text-on-surface leading-snug flex-1">${d.detail}</h4>
-          ${d.lat ? `<div class="place-photo-slot relative w-[68px] h-[46px] rounded-lg overflow-hidden bg-zinc-800/60 flex-shrink-0 flex items-center justify-center" data-q="${encodeURIComponent((d.to||d.detail).substring(0,60))}" data-lat="${d.lat}" data-lng="${d.lng}"><span class="material-symbols-outlined text-zinc-700" style="font-size:14px">image</span><img class="w-full h-full object-cover absolute inset-0 hidden" alt=""></div>` : ''}
-        </div>
-        ${d.from&&d.to&&d.from!==d.to?`<p class="text-zinc-600 text-xs mb-3 font-['Inter']">📍 ${d.from} → ${d.to}</p>`:''}
-        ${d.note?`<p class="text-zinc-600 text-xs italic mb-3">${d.note}</p>`:''}
-        <div class="media-slots flex gap-1.5 mt-3 mb-3" data-id="${d.id}">
-          <div class="media-thumb w-12 h-12 rounded-lg flex items-center justify-center bg-zinc-800/60 border border-white/5 overflow-hidden flex-shrink-0 cursor-pointer hover:border-primary/40 transition-colors relative media-preview-slot" style="min-width:3rem"></div>
-          <div class="media-thumb w-12 h-12 rounded-lg flex items-center justify-center bg-zinc-800/60 border border-white/5 overflow-hidden flex-shrink-0 cursor-pointer hover:border-primary/40 transition-colors relative media-preview-slot" style="min-width:3rem"></div>
-          <button class="media-add w-12 h-12 rounded-lg flex items-center justify-center bg-zinc-800/40 border border-dashed border-white/10 flex-shrink-0 hover:border-primary/50 hover:bg-zinc-800/70 transition-colors text-zinc-600 hover:text-primary" style="min-width:3rem" onclick="triggerMediaUpload(event,'${d.id}')">
-            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/></svg>
-          </button>
-          <input type="file" accept="image/*,video/*" multiple class="media-input hidden" data-id="${d.id}" onchange="handleMediaFiles(event,'${d.id}')">
-        </div>
-        <div class="flex flex-wrap gap-1.5 mt-0 items-center justify-between">
-          <div class="flex flex-wrap gap-1.5">
-            ${d.dur?`<span class="px-2 py-0.5 bg-zinc-800 text-zinc-500 text-[10px] rounded-full font-['Inter'] uppercase tracking-wide font-bold">⏱ ${d.dur}</span>`:''}
-            ${d.openClose?`<span class="px-2 py-0.5 bg-zinc-800 text-zinc-500 text-[10px] rounded-full font-['Inter'] uppercase tracking-wide font-bold">🕐 ${String(d.openClose).substring(0,22)}</span>`:''}
-            ${d.cost?(isFree
-              ?`<span class="px-2 py-0.5 text-[10px] rounded-full font-['Inter'] uppercase tracking-wide font-bold" style="background:rgba(52,211,153,0.15);color:#34d399">✅ Free</span>`
-              :`<span class="px-2 py-0.5 text-[10px] rounded-full font-['Inter'] uppercase tracking-wide font-bold" style="background:${col}1a;color:${col}">💴 ${costStr.substring(0,32)}</span>`)
-              :''}
-            ${d.alert?`<span class="px-2 py-0.5 text-[10px] rounded-full font-['Inter'] uppercase tracking-wide font-bold" style="background:rgba(251,191,36,0.15);color:#fbbf24">⚠️ จองล่วงหน้า</span>`:''}
+        ` : ''}
+        <div class="p-5">
+          <div class="flex justify-between items-start mb-2.5">
+            <div class="flex items-center gap-2">
+              <span class="font-['Inter'] text-[0.65rem] uppercase tracking-widest text-zinc-600 font-bold">${d.start||''}${d.end?' — '+d.end:''}</span>
+              ${d.actDate?`<span class="px-1.5 py-0.5 rounded text-[0.6rem] font-bold font-['Inter'] uppercase tracking-wide" style="background:rgba(255,107,157,0.12);color:#ff6b9d">${d.actDate}</span>`:''}
+            </div>
+            <div class="flex items-center gap-1.5">
+              <button class="btn-drag w-6 h-6 flex items-center justify-center rounded text-base leading-none select-none" data-tippy-content="ลากเพื่อเรียง" onclick="event.stopPropagation()">⠿</button>
+              ${!d.lat?`<span class="text-lg">${d.emoji||'📍'}</span>`:''}
+            </div>
           </div>
-          <div class="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-            ${d.lat?`<a href="https://www.google.com/maps/search/${encodeURIComponent(d.to||d.detail||'')}/@${d.lat},${d.lng},17z" target="_blank" rel="noopener" class="btn-navigate w-7 h-7 flex items-center justify-center rounded-lg text-xs transition-colors" style="background:rgba(52,211,153,0.12);color:#34d399" title="Navigate" onclick="event.stopPropagation()"><span class="material-symbols-outlined" style="font-size:14px">navigation</span></a>`:''}
-            <button class="btn-edit w-7 h-7 flex items-center justify-center rounded-lg text-xs transition-colors" data-tippy-content="แก้ไข" style="background:rgba(77,150,255,0.12);color:#60a5fa">✏️</button>
-            <button class="btn-delete w-7 h-7 flex items-center justify-center rounded-lg text-xs transition-colors" data-tippy-content="ลบ" style="background:rgba(255,107,107,0.12);color:#f87171">🗑️</button>
+          <h4 class="font-['Manrope'] font-bold text-base text-on-surface leading-snug mb-2">${d.detail}</h4>
+          ${d.from&&d.to&&d.from!==d.to?`<p class="text-zinc-600 text-xs mb-3 font-['Inter']">📍 ${d.from} → ${d.to}</p>`:''}
+          ${d.note?`<p class="text-zinc-600 text-xs italic mb-3">${d.note}</p>`:''}
+          <div class="media-slots flex gap-1.5 mt-3 mb-3" data-id="${d.id}">
+            <div class="media-thumb w-12 h-12 rounded-lg flex items-center justify-center bg-zinc-800/60 border border-white/5 overflow-hidden flex-shrink-0 cursor-pointer hover:border-primary/40 transition-colors relative media-preview-slot" style="min-width:3rem"></div>
+            <div class="media-thumb w-12 h-12 rounded-lg flex items-center justify-center bg-zinc-800/60 border border-white/5 overflow-hidden flex-shrink-0 cursor-pointer hover:border-primary/40 transition-colors relative media-preview-slot" style="min-width:3rem"></div>
+            <button class="media-add w-12 h-12 rounded-lg flex items-center justify-center bg-zinc-800/40 border border-dashed border-white/10 flex-shrink-0 hover:border-primary/50 hover:bg-zinc-800/70 transition-colors text-zinc-600 hover:text-primary" style="min-width:3rem" onclick="triggerMediaUpload(event,'${d.id}')">
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/></svg>
+            </button>
+            <input type="file" accept="image/*,video/*" multiple class="media-input hidden" data-id="${d.id}" onchange="handleMediaFiles(event,'${d.id}')">
+          </div>
+          <div class="flex flex-wrap gap-1.5 mt-0 items-center justify-between">
+            <div class="flex flex-wrap gap-1.5">
+              ${d.dur?`<span class="px-2 py-0.5 bg-zinc-800 text-zinc-500 text-[10px] rounded-full font-['Inter'] uppercase tracking-wide font-bold">⏱ ${d.dur}</span>`:''}
+              ${d.openClose?`<span class="px-2 py-0.5 bg-zinc-800 text-zinc-500 text-[10px] rounded-full font-['Inter'] uppercase tracking-wide font-bold">🕐 ${String(d.openClose).substring(0,22)}</span>`:''}
+              ${d.cost?(isFree
+                ?`<span class="px-2 py-0.5 text-[10px] rounded-full font-['Inter'] uppercase tracking-wide font-bold" style="background:rgba(52,211,153,0.15);color:#34d399">✅ Free</span>`
+                :`<span class="px-2 py-0.5 text-[10px] rounded-full font-['Inter'] uppercase tracking-wide font-bold" style="background:${col}1a;color:${col}">💴 ${costStr.substring(0,32)}</span>`)
+                :''}
+              ${d.alert?`<span class="px-2 py-0.5 text-[10px] rounded-full font-['Inter'] uppercase tracking-wide font-bold" style="background:rgba(251,191,36,0.15);color:#fbbf24">⚠️ จองล่วงหน้า</span>`:''}
+            </div>
+            <div class="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+              ${d.lat?`<a href="https://www.google.com/maps/search/${encodeURIComponent(d.to||d.detail||'')}/@${d.lat},${d.lng},17z" target="_blank" rel="noopener" class="btn-navigate w-7 h-7 flex items-center justify-center rounded-lg text-xs transition-colors" style="background:rgba(52,211,153,0.12);color:#34d399" title="Navigate" onclick="event.stopPropagation()"><span class="material-symbols-outlined" style="font-size:14px">navigation</span></a>`:''}
+              <button class="btn-edit w-7 h-7 flex items-center justify-center rounded-lg text-xs transition-colors" data-tippy-content="แก้ไข" style="background:rgba(77,150,255,0.12);color:#60a5fa">✏️</button>
+              <button class="btn-delete w-7 h-7 flex items-center justify-center rounded-lg text-xs transition-colors" data-tippy-content="ลบ" style="background:rgba(255,107,107,0.12);color:#f87171">🗑️</button>
+            </div>
           </div>
         </div>
       `;
@@ -1596,20 +1681,175 @@ function toggleSidebar(){
   icon.textContent = sidebar.classList.contains('sidebar-collapsed')?'chevron_right':'chevron_left';
 }
 
+/* ══════════════════════════════════════════
+   AI FEATURE 1 — IMAGE → LOCATION
+══════════════════════════════════════════ */
+function initAIImageImport() {
+  const dropZone  = document.getElementById('ai-drop-zone');
+  const fileInput = document.getElementById('ai-image-input');
+  const preview   = document.getElementById('ai-image-preview');
+  const previewImg= document.getElementById('ai-preview-img');
+  const analyzeBtn= document.getElementById('ai-analyze-btn');
+  const clearBtn  = document.getElementById('ai-clear-btn');
+  const status    = document.getElementById('ai-img-status');
+  let currentFile = null;
+
+  dropZone.addEventListener('click', () => fileInput.click());
+  dropZone.addEventListener('dragover', e => { e.preventDefault(); dropZone.classList.add('drag-over'); });
+  dropZone.addEventListener('dragleave', () => dropZone.classList.remove('drag-over'));
+  dropZone.addEventListener('drop', e => {
+    e.preventDefault(); dropZone.classList.remove('drag-over');
+    const f = e.dataTransfer.files[0];
+    if (f && f.type.startsWith('image/')) showPreview(f);
+  });
+  fileInput.addEventListener('change', () => { if (fileInput.files[0]) showPreview(fileInput.files[0]); });
+
+  function showPreview(file) {
+    currentFile = file;
+    const reader = new FileReader();
+    reader.onload = e => { previewImg.src = e.target.result; preview.style.display = 'flex'; dropZone.style.display = 'none'; };
+    reader.readAsDataURL(file);
+  }
+
+  clearBtn.addEventListener('click', () => {
+    currentFile = null; fileInput.value = '';
+    preview.style.display = 'none'; dropZone.style.display = 'block';
+    status.textContent = ''; status.className = 'place-status';
+  });
+
+  analyzeBtn.addEventListener('click', async () => {
+    if (!currentFile) return;
+    analyzeBtn.disabled = true; analyzeBtn.textContent = '⏳ กำลังวิเคราะห์...';
+    status.textContent = 'AI กำลังอ่านรูปภาพ...'; status.className = 'place-status';
+    try {
+      const b64 = await fileToBase64(currentFile);
+      const resp = await fetch('/api/extract-location', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ imageBase64: b64.split(',')[1], mimeType: currentFile.type })
+      });
+      const d = await resp.json();
+      if (d.error) throw new Error(d.error);
+      if (d.nameTH || d.name) document.getElementById('f-detail').value = d.nameTH || d.name;
+      if (d.name)     document.getElementById('f-to').value = d.name;
+      if (d.city)     document.getElementById('f-city').value = d.city;
+      if (d.lat)      document.getElementById('f-lat').value = d.lat;
+      if (d.lng)      document.getElementById('f-lng').value = d.lng;
+      if (d.openClose)document.getElementById('f-open').value = d.openClose;
+      if (d.cost)     document.getElementById('f-cost').value = d.cost;
+      if (d.emoji)    setSelectedEmoji(d.emoji);
+      status.textContent = `✅ พบสถานที่: ${d.name || ''}`;
+      status.className = 'place-status ok';
+      toast(`📷 AI พบ: ${d.name || d.nameTH}`, 'ok');
+    } catch (err) {
+      status.textContent = `❌ ${err.message || 'วิเคราะห์ไม่ได้'}`;
+      status.className = 'place-status err';
+    } finally {
+      analyzeBtn.disabled = false; analyzeBtn.textContent = '🤖 วิเคราะห์';
+    }
+  });
+}
+
+function fileToBase64(file) {
+  return new Promise((resolve, reject) => {
+    const r = new FileReader();
+    r.onload = e => resolve(e.target.result);
+    r.onerror = reject;
+    r.readAsDataURL(file);
+  });
+}
+
+/* ══════════════════════════════════════════
+   AI FEATURE 6 — RECOMMEND ACTIVITIES
+══════════════════════════════════════════ */
+function initAIRecommend() {
+  const overlay = document.getElementById('ai-rec-overlay');
+  document.getElementById('ai-rec-close').addEventListener('click', () => { overlay.style.display = 'none'; });
+  overlay.addEventListener('click', e => { if (e.target === overlay) overlay.style.display = 'none'; });
+}
+
+async function openAIRecommend(day) {
+  const overlay   = document.getElementById('ai-rec-overlay');
+  const dayLabel  = document.getElementById('ai-rec-day-label');
+  const body      = document.getElementById('ai-rec-body');
+
+  dayLabel.textContent = `${DAY_NAMES[day] || 'Day '+day} · ${DAY_DATES[day] || ''}`;
+  body.innerHTML = `<div class="ai-rec-loading"><div class="ai-spin"></div><span>AI กำลังวิเคราะห์ itinerary วันที่ ${day}...</span></div>`;
+  overlay.style.display = 'block';
+
+  const acts = itinerary.filter(d => d.day === day).map(a => ({
+    start: a.start, detail: a.detail, city: a.city, to: a.to, lat: a.lat, lng: a.lng
+  }));
+
+  try {
+    const resp = await fetch('/api/recommend-activities', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ day, dayName: DAY_NAMES[day], date: DAY_DATES[day], activities: acts })
+    });
+    const suggestions = await resp.json();
+    if (!Array.isArray(suggestions) || !suggestions.length) throw new Error('ไม่ได้รับคำแนะนำจาก AI');
+
+    body.innerHTML = `
+      <div class="ai-rec-hint">กด <strong>+</strong> เพื่อเพิ่มกิจกรรมลง Day ${day} ทันที</div>
+      <div id="ai-suggest-list">
+        ${suggestions.map((s, i) => `
+          <div class="ai-suggest-card">
+            <div class="ai-suggest-emoji">${s.emoji || '📍'}</div>
+            <div class="ai-suggest-content">
+              <div class="ai-suggest-title">${s.detail}</div>
+              <div class="ai-suggest-meta">
+                ${s.city ? `<span>📍 ${s.city}</span>` : ''}
+                ${s.dur ? `<span>⏱ ${s.dur}</span>` : ''}
+                ${s.cost ? `<span>${s.cost === 'Free' ? '✅ Free' : '💴 ' + s.cost}</span>` : ''}
+                ${s.openClose ? `<span>🕐 ${s.openClose}</span>` : ''}
+              </div>
+              ${s.why ? `<div class="ai-suggest-why">${s.why}</div>` : ''}
+            </div>
+            <button class="ai-suggest-add" data-idx="${i}">+</button>
+          </div>`).join('')}
+      </div>`;
+
+    body.querySelectorAll('.ai-suggest-add').forEach(btn => {
+      btn.addEventListener('click', async () => {
+        const s = suggestions[parseInt(btn.dataset.idx)];
+        btn.disabled = true; btn.textContent = '✓';
+        const maxOrder = Math.max(0, ...itinerary.filter(d => d.day === day).map(d => d.order || 0));
+        await addDoc(itineraryCol, {
+          day, date: DAY_DATES[day] || '', actDate: null,
+          city: s.city || '', emoji: s.emoji || '📍',
+          start: '', end: '', dur: s.dur || '',
+          detail: s.detail, from: '', to: s.to || s.detail,
+          openClose: s.openClose || '', cost: s.cost || '',
+          note: '💡 AI แนะนำ', alert: false,
+          lat: s.lat || null, lng: s.lng || null,
+          order: maxOrder + 10
+        });
+        toast(`✅ เพิ่ม: ${s.to || s.detail}`, 'ok');
+      });
+    });
+  } catch (err) {
+    body.innerHTML = `<div class="ai-rec-error"><p>❌ ${err.message}</p><p style="font-size:.7rem;color:#52525b;margin-top:6px">ตรวจสอบว่าตั้งค่า ANTHROPIC_API_KEY ใน Vercel แล้ว</p></div>`;
+  }
+}
+
 /* ── Connect initMap relay ── */
 window.__initMapReady = initMap;
 if (window.__initMapPending) initMap();
 
 /* ── Expose onclick handlers to global scope ── */
-window.openMapView       = openMapView;
-window.closeMapView      = closeMapView;
-window.toggleSidebar     = toggleSidebar;
-window.openModal         = openModal;
-window.closeModal        = closeModal;
+window.openMapView        = openMapView;
+window.closeMapView       = closeMapView;
+window.toggleSidebar      = toggleSidebar;
+window.openModal          = openModal;
+window.closeModal         = closeModal;
 window.triggerMediaUpload = triggerMediaUpload;
+window.openAIRecommend    = openAIRecommend;
 
-// ── INIT handled by onSnapshot; media slots init after first render ──
+// ── INIT ──
 initAllMediaSlots();
+initAIImageImport();
+initAIRecommend();
 
 /* ══════════════════════════════════════════
    PLUGINS INIT
