@@ -81,6 +81,10 @@
   #mobile-drawer.open { transform:translateX(0); }
   #mobile-overlay { opacity:0; pointer-events:none; transition:opacity 0.3s; }
   #mobile-overlay.open { opacity:1; pointer-events:auto; }
+  input[type="time"] { color-scheme: dark; }
+  html.light input[type="time"] { color-scheme: light; }
+  @keyframes modal-spin { to { transform: rotate(360deg); } }
+  .modal-spinning { animation: modal-spin 1s linear infinite; display:inline-block; }
 </style>
 </head>
 <body class="text-on-surface flex h-screen overflow-hidden bg-[#09090b]">
@@ -138,9 +142,9 @@
       <span class="text-sm font-['Public_Sans']">Packing</span>
     </a>
   </nav>
-  <button class="mt-auto bg-primary text-white rounded-full px-5 py-3 font-bold font-['Public_Sans'] text-sm hover:shadow-[0_0_24px_rgba(255,107,157,0.35)] transition-all active:scale-95 flex items-center justify-center gap-2">
+  <button onclick="openAddModal()" class="mt-auto bg-primary text-white rounded-full px-5 py-3 font-bold font-['Public_Sans'] text-sm hover:shadow-[0_0_24px_rgba(255,107,157,0.35)] transition-all active:scale-95 flex items-center justify-center gap-2">
     <span class="material-symbols-outlined" style="font-size:20px">add</span>
-    <span>Add New Stop</span>
+    <span>Add Restaurant</span>
   </button>
 </div>
 
@@ -195,9 +199,9 @@
     </a>
   </nav>
   <!-- CTA -->
-  <button class="add-btn mt-auto bg-primary text-white rounded-full px-5 py-3 font-bold font-['Public_Sans'] text-sm hover:shadow-[0_0_24px_rgba(255,107,157,0.35)] transition-all active:scale-95 flex items-center justify-center gap-2">
+  <button onclick="openAddModal()" class="add-btn mt-auto bg-primary text-white rounded-full px-5 py-3 font-bold font-['Public_Sans'] text-sm hover:shadow-[0_0_24px_rgba(255,107,157,0.35)] transition-all active:scale-95 flex items-center justify-center gap-2">
     <span class="material-symbols-outlined" style="font-size:20px">add</span>
-    <span class="btn-text">Add New Stop</span>
+    <span class="btn-text">Add Restaurant</span>
   </button>
 </aside>
 
@@ -249,7 +253,9 @@
       <div class="lg:col-span-8 space-y-5">
         <div class="flex justify-between items-center">
           <h3 class="text-base font-['Manrope'] font-bold text-on-surface">Food &amp; Dining <span id="dining-count" class="ml-2 text-[10px] font-['Inter'] font-bold bg-primary/10 text-primary px-2 py-0.5 rounded-full">0</span></h3>
-          <button class="text-primary font-bold text-xs font-['Inter'] hover:text-primary/80 transition-colors uppercase tracking-widest">View Calendar</button>
+          <button onclick="openAddModal()" class="text-primary font-bold text-xs font-['Inter'] hover:text-primary/80 transition-colors uppercase tracking-widest flex items-center gap-1">
+            <span class="material-symbols-outlined" style="font-size:14px">add</span>Add Restaurant
+          </button>
         </div>
         <div id="dining-list" class="space-y-1"></div>
       </div>
@@ -341,9 +347,123 @@
   </div>
   <div class="h-16"></div>
 
+<!-- Add Restaurant Modal -->
+<div id="add-restaurant-modal" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-[100] flex items-center justify-center hidden p-4" onclick="if(event.target===this)closeAddModal()">
+  <div class="bg-[#1a1a1a] rounded-2xl p-6 w-full max-w-lg ring-1 ring-white/10 shadow-2xl max-h-[90vh] overflow-y-auto">
+
+    <!-- Header -->
+    <div class="flex items-center justify-between mb-5">
+      <div>
+        <h3 class="text-base font-bold font-['Manrope'] text-on-surface">เพิ่มร้านอาหาร</h3>
+        <p class="text-[10px] text-zinc-500 font-['Inter'] mt-0.5">ค้นหาจากชื่อร้านหรือ Google Maps URL</p>
+      </div>
+      <button type="button" onclick="closeAddModal()" class="w-8 h-8 flex items-center justify-center rounded-full hover:bg-white/10 text-zinc-500 hover:text-on-surface transition-colors">
+        <span class="material-symbols-outlined" style="font-size:20px">close</span>
+      </button>
+    </div>
+
+    <!-- Search -->
+    <div class="mb-4">
+      <div class="flex gap-2">
+        <input id="modal-search-input" type="text" placeholder="ชื่อร้าน หรือ Google Maps URL..."
+          class="flex-1 bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-sm text-on-surface font-['Public_Sans'] placeholder:text-zinc-600 focus:outline-none focus:border-primary/50 focus:ring-1 focus:ring-primary/30 transition-all"
+          onkeydown="if(event.key==='Enter')searchRestaurant()">
+        <button type="button" onclick="searchRestaurant()" id="modal-search-btn"
+          class="bg-primary text-white rounded-xl px-4 py-2.5 font-bold font-['Public_Sans'] text-sm hover:bg-primary/90 transition-all active:scale-95 flex items-center gap-1.5 shrink-0">
+          <span class="material-symbols-outlined" style="font-size:16px" id="modal-search-icon">search</span>
+          <span id="modal-search-label">ค้นหา</span>
+        </button>
+      </div>
+      <p class="text-[10px] text-zinc-600 mt-1.5 font-['Inter']">💡 maps.app.goo.gl → เปิดใน browser แล้วนำ URL เต็มมาวาง หรือพิมพ์ชื่อร้านตรงๆ</p>
+    </div>
+
+    <!-- Results -->
+    <div id="modal-results" class="hidden mb-4">
+      <p class="text-[9px] text-zinc-600 font-['Inter'] uppercase tracking-widest mb-2">ผลลัพธ์ — เลือกร้านที่ต้องการ</p>
+      <div id="modal-results-list" class="space-y-2"></div>
+    </div>
+
+    <!-- Selected place + form -->
+    <div id="modal-place-preview" class="hidden">
+      <div class="bg-white/5 rounded-xl p-3 mb-4 flex gap-3 items-start ring-1 ring-white/5">
+        <div id="modal-place-photo" class="w-14 h-14 rounded-xl overflow-hidden bg-white/10 flex items-center justify-center text-2xl shrink-0">🍽️</div>
+        <div class="flex-1 min-w-0">
+          <p id="modal-place-name" class="font-bold text-on-surface text-sm font-['Public_Sans']"></p>
+          <p id="modal-place-addr" class="text-[11px] text-zinc-500 mt-0.5 font-['Inter'] leading-relaxed"></p>
+        </div>
+        <button type="button" onclick="clearSelectedPlace()" class="w-6 h-6 flex items-center justify-center rounded-full hover:bg-white/10 text-zinc-600 shrink-0 transition-colors">
+          <span class="material-symbols-outlined" style="font-size:14px">close</span>
+        </button>
+      </div>
+
+      <!-- Day -->
+      <div class="mb-4">
+        <p class="text-[9px] text-zinc-500 font-['Inter'] uppercase tracking-widest mb-2">Day</p>
+        <div class="grid grid-cols-5 gap-1.5">
+          <button type="button" onclick="selectDay(1)" data-day="1" class="day-btn py-2 rounded-xl text-xs font-bold font-['Inter'] border border-white/10 text-zinc-500 hover:border-primary/40 hover:text-primary transition-all">Day 1</button>
+          <button type="button" onclick="selectDay(2)" data-day="2" class="day-btn py-2 rounded-xl text-xs font-bold font-['Inter'] border border-white/10 text-zinc-500 hover:border-primary/40 hover:text-primary transition-all">Day 2</button>
+          <button type="button" onclick="selectDay(3)" data-day="3" class="day-btn py-2 rounded-xl text-xs font-bold font-['Inter'] border border-white/10 text-zinc-500 hover:border-primary/40 hover:text-primary transition-all">Day 3</button>
+          <button type="button" onclick="selectDay(4)" data-day="4" class="day-btn py-2 rounded-xl text-xs font-bold font-['Inter'] border border-white/10 text-zinc-500 hover:border-primary/40 hover:text-primary transition-all">Day 4</button>
+          <button type="button" onclick="selectDay(5)" data-day="5" class="day-btn py-2 rounded-xl text-xs font-bold font-['Inter'] border border-white/10 text-zinc-500 hover:border-primary/40 hover:text-primary transition-all">Day 5</button>
+        </div>
+      </div>
+
+      <!-- Time / Cost / Area -->
+      <div class="grid grid-cols-3 gap-3 mb-4">
+        <div>
+          <p class="text-[9px] text-zinc-500 font-['Inter'] uppercase tracking-widest mb-1.5">เวลา</p>
+          <input id="modal-time" type="time" value="12:00"
+            class="w-full bg-white/5 border border-white/10 rounded-xl px-3 py-2 text-sm text-on-surface font-['Public_Sans'] focus:outline-none focus:border-primary/50 transition-all">
+        </div>
+        <div>
+          <p class="text-[9px] text-zinc-500 font-['Inter'] uppercase tracking-widest mb-1.5">ราคา/คน</p>
+          <input id="modal-cost" type="text" placeholder="¥1,500"
+            class="w-full bg-white/5 border border-white/10 rounded-xl px-3 py-2 text-sm text-on-surface font-['Public_Sans'] placeholder:text-zinc-600 focus:outline-none focus:border-primary/50 transition-all">
+        </div>
+        <div>
+          <p class="text-[9px] text-zinc-500 font-['Inter'] uppercase tracking-widest mb-1.5">ย่าน</p>
+          <input id="modal-city" type="text" placeholder="Shinjuku"
+            class="w-full bg-white/5 border border-white/10 rounded-xl px-3 py-2 text-sm text-on-surface font-['Public_Sans'] placeholder:text-zinc-600 focus:outline-none focus:border-primary/50 transition-all">
+        </div>
+      </div>
+
+      <!-- Emoji picker -->
+      <div class="mb-5">
+        <p class="text-[9px] text-zinc-500 font-['Inter'] uppercase tracking-widest mb-2">Emoji</p>
+        <div class="flex gap-1.5 flex-wrap">
+          <button type="button" onclick="selectEmoji('🍣')" data-emoji="🍣" class="emoji-opt w-9 h-9 rounded-xl hover:bg-white/10 text-lg flex items-center justify-center transition-all">🍣</button>
+          <button type="button" onclick="selectEmoji('🍜')" data-emoji="🍜" class="emoji-opt w-9 h-9 rounded-xl hover:bg-white/10 text-lg flex items-center justify-center transition-all">🍜</button>
+          <button type="button" onclick="selectEmoji('🍱')" data-emoji="🍱" class="emoji-opt w-9 h-9 rounded-xl hover:bg-white/10 text-lg flex items-center justify-center transition-all">🍱</button>
+          <button type="button" onclick="selectEmoji('🍡')" data-emoji="🍡" class="emoji-opt w-9 h-9 rounded-xl hover:bg-white/10 text-lg flex items-center justify-center transition-all">🍡</button>
+          <button type="button" onclick="selectEmoji('🥩')" data-emoji="🥩" class="emoji-opt w-9 h-9 rounded-xl hover:bg-white/10 text-lg flex items-center justify-center transition-all">🥩</button>
+          <button type="button" onclick="selectEmoji('🦐')" data-emoji="🦐" class="emoji-opt w-9 h-9 rounded-xl hover:bg-white/10 text-lg flex items-center justify-center transition-all">🦐</button>
+          <button type="button" onclick="selectEmoji('☕')" data-emoji="☕" class="emoji-opt w-9 h-9 rounded-xl hover:bg-white/10 text-lg flex items-center justify-center transition-all">☕</button>
+          <button type="button" onclick="selectEmoji('🍺')" data-emoji="🍺" class="emoji-opt w-9 h-9 rounded-xl hover:bg-white/10 text-lg flex items-center justify-center transition-all">🍺</button>
+          <button type="button" onclick="selectEmoji('🍛')" data-emoji="🍛" class="emoji-opt w-9 h-9 rounded-xl hover:bg-white/10 text-lg flex items-center justify-center transition-all">🍛</button>
+          <button type="button" onclick="selectEmoji('🍙')" data-emoji="🍙" class="emoji-opt w-9 h-9 rounded-xl hover:bg-white/10 text-lg flex items-center justify-center transition-all">🍙</button>
+          <button type="button" onclick="selectEmoji('🥟')" data-emoji="🥟" class="emoji-opt w-9 h-9 rounded-xl hover:bg-white/10 text-lg flex items-center justify-center transition-all">🥟</button>
+          <button type="button" onclick="selectEmoji('🍽️')" data-emoji="🍽️" id="emoji-default" class="emoji-opt w-9 h-9 rounded-xl text-lg flex items-center justify-center transition-all" style="background:rgba(255,107,157,0.2);box-shadow:0 0 0 1px rgba(255,107,157,0.4)">🍽️</button>
+        </div>
+      </div>
+
+      <!-- Save -->
+      <button type="button" onclick="saveRestaurant()" id="modal-save-btn"
+        class="w-full bg-primary text-white rounded-xl py-3 font-bold font-['Public_Sans'] text-sm hover:shadow-[0_0_24px_rgba(255,107,157,0.35)] transition-all active:scale-95 flex items-center justify-center gap-2">
+        <span class="material-symbols-outlined" style="font-size:18px">add</span>
+        เพิ่มเข้ารายการ
+      </button>
+    </div>
+
+    <!-- Error -->
+    <div id="modal-error" class="hidden mt-3 bg-red-500/10 border border-red-500/20 rounded-xl p-3">
+      <p class="text-red-400 text-xs font-['Inter']" id="modal-error-text"></p>
+    </div>
+  </div>
+</div>
+
 <script type="module">
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js';
-import { getFirestore, collection, query, orderBy, onSnapshot } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
+import { getFirestore, collection, query, orderBy, onSnapshot, addDoc } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
 
 const firebaseConfig = {
   apiKey: "AIzaSyA48_2e-Ed3ss20V5yuTlLRb9vXx3V3OgY",
@@ -370,12 +490,13 @@ function render(data) {
   if (!items.length) { container.innerHTML = EMPTY; return; }
 
   const byDay = {};
-  items.forEach(d => { (byDay[d.day]=byDay[d.day]||[]).push(d); });
+  items.forEach(d => { const k = d.day || 0; (byDay[k]=byDay[k]||[]).push(d); });
   let html = '';
   Object.keys(byDay).sort((a,b)=>Number(a)-Number(b)).forEach(day => {
-    const col = DAY_COLORS[day]||'#ff6b9d';
+    const col = Number(day) === 0 ? '#a78bfa' : (DAY_COLORS[day]||'#ff6b9d');
+    const label = Number(day) === 0 ? 'Wishlist · ยังไม่ได้ assign วัน' : `Day ${day} · ${DAY_DATES[day]||''}`;
     html += `<div class="flex items-center gap-2 mb-3 mt-1">
-      <span class="text-[10px] font-['Inter'] font-bold uppercase tracking-widest px-3 py-1 rounded-full" style="color:${col};background:${col}20">Day ${day} · ${DAY_DATES[day]||''}</span>
+      <span class="text-[10px] font-['Inter'] font-bold uppercase tracking-widest px-3 py-1 rounded-full" style="color:${col};background:${col}20">${label}</span>
     </div>`;
     byDay[day].forEach(d => {
       const isFree = d.cost==='Free';
@@ -405,6 +526,8 @@ onSnapshot(query(collection(db, 'itinerary'), orderBy('order')), snapshot => {
   render(data);
   observeDiningPhotos();
 });
+
+window.__firestoreAdd = (data) => addDoc(collection(db, 'itinerary'), data);
 </script>
 
 <script>
@@ -534,6 +657,206 @@ function closeMobileDrawer() {
   document.getElementById('mobile-overlay').classList.remove('open');
   document.body.style.overflow = '';
 }
+</script>
+
+<script>
+(function() {
+  var _place = null;
+  var _day = null;
+  var _emoji = '🍽️';
+
+  window.openAddModal = function() {
+    document.getElementById('add-restaurant-modal').classList.remove('hidden');
+    document.body.style.overflow = 'hidden';
+    setTimeout(function() { document.getElementById('modal-search-input').focus(); }, 50);
+  };
+
+  window.closeAddModal = function() {
+    document.getElementById('add-restaurant-modal').classList.add('hidden');
+    document.body.style.overflow = '';
+    _reset();
+  };
+
+  function _reset() {
+    _place = null; _day = null; _emoji = '🍽️';
+    document.getElementById('modal-search-input').value = '';
+    document.getElementById('modal-results').classList.add('hidden');
+    document.getElementById('modal-place-preview').classList.add('hidden');
+    document.getElementById('modal-error').classList.add('hidden');
+    document.getElementById('modal-cost').value = '';
+    document.getElementById('modal-city').value = '';
+    document.getElementById('modal-time').value = '12:00';
+    document.querySelectorAll('.day-btn').forEach(function(b) { _dayStyle(b, false); });
+    document.querySelectorAll('.emoji-opt').forEach(function(b) { _emojiStyle(b, b.id === 'emoji-default'); });
+    var btn = document.getElementById('modal-save-btn');
+    btn.disabled = false;
+    btn.innerHTML = '<span class="material-symbols-outlined" style="font-size:18px">add</span> เพิ่มเข้ารายการ';
+  }
+
+  function _dayStyle(btn, on) {
+    btn.style.background = on ? '#ff6b9d' : '';
+    btn.style.color = on ? '#fff' : '';
+    btn.style.borderColor = on ? '#ff6b9d' : '';
+  }
+
+  function _emojiStyle(btn, on) {
+    btn.style.background = on ? 'rgba(255,107,157,0.2)' : '';
+    btn.style.boxShadow = on ? '0 0 0 1px rgba(255,107,157,0.4)' : '';
+  }
+
+  function _pid(s) {
+    var m;
+    m = s.match(/[?&]place_id=([A-Za-z0-9_%-]+)/); if (m) return decodeURIComponent(m[1]);
+    m = s.match(/!1s(ChIJ[A-Za-z0-9_-]+)/); if (m) return m[1];
+    m = s.match(/q=place_id:([A-Za-z0-9_-]+)/); if (m) return m[1];
+    return null;
+  }
+
+  function _setBusy(on) {
+    var btn = document.getElementById('modal-search-btn');
+    btn.disabled = on;
+    document.getElementById('modal-search-icon').textContent = on ? 'hourglass_empty' : 'search';
+    document.getElementById('modal-search-label').textContent = on ? 'กำลังค้นหา...' : 'ค้นหา';
+  }
+
+  function _err(msg) {
+    document.getElementById('modal-error-text').textContent = msg;
+    document.getElementById('modal-error').classList.remove('hidden');
+  }
+
+  window.searchRestaurant = function() {
+    var raw = document.getElementById('modal-search-input').value.trim();
+    if (!raw) return;
+    if (!window.google || !google.maps || !google.maps.places) { _err('Maps API ยังไม่พร้อม ลองรีโหลดหน้า'); return; }
+    _setBusy(true);
+    document.getElementById('modal-error').classList.add('hidden');
+    document.getElementById('modal-results').classList.add('hidden');
+    document.getElementById('modal-place-preview').classList.add('hidden');
+
+    var svc = new google.maps.places.PlacesService(document.createElement('div'));
+    var pid = _pid(raw);
+
+    if (pid) {
+      svc.getDetails({ placeId: pid, fields: ['name','formatted_address','geometry','photos','place_id'] }, function(place, st) {
+        _setBusy(false);
+        if (st === 'OK') _showResults([place]);
+        else _err('ไม่พบร้านจาก link นี้ — ลองค้นหาด้วยชื่อร้านแทน');
+      });
+    } else if (/maps\.app\.goo\.gl|goo\.gl\/maps/.test(raw)) {
+      _setBusy(false);
+      _err('Short link (maps.app.goo.gl) ไม่สามารถ resolve ได้ในเบราว์เซอร์ — กรุณาเปิด link นั้นใน browser แล้ว copy URL เต็มจาก address bar มาวาง หรือพิมพ์ชื่อร้านตรงๆ');
+    } else {
+      svc.textSearch({ query: raw, location: new google.maps.LatLng(35.6762, 139.6503), radius: 50000 }, function(results, st) {
+        _setBusy(false);
+        if (st === 'OK' && results && results.length) _showResults(results.slice(0, 3));
+        else _err('ไม่พบร้านที่ค้นหา — ลองค้นเป็นภาษาอังกฤษหรือญี่ปุ่น');
+      });
+    }
+  };
+
+  function _showResults(places) {
+    var list = document.getElementById('modal-results-list');
+    list.innerHTML = '';
+    places.forEach(function(place) {
+      var btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'w-full text-left bg-white/5 hover:bg-white/10 rounded-xl p-3 flex items-center gap-3 transition-all ring-1 ring-white/5';
+      var photoHtml = '<div style="width:40px;height:40px;border-radius:8px;background:rgba(255,255,255,0.1);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0">🍽️</div>';
+      if (place.photos && place.photos.length) {
+        var url = place.photos[0].getUrl({ maxWidth: 80 });
+        photoHtml = '<img src="' + url + '" style="width:40px;height:40px;border-radius:8px;object-fit:cover;flex-shrink:0" onerror="this.style.display=\'none\'">';
+      }
+      btn.innerHTML = photoHtml +
+        '<div style="flex:1;min-width:0">' +
+          '<p style="font-weight:700;color:#f1f1f1;font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">' + place.name + '</p>' +
+          '<p style="font-size:11px;color:#71717a;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">' + (place.formatted_address || place.vicinity || '') + '</p>' +
+        '</div>' +
+        '<span class="material-symbols-outlined" style="font-size:18px;color:#71717a;flex-shrink:0">chevron_right</span>';
+      btn.addEventListener('click', function() { _select(place); });
+      list.appendChild(btn);
+    });
+    document.getElementById('modal-results').classList.remove('hidden');
+  }
+
+  function _select(place) {
+    _place = place;
+    document.getElementById('modal-results').classList.add('hidden');
+    document.getElementById('modal-place-name').textContent = place.name;
+    document.getElementById('modal-place-addr').textContent = place.formatted_address || place.vicinity || '';
+    var photo = document.getElementById('modal-place-photo');
+    if (place.photos && place.photos.length) {
+      var url = place.photos[0].getUrl({ maxWidth: 120 });
+      photo.innerHTML = '<img src="' + url + '" style="width:100%;height:100%;object-fit:cover;border-radius:12px">';
+    } else {
+      photo.textContent = '🍽️';
+    }
+    var addr = place.formatted_address || place.vicinity || '';
+    var cityInput = document.getElementById('modal-city');
+    if (!cityInput.value) {
+      var areas = ['Shinjuku','Shibuya','Asakusa','Akihabara','Harajuku','Ginza','Ueno','Roppongi','Ikebukuro','Tsukiji','Nakameguro','Shimokitazawa','Akabane','Tabata','Koenji','Ebisu','Yanaka','Daikanyama'];
+      for (var i = 0; i < areas.length; i++) {
+        if (addr.toLowerCase().indexOf(areas[i].toLowerCase()) !== -1) { cityInput.value = areas[i]; break; }
+      }
+    }
+    document.getElementById('modal-place-preview').classList.remove('hidden');
+    document.getElementById('modal-place-preview').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }
+
+  window.clearSelectedPlace = function() {
+    _place = null;
+    document.getElementById('modal-place-preview').classList.add('hidden');
+    document.getElementById('modal-search-input').value = '';
+    document.getElementById('modal-search-input').focus();
+  };
+
+  window.selectDay = function(day) {
+    _day = day;
+    document.querySelectorAll('.day-btn').forEach(function(b) { _dayStyle(b, parseInt(b.dataset.day) === day); });
+  };
+
+  window.selectEmoji = function(emoji) {
+    _emoji = emoji;
+    document.querySelectorAll('.emoji-opt').forEach(function(b) { _emojiStyle(b, b.dataset.emoji === emoji); });
+  };
+
+  window.saveRestaurant = function() {
+    if (!_place) { _err('กรุณาเลือกร้านก่อน'); return; }
+    if (!_day) { _err('กรุณาเลือก Day ก่อน'); return; }
+    if (!window.__firestoreAdd) { _err('Firebase ยังไม่พร้อม ลองรีโหลดหน้า'); return; }
+    var btn = document.getElementById('modal-save-btn');
+    btn.disabled = true;
+    btn.innerHTML = '<span class="material-symbols-outlined modal-spinning" style="font-size:18px">refresh</span> กำลังบันทึก...';
+    var geo = _place.geometry && _place.geometry.location;
+    var data = {
+      emoji: _emoji,
+      detail: _place.name,
+      day: _day,
+      start: document.getElementById('modal-time').value || '12:00',
+      city: document.getElementById('modal-city').value || 'Tokyo',
+      cost: document.getElementById('modal-cost').value || '',
+      lat: geo ? (typeof geo.lat === 'function' ? geo.lat() : geo.lat) : null,
+      lng: geo ? (typeof geo.lng === 'function' ? geo.lng() : geo.lng) : null,
+      order: Date.now()
+    };
+    window.__firestoreAdd(data).then(function() {
+      closeAddModal();
+      _toast('เพิ่ม "' + _place.name + '" แล้ว! 🎉');
+    }).catch(function(err) {
+      _err('บันทึกไม่สำเร็จ: ' + err.message);
+      btn.disabled = false;
+      btn.innerHTML = '<span class="material-symbols-outlined" style="font-size:18px">add</span> เพิ่มเข้ารายการ';
+    });
+  };
+
+  function _toast(msg) {
+    var t = document.createElement('div');
+    t.style.cssText = 'position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#1a1a1a;color:#f1f1f1;padding:12px 20px;border-radius:999px;box-shadow:0 8px 32px rgba(0,0,0,0.4);z-index:300;display:flex;align-items:center;gap:8px;font-size:14px;font-family:"Public Sans",sans-serif;white-space:nowrap;border:1px solid rgba(255,255,255,0.08);transition:opacity 0.4s';
+    t.innerHTML = '<span class="material-symbols-outlined" style="font-size:18px;color:#ff6b9d">check_circle</span>' + msg;
+    document.body.appendChild(t);
+    setTimeout(function() { t.style.opacity = '0'; }, 2500);
+    setTimeout(function() { t.remove(); }, 3000);
+  }
+})();
 </script>
 </body>
 </html>
