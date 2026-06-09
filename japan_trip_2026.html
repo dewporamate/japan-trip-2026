@@ -523,7 +523,7 @@
       </div>
 
       <!-- ── RIGHT PANEL ── -->
-      <div class="lg:col-span-5 space-y-5 lg:sticky lg:top-20 lg:self-start order-1 lg:order-2">
+      <div class="lg:col-span-5 space-y-5 lg:sticky lg:top-20 lg:self-start order-1 lg:order-2 lg:max-h-[calc(100vh-6rem)] lg:overflow-y-auto lg:pr-1">
         <!-- MAP -->
         <div class="rounded-3xl overflow-hidden relative border border-white/5" style="height:400px">
           <div id="map"></div>
@@ -554,7 +554,7 @@
                 <span class="text-[0.6rem] font-bold text-primary uppercase tracking-widest font-['Inter']">Travel Tip</span>
               </button>
             </div>
-            <canvas id="budget-chart" height="90"></canvas>
+            <canvas id="budget-chart" height="90" style="touch-action:pan-y"></canvas>
           </div>
         </div>
 
@@ -1412,6 +1412,8 @@ function buildTimeline(filter){
       draggable: '.timeline-wrapper',
       ghostClass: 'sortable-ghost',
       chosenClass: 'sortable-chosen',
+      delay: 200,
+      delayOnTouchOnly: true,
       onEnd: async evt => {
         if (evt.oldIndex === evt.newIndex) return;
         const els = [...wrapper.querySelectorAll('.timeline-wrapper')];
