@@ -82,6 +82,15 @@
 </style>
 </head>
 <body class="text-on-surface flex h-screen overflow-hidden bg-[#09090b]">
+<!-- Home button -->
+<a href="index.html" title="กลับหน้าแรก"
+   style="position:fixed;bottom:1.5rem;left:1.5rem;z-index:9999;display:flex;align-items:center;gap:0.5rem;padding:0.5rem 1rem;border-radius:999px;background:#0d0d0d;border:1px solid #1e1e1e;color:#555;text-decoration:none;font-size:10px;font-family:Manrope,-apple-system,sans-serif;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;transition:color 0.2s,border-color 0.2s;backdrop-filter:blur(8px);"
+   onmouseover="this.style.color='#ff6b9d';this.style.borderColor='rgba(255,107,157,0.3)'"
+   onmouseout="this.style.color='#555';this.style.borderColor='#1e1e1e'">
+  <span style="font-size:14px;line-height:1">🏠</span>
+  <span>Home</span>
+</a>
+
 
 <!-- Mobile Overlay -->
 <div id="mobile-overlay" class="fixed inset-0 bg-black/60 z-40 md:hidden" onclick="closeMobileDrawer()"></div>
