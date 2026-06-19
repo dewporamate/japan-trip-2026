@@ -81,6 +81,7 @@
   #mobile-overlay { opacity:0; pointer-events:none; transition:opacity 0.3s; }
   #mobile-overlay.open { opacity:1; pointer-events:auto; }
 </style>
+<link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
 </head>
 <body class="text-on-surface flex overflow-hidden h-screen bg-[#09090b]">
 
@@ -255,7 +256,7 @@
   <div class="max-w-6xl mx-auto p-6 md:p-10 space-y-10">
 
     <!-- Budget Progress Hero -->
-    <section class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+    <section class="grid grid-cols-1 lg:grid-cols-3 gap-6" data-aos="fade-up">
       <div class="lg:col-span-2 bg-[#1a1a1a] rounded-xl p-6 ring-1 ring-white/5 shadow-[0_8px_32px_rgba(0,0,0,0.25)] relative overflow-hidden">
         <div class="absolute top-0 right-0 w-64 h-64 bg-primary/10 rounded-full blur-[100px] -mr-32 -mt-32 pointer-events-none"></div>
         <div class="relative z-10">
@@ -290,11 +291,11 @@
     </section>
 
     <!-- Categories & Chart -->
-    <section class="grid grid-cols-1 md:grid-cols-2 gap-8">
+    <section class="grid grid-cols-1 md:grid-cols-2 gap-8" data-aos="fade-up" data-aos-delay="100">
       <!-- Categories -->
       <div class="space-y-6">
         <h4 class="text-base font-['Manrope'] font-bold text-on-surface">Categories</h4>
-        <div class="space-y-5">
+        <div class="space-y-5" data-aos="fade-up" data-aos-delay="200">
           <!-- Dining -->
           <div class="bg-[#1a1a1a] rounded-xl p-4 ring-1 ring-white/5">
             <div class="flex justify-between items-center mb-3">
@@ -941,5 +942,7 @@ function closeMobileDrawer() {
   document.body.style.overflow = '';
 }
 </script>
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+<script>AOS.init({ duration: 800, once: true, offset: 100 });</script>
 </body>
 </html>

@@ -389,6 +389,7 @@
     .countdown__units { gap: 0.4rem; }
   }
 </style>
+<link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
 </head>
 <body>
 
@@ -438,7 +439,7 @@
 </div>
 
 <!-- ══════════ COUNTDOWN ══════════ -->
-<section class="countdown" id="countdown">
+<section class="countdown" id="countdown" data-aos="fade-up" data-aos-delay="200">
   <span class="countdown__label">Until we land in Tokyo</span>
   <div class="countdown__units">
     <div class="countdown__unit">
@@ -466,33 +467,33 @@
 
 <!-- ══════════ NAV GRID ══════════ -->
 <nav class="nav" aria-label="Trip sections">
-  <p class="nav__header">✦ &nbsp; Explore the Trip &nbsp; ✦</p>
+  <p class="nav__header" data-aos="fade-up">✦ &nbsp; Explore the Trip &nbsp; ✦</p>
   <div class="nav__grid">
-    <a class="nav__card" href="japan_trip_2026.html">
+    <a class="nav__card" href="japan_trip_2026.html" data-aos="fade-up" data-aos-delay="0">
       <span class="nav__card-icon" aria-hidden="true">🗓️</span>
       <span class="nav__card-label">Itinerary</span>
     </a>
-    <a class="nav__card" href="lodging.html">
+    <a class="nav__card" href="lodging.html" data-aos="fade-up" data-aos-delay="100">
       <span class="nav__card-icon" aria-hidden="true">🏨</span>
       <span class="nav__card-label">Lodging</span>
     </a>
-    <a class="nav__card" href="dining.html">
+    <a class="nav__card" href="dining.html" data-aos="fade-up" data-aos-delay="200">
       <span class="nav__card-icon" aria-hidden="true">🍜</span>
       <span class="nav__card-label">Dining</span>
     </a>
-    <a class="nav__card" href="transportation.html">
+    <a class="nav__card" href="transportation.html" data-aos="fade-up" data-aos-delay="300">
       <span class="nav__card-icon" aria-hidden="true">🚄</span>
       <span class="nav__card-label">Transport</span>
     </a>
-    <a class="nav__card" href="budget.html">
+    <a class="nav__card" href="budget.html" data-aos="fade-up" data-aos-delay="400">
       <span class="nav__card-icon" aria-hidden="true">💴</span>
       <span class="nav__card-label">Budget</span>
     </a>
-    <a class="nav__card" href="packing.html">
+    <a class="nav__card" href="packing.html" data-aos="fade-up" data-aos-delay="500">
       <span class="nav__card-icon" aria-hidden="true">🎒</span>
       <span class="nav__card-label">Packing</span>
     </a>
-    <a class="nav__card" href="documents.html">
+    <a class="nav__card" href="documents.html" data-aos="fade-up" data-aos-delay="600">
       <span class="nav__card-icon" aria-hidden="true">📄</span>
       <span class="nav__card-label">Documents</span>
     </a>
@@ -532,5 +533,7 @@
     setInterval(tick, 1000);
   })();
 </script>
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+<script>AOS.init({ duration: 800, once: true, offset: 100 });</script>
 </body>
 </html>
