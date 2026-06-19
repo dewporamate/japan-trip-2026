@@ -44,12 +44,37 @@
     overflow: hidden;
   }
 
+  /* video background */
+  .hero__video {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: 0;
+    will-change: transform;
+  }
+
+  /* dark gradient overlay */
+  .hero__overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      to bottom,
+      rgba(0,0,0,0.52) 0%,
+      rgba(0,0,0,0.28) 45%,
+      rgba(0,0,0,0.72) 100%
+    );
+    z-index: 1;
+    will-change: opacity;
+  }
+
   /* kanji watermark */
   .hero__kanji {
     position: absolute;
     font-size: clamp(8rem, 25vw, 18rem);
     font-weight: 900;
-    color: rgba(255, 255, 255, 0.03);
+    color: rgba(255, 255, 255, 0.06);
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
@@ -59,6 +84,7 @@
     line-height: 1;
     pointer-events: none;
     user-select: none;
+    z-index: 2;
     animation: kanji-pulse 8s ease-in-out infinite alternate;
   }
   @keyframes kanji-pulse {
@@ -73,17 +99,19 @@
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
     pointer-events: none;
     opacity: 0.5;
+    z-index: 3;
   }
 
   /* center content */
   .hero__content {
     position: relative;
-    z-index: 2;
+    z-index: 4;
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 0;
     text-align: center;
+    will-change: transform, opacity;
   }
 
   .hero__eyebrow {
@@ -167,8 +195,9 @@
     gap: 0.5rem;
     opacity: 0;
     animation: fade-in 1s ease 2.2s forwards;
-    z-index: 2;
+    z-index: 4;
     text-decoration: none;
+    will-change: opacity;
   }
   .hero__scroll span {
     font-size: 0.4rem;
@@ -394,6 +423,10 @@
 
 <!-- ══════════ HERO ══════════ -->
 <section class="hero">
+  <video class="hero__video" autoplay muted loop playsinline preload="auto">
+    <source src="hero-fuji.mp4" type="video/mp4">
+  </video>
+  <div class="hero__overlay" aria-hidden="true"></div>
   <div class="hero__kanji" aria-hidden="true">日本</div>
   <div class="hero__grain" aria-hidden="true"></div>
 
@@ -503,6 +536,69 @@
 <footer class="footer">
   <p class="footer__text">✦ &nbsp; Japan 2026 &nbsp; · &nbsp; กลุ่มเพื่อน &nbsp; ✦</p>
 </footer>
+
+<!-- GSAP + ScrollTrigger -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script>
+  gsap.registerPlugin(ScrollTrigger);
+
+  // ── 1. Hero: video parallax zoom + overlay darken + content drift out ──
+  const heroTl = gsap.timeline({
+    scrollTrigger: {
+      trigger: ".hero",
+      start: "top top",
+      end: "bottom top",
+      scrub: 1.2,
+    }
+  });
+  heroTl
+    .to(".hero__video",   { scale: 1.14, ease: "none" }, 0)
+    .to(".hero__overlay", { opacity: 0.92, ease: "none" }, 0)
+    .to(".hero__content", { y: -70, opacity: 0, ease: "none" }, 0)
+    .to(".hero__scroll",  { opacity: 0, y: -20, ease: "none" }, 0)
+    .to(".hero__kanji",   { opacity: 0, ease: "none" }, 0);
+
+  // ── 2. Countdown: slide up when entering viewport ──
+  gsap.from(".countdown", {
+    scrollTrigger: {
+      trigger: ".countdown",
+      start: "top 88%",
+      toggleActions: "play none none none",
+    },
+    y: 50,
+    opacity: 0,
+    duration: 1,
+    ease: "power3.out",
+  });
+
+  // ── 3. Nav header ──
+  gsap.from(".nav__header", {
+    scrollTrigger: {
+      trigger: ".nav",
+      start: "top 88%",
+      toggleActions: "play none none none",
+    },
+    y: 20,
+    opacity: 0,
+    duration: 0.7,
+    ease: "power3.out",
+  });
+
+  // ── 4. Nav cards: stagger slide-up ──
+  gsap.from(".nav__card", {
+    scrollTrigger: {
+      trigger: ".nav__grid",
+      start: "top 90%",
+      toggleActions: "play none none none",
+    },
+    y: 35,
+    opacity: 0,
+    duration: 0.65,
+    stagger: 0.09,
+    ease: "power3.out",
+  });
+</script>
 
 <script>
   (function () {
