@@ -423,7 +423,7 @@
 
 <!-- ══════════ HERO ══════════ -->
 <section class="hero">
-  <video class="hero__video" autoplay muted loop playsinline preload="auto">
+  <video class="hero__video" muted playsinline preload="auto">
     <source src="hero-fuji.mp4" type="video/mp4">
   </video>
   <div class="hero__overlay" aria-hidden="true"></div>
@@ -543,23 +543,59 @@
 <script>
   gsap.registerPlugin(ScrollTrigger);
 
-  // ── 1. Hero: video parallax zoom + overlay darken + content drift out ──
-  const heroTl = gsap.timeline({
-    scrollTrigger: {
+  const video = document.querySelector(".hero__video");
+
+  // ── 1. Video scrubbing: currentTime follows scroll ──
+  //    Hero is pinned for 2400px — scrub through all 12s of footage
+  function initScrub() {
+    const dur = video.duration || 12;
+
+    ScrollTrigger.create({
       trigger: ".hero",
       start: "top top",
-      end: "bottom top",
-      scrub: 1.2,
-    }
-  });
-  heroTl
-    .to(".hero__video",   { scale: 1.14, ease: "none" }, 0)
-    .to(".hero__overlay", { opacity: 0.92, ease: "none" }, 0)
-    .to(".hero__content", { y: -70, opacity: 0, ease: "none" }, 0)
-    .to(".hero__scroll",  { opacity: 0, y: -20, ease: "none" }, 0)
-    .to(".hero__kanji",   { opacity: 0, ease: "none" }, 0);
+      end: "+=2400",
+      pin: true,
+      scrub: 0.6,
+      onUpdate: (self) => {
+        video.currentTime = dur * self.progress;
+      },
+    });
 
-  // ── 2. Countdown: slide up when entering viewport ──
+    // ── 2. Parallax zoom on video during pin ──
+    gsap.to(".hero__video", {
+      scale: 1.14,
+      ease: "none",
+      scrollTrigger: {
+        trigger: ".hero",
+        start: "top top",
+        end: "+=2400",
+        scrub: true,
+      },
+    });
+
+    // ── 3. Overlay darkens + content fades as video nears end ──
+    gsap.timeline({
+      scrollTrigger: {
+        trigger: ".hero",
+        start: "top top",
+        end: "+=2400",
+        scrub: true,
+      },
+    })
+    .to(".hero__overlay", { opacity: 0.9 }, 0)
+    .to(".hero__content", { y: -80, opacity: 0 }, 0)
+    .to(".hero__scroll",  { opacity: 0, y: -20 }, 0)
+    .to(".hero__kanji",   { opacity: 0 }, 0);
+  }
+
+  // Wait for video metadata before setting up scrub
+  if (video.readyState >= 1) {
+    initScrub();
+  } else {
+    video.addEventListener("loadedmetadata", initScrub, { once: true });
+  }
+
+  // ── 4. Countdown: slide up when entering viewport ──
   gsap.from(".countdown", {
     scrollTrigger: {
       trigger: ".countdown",
@@ -572,7 +608,7 @@
     ease: "power3.out",
   });
 
-  // ── 3. Nav header ──
+  // ── 5. Nav header ──
   gsap.from(".nav__header", {
     scrollTrigger: {
       trigger: ".nav",
@@ -585,7 +621,7 @@
     ease: "power3.out",
   });
 
-  // ── 4. Nav cards: stagger slide-up ──
+  // ── 6. Nav cards: stagger slide-up ──
   gsap.from(".nav__card", {
     scrollTrigger: {
       trigger: ".nav__grid",
