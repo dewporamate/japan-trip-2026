@@ -80,7 +80,6 @@
   .sidebar-collapsed .nav-item-active { border-left:none; }
   .sidebar-collapsed .add-btn { width:48px; height:48px; padding:0; border-radius:9999px; margin:0 auto; }
 </style>
-<link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
 </head>
 <body class="text-on-surface flex h-screen overflow-hidden bg-[#09090b]">
 
@@ -275,7 +274,7 @@
     </div>
 
     <!-- Bento Grid -->
-    <div class="grid grid-cols-1 md:grid-cols-12 gap-8" data-aos="fade-up" data-aos-delay="100">
+    <div class="grid grid-cols-1 md:grid-cols-12 gap-8">
 
       <!-- Gallery -->
       <div class="md:col-span-8 grid grid-cols-2 gap-4">
@@ -294,7 +293,7 @@
       <div class="md:col-span-4 space-y-6">
 
         <!-- Location -->
-        <div class="bg-[#1a1a1a] rounded-xl p-5 ring-1 ring-white/5 shadow-[0_8px_32px_rgba(0,0,0,0.25)]" data-aos="fade-up" data-aos-delay="300" data-aos="fade-up" data-aos-delay="200">
+        <div class="bg-[#1a1a1a] rounded-xl p-5 ring-1 ring-white/5 shadow-[0_8px_32px_rgba(0,0,0,0.25)]">
           <div class="flex justify-between items-center mb-4">
             <h3 class="text-sm font-['Manrope'] font-bold text-on-surface">Location</h3>
             <a href="https://www.google.com/maps/place/1-ch%C5%8Dme-2-23+Sh%C5%8Dwamachi,+Kita+City,+Tokyo+114-0011,+Japan/@35.7463271,139.7557968,17z" target="_blank" class="text-primary text-xs font-bold font-['Inter'] hover:text-primary/80 transition-colors">Get Directions</a>
@@ -502,7 +501,5 @@ function closeMobileDrawer() {
   document.body.style.overflow = '';
 }
 </script>
-<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-<script>AOS.init({ duration: 800, once: true, offset: 100 });</script>
 </body>
 </html>

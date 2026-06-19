@@ -80,7 +80,6 @@
   #mobile-overlay { opacity:0; pointer-events:none; transition:opacity 0.3s; }
   #mobile-overlay.open { opacity:1; pointer-events:auto; }
 </style>
-<link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
 </head>
 <body class="text-on-surface flex h-screen overflow-hidden bg-[#09090b]">
 
@@ -235,7 +234,7 @@
   <div class="max-w-7xl mx-auto p-6 md:p-10 space-y-10">
 
     <!-- Hero -->
-    <section class="relative h-[300px] rounded-xl overflow-hidden ring-1 ring-white/5" data-aos="fade-up">
+    <section class="relative h-[300px] rounded-xl overflow-hidden ring-1 ring-white/5">
       <div class="absolute inset-0 bg-[#1a1a1a]"></div>
       <div class="absolute inset-0 flex items-center justify-center opacity-10">
         <span class="text-[16rem] leading-none">🗾</span>
@@ -272,7 +271,7 @@
     <div class="space-y-12">
 
       <!-- Day 1 -->
-      <section data-aos="fade-up" data-aos-delay="200">
+      <section>
         <div class="flex items-center gap-3 mb-6">
           <div class="px-4 py-2 rounded-full font-bold font-['Inter'] text-xs uppercase tracking-widest" style="background:#ff6b9d20;color:#ff6b9d">Day 1 · Oct 9–10</div>
           <div class="h-px flex-1 bg-white/5"></div>
@@ -336,7 +335,7 @@
       </section>
 
       <!-- Day 2 -->
-      <section data-aos="fade-up" data-aos-delay="300">
+      <section>
         <div class="flex items-center gap-3 mb-6">
           <div class="px-4 py-2 rounded-full font-bold font-['Inter'] text-xs uppercase tracking-widest" style="background:#a78bfa20;color:#a78bfa">Day 2 · Oct 11</div>
           <div class="h-px flex-1 bg-white/5"></div>
@@ -383,7 +382,7 @@
       </section>
 
       <!-- Day 3 -->
-      <section data-aos="fade-up" data-aos-delay="400">
+      <section>
         <div class="flex items-center gap-3 mb-6">
           <div class="px-4 py-2 rounded-full font-bold font-['Inter'] text-xs uppercase tracking-widest" style="background:#fbbf2420;color:#fbbf24">Day 3 · Oct 12</div>
           <div class="h-px flex-1 bg-white/5"></div>
@@ -430,7 +429,7 @@
       </section>
 
       <!-- Day 4 -->
-      <section data-aos="fade-up" data-aos-delay="500">
+      <section>
         <div class="flex items-center gap-3 mb-6">
           <div class="px-4 py-2 rounded-full font-bold font-['Inter'] text-xs uppercase tracking-widest" style="background:#34d39920;color:#34d399">Day 4 · Oct 13</div>
           <div class="h-px flex-1 bg-white/5"></div>
@@ -468,7 +467,7 @@
       </section>
 
       <!-- Day 5 -->
-      <section data-aos="fade-up" data-aos-delay="600">
+      <section>
         <div class="flex items-center gap-3 mb-6">
           <div class="px-4 py-2 rounded-full font-bold font-['Inter'] text-xs uppercase tracking-widest" style="background:#60a5fa20;color:#60a5fa">Day 5 · Oct 14</div>
           <div class="h-px flex-1 bg-white/5"></div>
@@ -562,7 +561,5 @@ function closeMobileDrawer() {
 }
 </script>
 
-<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-<script>AOS.init({ duration: 800, once: true, offset: 100 });</script>
 </body>
 </html>

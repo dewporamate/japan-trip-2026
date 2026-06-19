@@ -127,7 +127,6 @@
   /* Hidden filter states */
   .item-row[data-hidden="true"] { display: none; }
 </style>
-<link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
 </head>
 <body class="text-on-surface flex h-screen overflow-hidden bg-[#09090b]">
 
@@ -292,7 +291,7 @@
   <div class="px-5 md:px-8 py-6 max-w-2xl mx-auto">
 
     <!-- Overall Progress -->
-    <div class="mb-6" data-aos="fade-up">
+    <div class="mb-6">
       <div class="flex justify-between items-end mb-2">
         <div>
           <div class="text-xs font-['Inter'] uppercase tracking-widest text-zinc-600 mb-0.5">Overall Progress</div>
@@ -309,14 +308,14 @@
     </div>
 
     <!-- Filter Tabs -->
-    <div class="flex gap-0 border-b border-white/5 mb-6" data-aos="fade-up" data-aos-delay="100">
+    <div class="flex gap-0 border-b border-white/5 mb-6">
       <button class="filter-tab active px-4 py-2.5 text-sm font-['Inter'] text-zinc-400 border-b-2 border-transparent -mb-px" onclick="setFilter('all', this)">ทั้งหมด</button>
       <button class="filter-tab px-4 py-2.5 text-sm font-['Inter'] text-zinc-400 border-b-2 border-transparent -mb-px" onclick="setFilter('packed', this)">จัดแล้ว</button>
       <button class="filter-tab px-4 py-2.5 text-sm font-['Inter'] text-zinc-400 border-b-2 border-transparent -mb-px" onclick="setFilter('unpacked', this)">ยังไม่จัด</button>
     </div>
 
     <!-- Categories -->
-    <div id="categories-container" data-aos="fade-up" data-aos-delay="200"></div>
+    <div id="categories-container"></div>
 
     <!-- Done state -->
     <div id="all-done-banner" class="hidden text-center py-12">
@@ -649,7 +648,5 @@ function toggleTheme() {
 renderCategories();
 updateProgress();
 </script>
-<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-<script>AOS.init({ duration: 800, once: true, offset: 100 });</script>
 </body>
 </html>
