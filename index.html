@@ -545,8 +545,27 @@
 
   const video = document.querySelector(".hero__video");
 
+  // ── Smooth lerp scrubber ──────────────────────────────────────────
+  // Every frame is a keyframe (all-intra encode) so seeks are instant.
+  // We still lerp currentTime for buttery transitions between scroll events.
+  let targetTime = 0;
+  let currentTime = 0;
+  let rafId = null;
+
+  function lerpScrub() {
+    const diff = targetTime - currentTime;
+    if (Math.abs(diff) > 0.001) {
+      currentTime += diff * 0.18;          // lerp factor — higher = snappier
+      if (video.readyState >= 2) video.currentTime = currentTime;
+      rafId = requestAnimationFrame(lerpScrub);
+    } else {
+      currentTime = targetTime;
+      if (video.readyState >= 2) video.currentTime = currentTime;
+      rafId = null;
+    }
+  }
+
   // ── 1. Video scrubbing: currentTime follows scroll ──
-  //    Hero is pinned for 2400px — scrub through all 12s of footage
   function initScrub() {
     const dur = video.duration || 12;
 
@@ -555,9 +574,10 @@
       start: "top top",
       end: "+=2400",
       pin: true,
-      scrub: 0.6,
+      scrub: false,                        // we handle smoothing ourselves via lerp
       onUpdate: (self) => {
-        video.currentTime = dur * self.progress;
+        targetTime = dur * self.progress;
+        if (!rafId) rafId = requestAnimationFrame(lerpScrub);
       },
     });
 
@@ -569,17 +589,17 @@
         trigger: ".hero",
         start: "top top",
         end: "+=2400",
-        scrub: true,
+        scrub: 1,
       },
     });
 
-    // ── 3. Overlay darkens + content fades as video nears end ──
+    // ── 3. Overlay darkens + content fades ──
     gsap.timeline({
       scrollTrigger: {
         trigger: ".hero",
         start: "top top",
         end: "+=2400",
-        scrub: true,
+        scrub: 1,
       },
     })
     .to(".hero__overlay", { opacity: 0.9 }, 0)
@@ -588,7 +608,6 @@
     .to(".hero__kanji",   { opacity: 0 }, 0);
   }
 
-  // Wait for video metadata before setting up scrub
   if (video.readyState >= 1) {
     initScrub();
   } else {
