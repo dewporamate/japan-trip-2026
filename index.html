@@ -1,11 +1,532 @@
 <!DOCTYPE html>
-<html>
+<html lang="th">
 <head>
-<meta http-equiv="refresh" content="0; url=japan_trip_2026.html">
 <meta charset="UTF-8">
-<title>Japan Trip 2026</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Japan Trip 2026 🌸</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --pink: #ff6b9d;
+    --bg: #000;
+    --surface: #09090b;
+    --text: #ffffff;
+    --muted: #555;
+    --border: #151515;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Manrope', -apple-system, BlinkMacSystemFont, sans-serif;
+    overflow-x: hidden;
+  }
+
+  /* ═══════════════════════════════════════
+     HERO
+  ═══════════════════════════════════════ */
+  .hero {
+    position: relative;
+    width: 100%;
+    height: 100dvh;
+    min-height: 600px;
+    background: #000;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+
+  /* kanji watermark */
+  .hero__kanji {
+    position: absolute;
+    font-size: clamp(8rem, 25vw, 18rem);
+    font-weight: 900;
+    color: rgba(255, 255, 255, 0.03);
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-family: 'Times New Roman', 'Noto Serif JP', serif;
+    letter-spacing: -0.05em;
+    white-space: nowrap;
+    line-height: 1;
+    pointer-events: none;
+    user-select: none;
+    animation: kanji-pulse 8s ease-in-out infinite alternate;
+  }
+  @keyframes kanji-pulse {
+    from { opacity: 0.7; transform: translate(-50%, -50%) scale(1.04); }
+    to   { opacity: 0.1; transform: translate(-50%, -50%) scale(1); }
+  }
+
+  /* film grain overlay */
+  .hero__grain {
+    position: absolute;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    opacity: 0.5;
+  }
+
+  /* center content */
+  .hero__content {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
+    text-align: center;
+  }
+
+  .hero__eyebrow {
+    font-size: clamp(0.45rem, 1.2vw, 0.6rem);
+    letter-spacing: 0.5em;
+    color: var(--pink);
+    text-transform: uppercase;
+    font-weight: 600;
+    margin-bottom: 1.2rem;
+    opacity: 0;
+    animation: fade-in 0.8s ease 0.4s forwards;
+  }
+
+  .hero__title-clip {
+    overflow: hidden;
+    line-height: 0.88;
+  }
+  .hero__title {
+    display: block;
+    font-size: clamp(5rem, 18vw, 13rem);
+    font-weight: 900;
+    letter-spacing: -0.04em;
+    color: var(--text);
+    transform: translateY(110%);
+    animation: slide-up 1s cubic-bezier(0.16, 1, 0.3, 1) 0.6s forwards;
+  }
+  @keyframes slide-up {
+    to { transform: translateY(0); }
+  }
+
+  .hero__year-clip {
+    overflow: hidden;
+    margin-top: 0.5rem;
+  }
+  .hero__year {
+    display: block;
+    font-size: clamp(0.65rem, 2vw, 0.9rem);
+    letter-spacing: 0.7em;
+    color: var(--muted);
+    font-weight: 300;
+    text-transform: uppercase;
+    transform: translateY(110%);
+    animation: slide-up 1s cubic-bezier(0.16, 1, 0.3, 1) 0.9s forwards;
+    padding-right: 0.7em; /* optical centering for letter-spacing */
+  }
+
+  .hero__line {
+    width: 48px;
+    height: 1px;
+    background: var(--pink);
+    margin-top: 2rem;
+    transform: scaleX(0);
+    transform-origin: left center;
+    animation: line-grow 0.8s ease 1.5s forwards;
+  }
+  @keyframes line-grow { to { transform: scaleX(1); } }
+
+  .hero__date {
+    font-size: clamp(0.45rem, 1.1vw, 0.55rem);
+    letter-spacing: 0.25em;
+    color: #2a2a2a;
+    text-transform: uppercase;
+    margin-top: 0.7rem;
+    opacity: 0;
+    animation: fade-in 0.8s ease 1.7s forwards;
+  }
+
+  @keyframes fade-in {
+    to { opacity: 1; }
+  }
+
+  /* scroll indicator */
+  .hero__scroll {
+    position: absolute;
+    bottom: 2.5rem;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    opacity: 0;
+    animation: fade-in 1s ease 2.2s forwards;
+    z-index: 2;
+    text-decoration: none;
+  }
+  .hero__scroll span {
+    font-size: 0.4rem;
+    letter-spacing: 0.4em;
+    color: #333;
+    text-transform: uppercase;
+  }
+  .hero__scroll-line {
+    width: 1px;
+    height: 36px;
+    background: linear-gradient(to bottom, var(--pink), transparent);
+    animation: scroll-pulse 1.8s ease-in-out 2.2s infinite;
+  }
+  @keyframes scroll-pulse {
+    0%, 100% { opacity: 0.3; transform: translateY(0); }
+    50%       { opacity: 1;   transform: translateY(8px); }
+  }
+
+  /* ═══════════════════════════════════════
+     TICKER
+  ═══════════════════════════════════════ */
+  .ticker {
+    width: 100%;
+    background: var(--pink);
+    height: 28px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+  }
+  .ticker__track {
+    display: flex;
+    white-space: nowrap;
+    animation: ticker-scroll 16s linear infinite;
+    will-change: transform;
+  }
+  .ticker__item {
+    font-size: 0.5rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    font-weight: 800;
+    color: #000;
+    padding: 0 2rem;
+  }
+  @keyframes ticker-scroll {
+    from { transform: translateX(0); }
+    to   { transform: translateX(-50%); }
+  }
+
+  /* ═══════════════════════════════════════
+     COUNTDOWN
+  ═══════════════════════════════════════ */
+  .countdown {
+    background: #000;
+    padding: 4rem 2rem 3.5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .countdown__label {
+    font-size: 0.5rem;
+    letter-spacing: 0.35em;
+    color: #333;
+    text-transform: uppercase;
+    font-weight: 600;
+  }
+
+  .countdown__units {
+    display: flex;
+    align-items: flex-start;
+    gap: clamp(0.5rem, 2vw, 1.2rem);
+  }
+
+  .countdown__unit {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.4rem;
+  }
+  .countdown__num {
+    font-size: clamp(3rem, 8vw, 5.5rem);
+    font-weight: 900;
+    color: var(--text);
+    line-height: 1;
+    letter-spacing: -0.03em;
+    min-width: 1.8ch;
+    text-align: center;
+    font-variant-numeric: tabular-nums;
+  }
+  .countdown__unit-label {
+    font-size: 0.4rem;
+    letter-spacing: 0.2em;
+    color: #333;
+    text-transform: uppercase;
+  }
+
+  .countdown__colon {
+    font-size: clamp(2.5rem, 6vw, 4.5rem);
+    font-weight: 900;
+    color: var(--pink);
+    line-height: 1;
+    padding-top: 0.05em;
+    animation: colon-blink 1s step-end infinite;
+  }
+  @keyframes colon-blink {
+    0%, 100% { opacity: 1; }
+    50%       { opacity: 0.15; }
+  }
+
+  .countdown__date {
+    font-size: 0.48rem;
+    letter-spacing: 0.3em;
+    color: #222;
+    text-transform: uppercase;
+    border-top: 1px solid #0f0f0f;
+    padding-top: 1.5rem;
+    width: 100%;
+    max-width: 360px;
+    text-align: center;
+  }
+
+  /* ═══════════════════════════════════════
+     NAV GRID
+  ═══════════════════════════════════════ */
+  .nav {
+    background: #000;
+    padding: 0 1.5rem 4rem;
+  }
+
+  .nav__header {
+    font-size: 0.42rem;
+    letter-spacing: 0.35em;
+    color: #222;
+    text-transform: uppercase;
+    text-align: center;
+    padding: 1.5rem 0;
+    border-bottom: 1px solid #0a0a0a;
+    margin-bottom: 1.5rem;
+  }
+
+  .nav__grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    max-width: 560px;
+    margin: 0 auto;
+  }
+
+  .nav__card {
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 1.6rem 0.5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.7rem;
+    background: #050505;
+    text-decoration: none;
+    color: inherit;
+    position: relative;
+    overflow: hidden;
+    transition: border-color 0.25s, background 0.25s;
+  }
+
+  .nav__card::before {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0;
+    width: 0; height: 1px;
+    background: var(--pink);
+    transition: width 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .nav__card:hover {
+    border-color: rgba(255, 107, 157, 0.18);
+    background: #0c0608;
+  }
+  .nav__card:hover::before { width: 100%; }
+
+  .nav__card-icon { font-size: 1.8rem; line-height: 1; }
+  .nav__card-label {
+    font-size: 0.48rem;
+    letter-spacing: 0.15em;
+    color: #666;
+    text-transform: uppercase;
+    font-weight: 700;
+    transition: color 0.25s;
+  }
+  .nav__card:hover .nav__card-label { color: #999; }
+
+  /* ═══════════════════════════════════════
+     FOOTER
+  ═══════════════════════════════════════ */
+  .footer {
+    background: #000;
+    border-top: 1px solid #0a0a0a;
+    padding: 2rem;
+    text-align: center;
+  }
+  .footer__text {
+    font-size: 0.42rem;
+    letter-spacing: 0.25em;
+    color: #1c1c1c;
+    text-transform: uppercase;
+  }
+
+  /* ═══════════════════════════════════════
+     RESPONSIVE
+  ═══════════════════════════════════════ */
+  @media (max-width: 480px) {
+    .nav__grid { grid-template-columns: repeat(3, 1fr); gap: 8px; }
+    .nav__card  { padding: 1.2rem 0.3rem; gap: 0.5rem; border-radius: 10px; }
+    .nav__card-icon { font-size: 1.5rem; }
+    .countdown__units { gap: 0.4rem; }
+  }
+</style>
 </head>
 <body>
-<p>Redirecting... <a href="japan_trip_2026.html">Click here</a></p>
+
+<!-- ══════════ HERO ══════════ -->
+<section class="hero">
+  <div class="hero__kanji" aria-hidden="true">日本</div>
+  <div class="hero__grain" aria-hidden="true"></div>
+
+  <div class="hero__content">
+    <span class="hero__eyebrow">Japan Trip 2026</span>
+    <div class="hero__title-clip">
+      <span class="hero__title">JAPAN</span>
+    </div>
+    <div class="hero__year-clip">
+      <span class="hero__year">2 &nbsp; 0 &nbsp; 2 &nbsp; 6</span>
+    </div>
+    <div class="hero__line" aria-hidden="true"></div>
+    <span class="hero__date">9 October &nbsp;·&nbsp; Autumn Edition</span>
+  </div>
+
+  <a class="hero__scroll" href="#countdown" aria-label="Scroll to countdown">
+    <span>scroll</span>
+    <div class="hero__scroll-line" aria-hidden="true"></div>
+  </a>
+</section>
+
+<!-- ══════════ TICKER ══════════ -->
+<div class="ticker" aria-hidden="true">
+  <div class="ticker__track">
+    <span class="ticker__item">✦ Japan Trip 2026</span>
+    <span class="ticker__item">✦ 9 October 2026</span>
+    <span class="ticker__item">✦ Autumn Edition</span>
+    <span class="ticker__item">✦ กลุ่มเพื่อน</span>
+    <span class="ticker__item">✦ Japan Trip 2026</span>
+    <span class="ticker__item">✦ 9 October 2026</span>
+    <span class="ticker__item">✦ Autumn Edition</span>
+    <span class="ticker__item">✦ กลุ่มเพื่อน</span>
+    <span class="ticker__item">✦ Japan Trip 2026</span>
+    <span class="ticker__item">✦ 9 October 2026</span>
+    <span class="ticker__item">✦ Autumn Edition</span>
+    <span class="ticker__item">✦ กลุ่มเพื่อน</span>
+    <span class="ticker__item">✦ Japan Trip 2026</span>
+    <span class="ticker__item">✦ 9 October 2026</span>
+    <span class="ticker__item">✦ Autumn Edition</span>
+    <span class="ticker__item">✦ กลุ่มเพื่อน</span>
+  </div>
+</div>
+
+<!-- ══════════ COUNTDOWN ══════════ -->
+<section class="countdown" id="countdown">
+  <span class="countdown__label">Until we land in Tokyo</span>
+  <div class="countdown__units">
+    <div class="countdown__unit">
+      <span class="countdown__num" id="cd-days">00</span>
+      <span class="countdown__unit-label">Days</span>
+    </div>
+    <span class="countdown__colon" aria-hidden="true">:</span>
+    <div class="countdown__unit">
+      <span class="countdown__num" id="cd-hrs">00</span>
+      <span class="countdown__unit-label">Hours</span>
+    </div>
+    <span class="countdown__colon" aria-hidden="true">:</span>
+    <div class="countdown__unit">
+      <span class="countdown__num" id="cd-min">00</span>
+      <span class="countdown__unit-label">Min</span>
+    </div>
+    <span class="countdown__colon" aria-hidden="true">:</span>
+    <div class="countdown__unit">
+      <span class="countdown__num" id="cd-sec">00</span>
+      <span class="countdown__unit-label">Sec</span>
+    </div>
+  </div>
+  <span class="countdown__date">Friday &nbsp;·&nbsp; 9 October 2026 &nbsp;·&nbsp; Tokyo, Japan</span>
+</section>
+
+<!-- ══════════ NAV GRID ══════════ -->
+<nav class="nav" aria-label="Trip sections">
+  <p class="nav__header">✦ &nbsp; Explore the Trip &nbsp; ✦</p>
+  <div class="nav__grid">
+    <a class="nav__card" href="japan_trip_2026.html">
+      <span class="nav__card-icon" aria-hidden="true">🗓️</span>
+      <span class="nav__card-label">Itinerary</span>
+    </a>
+    <a class="nav__card" href="lodging.html">
+      <span class="nav__card-icon" aria-hidden="true">🏨</span>
+      <span class="nav__card-label">Lodging</span>
+    </a>
+    <a class="nav__card" href="dining.html">
+      <span class="nav__card-icon" aria-hidden="true">🍜</span>
+      <span class="nav__card-label">Dining</span>
+    </a>
+    <a class="nav__card" href="transportation.html">
+      <span class="nav__card-icon" aria-hidden="true">🚄</span>
+      <span class="nav__card-label">Transport</span>
+    </a>
+    <a class="nav__card" href="budget.html">
+      <span class="nav__card-icon" aria-hidden="true">💴</span>
+      <span class="nav__card-label">Budget</span>
+    </a>
+    <a class="nav__card" href="packing.html">
+      <span class="nav__card-icon" aria-hidden="true">🎒</span>
+      <span class="nav__card-label">Packing</span>
+    </a>
+  </div>
+</nav>
+
+<!-- ══════════ FOOTER ══════════ -->
+<footer class="footer">
+  <p class="footer__text">✦ &nbsp; Japan 2026 &nbsp; · &nbsp; กลุ่มเพื่อน &nbsp; ✦</p>
+</footer>
+
+<script>
+  (function () {
+    // Countdown to 9 Oct 2026 00:00:00 JST (UTC+9)
+    var TARGET = new Date('2026-10-09T00:00:00+09:00').getTime();
+
+    var elDays = document.getElementById('cd-days');
+    var elHrs  = document.getElementById('cd-hrs');
+    var elMin  = document.getElementById('cd-min');
+    var elSec  = document.getElementById('cd-sec');
+
+    function pad(n) { return String(n).padStart(2, '0'); }
+
+    function tick() {
+      var diff = TARGET - Date.now();
+      if (diff <= 0) {
+        elDays.textContent = elHrs.textContent = elMin.textContent = elSec.textContent = '00';
+        return;
+      }
+      elDays.textContent = pad(Math.floor(diff / 86400000));
+      elHrs.textContent  = pad(Math.floor((diff % 86400000) / 3600000));
+      elMin.textContent  = pad(Math.floor((diff % 3600000) / 60000));
+      elSec.textContent  = pad(Math.floor((diff % 60000) / 1000));
+    }
+
+    tick();
+    setInterval(tick, 1000);
+  })();
+</script>
 </body>
 </html>
