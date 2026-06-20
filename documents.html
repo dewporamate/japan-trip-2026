@@ -1051,11 +1051,28 @@
     return m;
   }
 
+  /* ZIPAIR 787-8 cabin layout */
+  const ECO_START = 11, ECO_END = 38;
+  const ECO_ROWS = Array.from({length: ECO_END - ECO_START + 1}, (_, i) => ECO_START + i);
+
+  /* Mt. Fuji visibility info
+     ขาไป (BKK→NRT): เครื่องเข้าจาก SE, Fuji อยู่ทิศตะวันตกของ NRT → ฝั่งซ้าย (A)
+     ขากลับ (NRT→BKK): ออกจาก NRT บินใต้แล้วเลี้ยวSW → Fuji อยู่ฝั่งขวา (K)
+     กลุ่มเรา: ขาไป=ฝั่ง A ✓  ขากลับ=ฝั่ง K ✓  THANASAN มีวิวดีสุดทั้งสองเที่ยว! */
+  const FUJI = {
+    out: { side:'left',  winCol:'A', label:'ฝั่งซ้าย (A) ช่วง 40–60 นาทีก่อนลงจอด', time:'~06:30–06:50 JST', hero:'THANASAN · 24A' },
+    ret: { side:'right', winCol:'K', label:'ฝั่งขวา (K) ช่วง 20–40 นาทีหลังขึ้น',    time:'~17:20–17:40 JST', hero:'THANASAN · 24K' },
+  };
+
   function openSeatModal() {
     _hl = null;
     document.getElementById('seat-modal').classList.remove('hidden');
     document.getElementById('seat-modal').classList.add('flex');
     setSeatFlight('out');
+    setTimeout(() => {
+      const marker = document.querySelector('[data-group-row]');
+      if (marker) marker.scrollIntoView({ block: 'center', behavior: 'smooth' });
+    }, 120);
   }
 
   function closeSeatModal() {
@@ -1081,86 +1098,132 @@
     renderCards();
   }
 
-  function seatCell(key, p, isGroup) {
+  /* Mini seat cell for full-cabin map */
+  function miniSeat(key, p, isFujiWin) {
     if (p) {
       const dimmed = _hl !== null && _hl !== p.id;
       const glow   = _hl === p.id;
-      return `<div class="w-10 h-10 rounded-lg flex flex-col items-center justify-center cursor-pointer transition-all"
-        style="background:${p.color}${dimmed?'10':'1a'};border:1.5px solid ${p.color}${dimmed?'44':''};opacity:${dimmed?.35:1};${glow?'box-shadow:0 0 12px '+p.color+'55':''}"
-        data-pid="${p.id}" title="${p.name} · ${key}">
-        <span class="text-[8px] font-black leading-none" style="color:${p.color}">${p.abbr}</span>
-        <span class="text-[7px] leading-none mt-0.5" style="color:${p.color}88">${key}</span>
-      </div>`;
+      return `<div class="w-6 h-5 rounded-sm flex items-center justify-center text-[6px] font-black cursor-pointer select-none transition-all"
+        style="background:${p.color}${dimmed?'0e':'22'};border:1px solid ${p.color}${dimmed?'38':''};color:${p.color};opacity:${dimmed?.28:1};${glow?'box-shadow:0 0 7px '+p.color+'66;':''}"
+        data-pid="${p.id}" title="${p.name} · ${key}">${p.abbr}</div>`;
     }
-    return `<div class="w-10 h-10 rounded-lg border border-white/5 bg-white/[0.015]"></div>`;
+    if (isFujiWin) return `<div class="w-6 h-5 rounded-sm" style="background:rgba(56,189,248,0.05);border:1px solid rgba(56,189,248,0.18)"></div>`;
+    return `<div class="w-6 h-5 rounded-sm" style="background:rgba(255,255,255,0.012);border:1px solid rgba(255,255,255,0.05)"></div>`;
   }
 
   function renderGrid() {
-    const lookup = buildLookup(_flight);
+    const lookup  = buildLookup(_flight);
+    const fuji    = FUJI[_flight];
+    const leftFJ  = fuji.side === 'left';
+    const rightFJ = fuji.side === 'right';
+
     let h = '';
 
-    /* Column headers */
-    h += `<div class="flex items-center mb-2">
-      <div class="w-5 shrink-0"></div>
-      <div class="flex gap-1">${L_COLS.map(c=>`<div class="w-10 text-center text-[9px] text-zinc-600 font-bold">${c}</div>`).join('')}</div>
-      <div class="flex-1 mx-1"></div>
-      <div class="flex gap-1">${R_COLS.map(c=>`<div class="w-10 text-center text-[9px] text-zinc-600 font-bold">${c}</div>`).join('')}</div>
-    </div>
-    <div class="flex items-center mb-1">
-      <div class="w-5 shrink-0"></div>
-      <div class="flex gap-1">
-        <div class="w-10 text-center text-[10px]">🪟</div>
-        <div class="w-10"></div><div class="w-10"></div>
-      </div>
-      <div class="flex-1 mx-1"></div>
-      <div class="flex gap-1">
-        <div class="w-10"></div><div class="w-10"></div>
-        <div class="w-10 text-center text-[10px]">🪟</div>
+    /* ── Fuji Banner ── */
+    h += `<div class="rounded-xl p-3.5 mb-4 flex gap-3" style="background:rgba(14,165,233,0.06);border:1px solid rgba(56,189,248,0.18)">
+      <span class="text-2xl shrink-0 mt-0.5">🗻</span>
+      <div class="min-w-0">
+        <div class="text-[9px] font-black uppercase tracking-widest mb-1" style="color:#38bdf8">โอกาสเห็น ฟูจิซัง · Mt. Fuji</div>
+        <div class="text-[10px] mb-2 leading-relaxed" style="color:rgba(186,230,253,0.75)">${fuji.label}</div>
+        <div class="flex flex-wrap gap-x-3 gap-y-1 mb-1.5">
+          <span class="flex items-center gap-1 text-[9px] font-bold px-2 py-0.5 rounded-full" style="color:#38bdf8;background:rgba(56,189,248,0.12);border:1px solid rgba(56,189,248,0.25)">
+            🪟 ${leftFJ ? 'ฝั่งซ้าย · A' : 'ฝั่งขวา · K'}
+          </span>
+          <span class="text-[9px] font-bold" style="color:#4ade80">✓ กลุ่มเรานั่งฝั่งนี้!</span>
+        </div>
+        <div class="text-[8px]" style="color:rgba(148,163,184,0.5)">⏱ ${fuji.time} · ที่นั่งวิวดีสุด: <span style="color:#38bdf8">${fuji.hero}</span></div>
       </div>
     </div>`;
 
-    SEAT_ROWS.forEach(row => {
-      const grp = GROUP_ROWS.has(row);
+    /* ── Column headers ── */
+    const colHdr = (c, highlight) =>
+      `<div class="w-6 h-5 flex items-center justify-center text-[8px] font-black ${highlight ? 'text-sky-400' : 'text-zinc-600'}">${c}${highlight ? ' 🗻' : ''}</div>`;
+
+    h += `<div class="flex items-center mb-0.5">
+      <div class="w-6 shrink-0"></div>
+      <div class="flex gap-0.5">${['A','B','C'].map(c=>colHdr(c,leftFJ&&c==='A')).join('')}</div>
+      <div class="w-1.5 shrink-0"></div>
+      <div class="flex gap-0.5">${['D','E','F','G'].map(c=>`<div class="w-5 h-5 flex items-center justify-center text-[7px] text-zinc-700 font-bold">${c}</div>`).join('')}</div>
+      <div class="w-1.5 shrink-0"></div>
+      <div class="flex gap-0.5">${['H','J','K'].map(c=>colHdr(c,rightFJ&&c==='K')).join('')}</div>
+    </div>
+    <div class="flex items-center mb-3">
+      <div class="w-6 shrink-0"></div>
+      <div class="flex gap-0.5">
+        <div class="w-6 h-4 flex items-center justify-center text-[9px] ${leftFJ?'text-sky-400':'text-zinc-700'}">🪟</div>
+        <div class="w-6"></div><div class="w-6"></div>
+      </div>
+      <div class="w-1.5 shrink-0"></div>
+      <div class="flex gap-0.5"><div class="w-5"></div><div class="w-5"></div><div class="w-5"></div><div class="w-5"></div></div>
+      <div class="w-1.5 shrink-0"></div>
+      <div class="flex gap-0.5">
+        <div class="w-6"></div><div class="w-6"></div>
+        <div class="w-6 h-4 flex items-center justify-center text-[9px] ${rightFJ?'text-sky-400':'text-zinc-700'}">🪟</div>
+      </div>
+    </div>`;
+
+    /* ── ZIPAIR Pod section (rows 1-6, 2-2-2 premium) ── */
+    h += `<div class="flex items-center mb-0.5 rounded-lg overflow-hidden" style="border:1px solid rgba(245,158,11,0.18);background:rgba(245,158,11,0.04)">
+      <div class="w-6 shrink-0 text-center text-[7px] font-bold text-amber-600/50 py-2">1–6</div>
+      <div class="flex-1 px-2 py-1.5">
+        <div class="text-[7px] font-black uppercase tracking-widest text-amber-500/60 mb-1.5">✦ ZIPAIR POD · Premium</div>
+        <div class="flex gap-2">
+          ${[0,1,2,3,4,5].map(()=>`<div class="flex flex-col gap-0.5">${[0,1].map(()=>`<div class="w-4 h-1.5 rounded-[2px]" style="background:rgba(245,158,11,0.22);border:0.5px solid rgba(245,158,11,0.28)"></div>`).join('')}</div>`).join('')}
+        </div>
+      </div>
+    </div>`;
+
+    /* ── Galley / Exit ── */
+    h += `<div class="flex items-center gap-2 py-1.5 mb-0.5">
+      <div class="w-6 shrink-0"></div>
+      <div class="flex-1 border-t border-dashed border-zinc-800"></div>
+      <span class="text-[7px] uppercase tracking-widest text-zinc-700 whitespace-nowrap">galley / exit</span>
+      <div class="flex-1 border-t border-dashed border-zinc-800"></div>
+    </div>`;
+
+    /* ── Economy rows 11-38 ── */
+    ECO_ROWS.forEach(row => {
+      const isGrp = GROUP_ROWS.has(row);
 
       if (row === 24) {
-        h += `<div class="flex items-center gap-2 my-2">
-          <div class="w-5"></div>
+        h += `<div class="flex items-center gap-2 py-1" data-group-row>
+          <div class="w-6 shrink-0"></div>
           <div class="flex-1 border-t border-dashed border-primary/30"></div>
-          <span class="text-[8px] text-primary/50 uppercase tracking-widest font-bold whitespace-nowrap">กลุ่มเรา</span>
+          <span class="text-[7px] font-black uppercase tracking-widest text-primary/50 whitespace-nowrap">กลุ่มเรา</span>
           <div class="flex-1 border-t border-dashed border-primary/30"></div>
         </div>`;
       }
 
-      h += `<div class="flex items-center gap-0 mb-1.5">
-        <div class="w-5 text-[9px] text-zinc-600 font-bold text-right pr-1 shrink-0">${row}</div>
-        <div class="flex gap-1">${L_COLS.map(c => seatCell(`${row}${c}`, lookup[`${row}${c}`], grp)).join('')}</div>
-        <div class="flex-1 mx-1 flex items-center justify-center">
-          <div class="w-full rounded border border-dashed ${grp?'border-zinc-700':'border-zinc-800/50'} flex items-center justify-center gap-0.5 py-2.5">
-            ${[1,2,3,4].map(()=>`<span class="w-1.5 h-1.5 rounded-sm ${grp?'bg-zinc-700':'bg-zinc-800/60'}"></span>`).join('')}
-          </div>
-        </div>
-        <div class="flex gap-1">${R_COLS.map(c => seatCell(`${row}${c}`, lookup[`${row}${c}`], grp)).join('')}</div>
+      h += `<div class="flex items-center gap-0 mb-0.5">
+        <div class="w-6 shrink-0 text-[8px] font-bold text-right pr-1 ${isGrp?'text-primary/60':'text-zinc-700'}">${row}</div>
+        <div class="flex gap-0.5">${['A','B','C'].map(c => miniSeat(`${row}${c}`, lookup[`${row}${c}`], leftFJ&&c==='A')).join('')}</div>
+        <div class="w-1.5 shrink-0"></div>
+        <div class="flex gap-0.5">${['D','E','F','G'].map(()=>`<div class="w-5 h-5 rounded-sm" style="background:rgba(255,255,255,0.01);border:1px solid rgba(255,255,255,0.035)"></div>`).join('')}</div>
+        <div class="w-1.5 shrink-0"></div>
+        <div class="flex gap-0.5">${['H','J','K'].map(c => miniSeat(`${row}${c}`, lookup[`${row}${c}`], rightFJ&&c==='K')).join('')}</div>
       </div>`;
 
       if (row === 26) {
-        h += `<div class="flex items-center gap-2 my-2">
-          <div class="w-5"></div>
-          <div class="flex-1 border-t border-dashed border-primary/30"></div>
+        h += `<div class="flex items-center gap-2 py-1">
+          <div class="w-6 shrink-0"></div>
+          <div class="flex-1 border-t border-dashed border-primary/20"></div>
         </div>`;
       }
     });
 
-    /* Bottom window row */
-    h += `<div class="flex items-center mt-1">
-      <div class="w-5 shrink-0"></div>
-      <div class="flex gap-1">
-        <div class="w-10 text-center text-[10px]">🪟</div>
-        <div class="w-10"></div><div class="w-10"></div>
+    /* ── Bottom window icons ── */
+    h += `<div class="flex items-center mt-2">
+      <div class="w-6 shrink-0"></div>
+      <div class="flex gap-0.5">
+        <div class="w-6 h-4 flex items-center justify-center text-[9px] ${leftFJ?'text-sky-400':'text-zinc-700'}">🪟</div>
+        <div class="w-6"></div><div class="w-6"></div>
       </div>
-      <div class="flex-1 mx-1"></div>
-      <div class="flex gap-1">
-        <div class="w-10"></div><div class="w-10"></div>
-        <div class="w-10 text-center text-[10px]">🪟</div>
+      <div class="w-1.5 shrink-0"></div>
+      <div class="flex gap-0.5"><div class="w-5"></div><div class="w-5"></div><div class="w-5"></div><div class="w-5"></div></div>
+      <div class="w-1.5 shrink-0"></div>
+      <div class="flex gap-0.5">
+        <div class="w-6"></div><div class="w-6"></div>
+        <div class="w-6 h-4 flex items-center justify-center text-[9px] ${rightFJ?'text-sky-400':'text-zinc-700'}">🪟</div>
       </div>
     </div>`;
 
@@ -1170,24 +1233,32 @@
       el.addEventListener('click', () => {
         const pid = parseInt(el.dataset.pid);
         _hl = _hl === pid ? null : pid;
-        renderGrid();
-        renderCards();
+        renderGrid(); renderCards();
       });
     });
   }
 
   function renderCards() {
     const html = PAX.map(p => {
-      const seat = _flight === 'out' ? p.seatOut : p.seatRet;
       const active = _hl === p.id;
       const dimmed = _hl !== null && !active;
-      return `<div class="rounded-xl p-3 border cursor-pointer transition-all"
-        style="background:${p.color}${active?'18':'0a'};border-color:${p.color}${active?'55':'1a'};opacity:${dimmed?.35:1}"
-        onclick="highlightCard(${p.id})">
-        <div class="text-[7px] font-black tracking-widest mb-1" style="color:${p.color}">${p.abbr}</div>
-        <div class="text-[8px] text-zinc-500 truncate mb-1.5">${p.name.slice(0,9)}</div>
-        <div class="text-lg font-black font-['Inter'] leading-none" style="color:${active?p.color:'#e4e4e7'}">${seat}</div>
-        <div class="text-[8px] mt-1" style="color:${p.color}88">${_flight === 'out' ? '✈ BKK→NRT' : '✈ NRT→BKK'}</div>
+      const sOut = p.seatOut, sRet = p.seatRet;
+      const hiOut = _flight === 'out', hiRet = _flight === 'ret';
+      return `<div class="rounded-xl p-2.5 border cursor-pointer transition-all" onclick="highlightCard(${p.id})"
+        style="background:${p.color}${active?'15':'08'};border-color:${p.color}${active?'55':'16'};opacity:${dimmed?.28:1}">
+        <div class="w-6 h-6 rounded-md flex items-center justify-center text-[7px] font-black mb-1.5"
+             style="background:${p.color}20;color:${p.color}">${p.abbr}</div>
+        <div class="text-[8px] font-bold truncate mb-2" style="color:${p.color}">${p.name.slice(0,8)}</div>
+        <div class="space-y-1">
+          <div class="flex items-center justify-between gap-1">
+            <span class="text-[6px] uppercase tracking-wider text-zinc-600 shrink-0">ไป</span>
+            <span class="text-[11px] font-black font-['Inter'] leading-none" style="color:${hiOut?(active?p.color:'#e4e4e7'):'#3f3f46'}">${sOut}</span>
+          </div>
+          <div class="flex items-center justify-between gap-1">
+            <span class="text-[6px] uppercase tracking-wider text-zinc-600 shrink-0">กลับ</span>
+            <span class="text-[11px] font-black font-['Inter'] leading-none" style="color:${hiRet?(active?p.color:'#e4e4e7'):'#3f3f46'}">${sRet}</span>
+          </div>
+        </div>
       </div>`;
     }).join('');
     document.getElementById('passenger-cards').innerHTML = html;
@@ -1195,8 +1266,7 @@
 
   function highlightCard(pid) {
     _hl = _hl === pid ? null : pid;
-    renderGrid();
-    renderCards();
+    renderGrid(); renderCards();
   }
 </script>
 </body>
