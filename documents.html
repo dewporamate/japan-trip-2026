@@ -631,7 +631,13 @@
       <div class="flex items-center gap-2 mb-4">
         <span class="material-symbols-outlined text-primary" style="font-size:18px">flight</span>
         <h2 class="text-xs font-bold font-['Inter'] uppercase tracking-widest text-zinc-500">ตั๋วเครื่องบิน · Flights</h2>
-        <span class="ml-auto text-[10px] text-zinc-600 font-['Inter']">Booking No. <span class="text-zinc-400 font-bold">1622926516747094</span></span>
+        <div class="ml-auto flex items-center gap-3">
+          <button onclick="openSeatModal()" class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-primary/30 bg-primary/5 hover:bg-primary/10 text-primary text-[9px] font-black font-['Inter'] uppercase tracking-widest transition-colors">
+            <span class="material-symbols-outlined" style="font-size:13px">event_seat</span>
+            Seat Map
+          </button>
+          <span class="hidden md:inline text-[10px] text-zinc-600 font-['Inter']">Booking No. <span class="text-zinc-400 font-bold">1622926516747094</span></span>
+        </div>
       </div>
 
       <!-- Outbound -->
@@ -901,6 +907,62 @@
   </div>
 </main>
 
+<!-- ══════════════════════════════════════════
+     SEAT MAP MODAL
+══════════════════════════════════════════ -->
+<div id="seat-modal" class="fixed inset-0 bg-black/75 z-[100] hidden items-end md:items-center justify-center" onclick="handleSeatModalClick(event)">
+  <div class="bg-[#0d0d0d] border border-white/8 rounded-t-2xl md:rounded-2xl w-full md:max-w-lg max-h-[92svh] flex flex-col">
+
+    <!-- Modal header -->
+    <div class="flex items-center gap-3 px-5 py-4 border-b border-white/5 shrink-0">
+      <span class="material-symbols-outlined text-primary" style="font-size:18px">event_seat</span>
+      <div>
+        <div class="text-sm font-bold font-['Manrope']">แผนผังที่นั่ง · Seat Map</div>
+        <div id="seat-flight-info" class="text-[10px] text-zinc-600 font-['Inter'] mt-0.5"></div>
+      </div>
+      <!-- Flight toggle -->
+      <div class="ml-auto flex rounded-lg border border-white/10 overflow-hidden shrink-0">
+        <button id="seat-tab-out" onclick="setSeatFlight('out')" class="px-3 py-2 text-[9px] font-black font-['Inter'] uppercase tracking-widest transition-colors">✈ ขาไป</button>
+        <button id="seat-tab-ret" onclick="setSeatFlight('ret')" class="px-3 py-2 text-[9px] font-black font-['Inter'] uppercase tracking-widest transition-colors">✈ ขากลับ</button>
+      </div>
+      <button onclick="closeSeatModal()" class="w-8 h-8 flex items-center justify-center rounded-full hover:bg-white/5 text-zinc-500 hover:text-primary transition-colors ml-1 shrink-0">
+        <span class="material-symbols-outlined" style="font-size:18px">close</span>
+      </button>
+    </div>
+
+    <!-- Scrollable body -->
+    <div class="flex-1 overflow-y-auto px-4 py-5 space-y-5">
+
+      <!-- Legend -->
+      <div class="flex items-center justify-between">
+        <div class="text-[9px] text-zinc-700 uppercase tracking-widest font-bold">ZIPAIR 787 · Economy</div>
+        <div class="flex items-center gap-3">
+          <span class="flex items-center gap-1.5 text-[9px] text-zinc-600">
+            <span class="w-3 h-3 rounded-sm inline-block border border-primary/60 bg-primary/15"></span>กลุ่มเรา
+          </span>
+          <span class="flex items-center gap-1.5 text-[9px] text-zinc-600">
+            <span class="w-3 h-3 rounded-sm inline-block border border-white/10 bg-white/3"></span>ว่าง
+          </span>
+        </div>
+      </div>
+
+      <!-- Seat grid -->
+      <div id="seat-grid" class="select-none"></div>
+
+      <!-- Divider -->
+      <div class="border-t border-white/5"></div>
+
+      <!-- Passenger cards -->
+      <div>
+        <div class="text-[9px] text-zinc-600 uppercase tracking-widest font-bold mb-3">ผู้โดยสาร · กด card หรือ seat เพื่อ highlight</div>
+        <div class="grid grid-cols-3 gap-2" id="passenger-cards"></div>
+      </div>
+
+      <div class="h-2"></div>
+    </div>
+  </div>
+</div>
+
 <script>
   const STORE_KEY = 'japan2026_docs';
 
@@ -959,6 +1021,183 @@
   }
 
   loadData();
+
+  /* ══════════════════════════════════════════
+     SEAT MAP
+  ══════════════════════════════════════════ */
+  const PAX = [
+    { id:0, name:'PORAMATE',    abbr:'DEW', seatOut:'24C', seatRet:'24H', color:'#ff6b9d' },
+    { id:1, name:'THANASAN',    abbr:'NAS', seatOut:'24A', seatRet:'24K', color:'#60a5fa' },
+    { id:2, name:'THANYAKORN',  abbr:'TNY', seatOut:'24B', seatRet:'24J', color:'#c084fc' },
+    { id:3, name:'SARAN',       abbr:'SAR', seatOut:'25A', seatRet:'25K', color:'#fb923c' },
+    { id:4, name:'PHEERAPHRAT', abbr:'PHR', seatOut:'25B', seatRet:'25J', color:'#2dd4bf' },
+    { id:5, name:'SORAWIT',     abbr:'SOR', seatOut:'25C', seatRet:'25H', color:'#86efac' },
+    { id:6, name:'PARIN',       abbr:'PAR', seatOut:'26C', seatRet:'26H', color:'#fbbf24' },
+    { id:7, name:'ANAWAT',      abbr:'ANA', seatOut:'26A', seatRet:'26K', color:'#f87171' },
+    { id:8, name:'KIDAKON',     abbr:'KID', seatOut:'26B', seatRet:'26J', color:'#818cf8' },
+  ];
+
+  const SEAT_ROWS = [22, 23, 24, 25, 26, 27];
+  const GROUP_ROWS = new Set([24, 25, 26]);
+  const L_COLS = ['A','B','C'];
+  const R_COLS = ['H','J','K'];
+
+  let _flight = 'out';
+  let _hl = null; // highlighted passenger id
+
+  function buildLookup(fl) {
+    const m = {};
+    PAX.forEach(p => { m[fl === 'out' ? p.seatOut : p.seatRet] = p; });
+    return m;
+  }
+
+  function openSeatModal() {
+    _hl = null;
+    document.getElementById('seat-modal').classList.remove('hidden');
+    document.getElementById('seat-modal').classList.add('flex');
+    setSeatFlight('out');
+  }
+
+  function closeSeatModal() {
+    document.getElementById('seat-modal').classList.add('hidden');
+    document.getElementById('seat-modal').classList.remove('flex');
+  }
+
+  function handleSeatModalClick(e) {
+    if (e.target === document.getElementById('seat-modal')) closeSeatModal();
+  }
+
+  function setSeatFlight(fl) {
+    _flight = fl;
+    const isOut = fl === 'out';
+    const activeStyle = 'bg-primary text-[#09090b]';
+    const inactiveStyle = 'text-zinc-500 hover:text-zinc-300 transition-colors';
+    document.getElementById('seat-tab-out').className = `px-3 py-2 text-[9px] font-black font-['Inter'] uppercase tracking-widest transition-colors ${isOut ? activeStyle : inactiveStyle}`;
+    document.getElementById('seat-tab-ret').className = `px-3 py-2 text-[9px] font-black font-['Inter'] uppercase tracking-widest transition-colors ${!isOut ? activeStyle : inactiveStyle}`;
+    document.getElementById('seat-flight-info').textContent = isOut
+      ? 'ZG052 · BKK → NRT · 9 Oct 2026 · 23:10'
+      : 'ZG051 · NRT → BKK · 14 Oct 2026 · 17:00';
+    renderGrid();
+    renderCards();
+  }
+
+  function seatCell(key, p, isGroup) {
+    if (p) {
+      const dimmed = _hl !== null && _hl !== p.id;
+      const glow   = _hl === p.id;
+      return `<div class="w-10 h-10 rounded-lg flex flex-col items-center justify-center cursor-pointer transition-all"
+        style="background:${p.color}${dimmed?'10':'1a'};border:1.5px solid ${p.color}${dimmed?'44':''};opacity:${dimmed?.35:1};${glow?'box-shadow:0 0 12px '+p.color+'55':''}"
+        data-pid="${p.id}" title="${p.name} · ${key}">
+        <span class="text-[8px] font-black leading-none" style="color:${p.color}">${p.abbr}</span>
+        <span class="text-[7px] leading-none mt-0.5" style="color:${p.color}88">${key}</span>
+      </div>`;
+    }
+    return `<div class="w-10 h-10 rounded-lg border border-white/5 bg-white/[0.015]"></div>`;
+  }
+
+  function renderGrid() {
+    const lookup = buildLookup(_flight);
+    let h = '';
+
+    /* Column headers */
+    h += `<div class="flex items-center mb-2">
+      <div class="w-5 shrink-0"></div>
+      <div class="flex gap-1">${L_COLS.map(c=>`<div class="w-10 text-center text-[9px] text-zinc-600 font-bold">${c}</div>`).join('')}</div>
+      <div class="flex-1 mx-1"></div>
+      <div class="flex gap-1">${R_COLS.map(c=>`<div class="w-10 text-center text-[9px] text-zinc-600 font-bold">${c}</div>`).join('')}</div>
+    </div>
+    <div class="flex items-center mb-1">
+      <div class="w-5 shrink-0"></div>
+      <div class="flex gap-1">
+        <div class="w-10 text-center text-[10px]">🪟</div>
+        <div class="w-10"></div><div class="w-10"></div>
+      </div>
+      <div class="flex-1 mx-1"></div>
+      <div class="flex gap-1">
+        <div class="w-10"></div><div class="w-10"></div>
+        <div class="w-10 text-center text-[10px]">🪟</div>
+      </div>
+    </div>`;
+
+    SEAT_ROWS.forEach(row => {
+      const grp = GROUP_ROWS.has(row);
+
+      if (row === 24) {
+        h += `<div class="flex items-center gap-2 my-2">
+          <div class="w-5"></div>
+          <div class="flex-1 border-t border-dashed border-primary/30"></div>
+          <span class="text-[8px] text-primary/50 uppercase tracking-widest font-bold whitespace-nowrap">กลุ่มเรา</span>
+          <div class="flex-1 border-t border-dashed border-primary/30"></div>
+        </div>`;
+      }
+
+      h += `<div class="flex items-center gap-0 mb-1.5">
+        <div class="w-5 text-[9px] text-zinc-600 font-bold text-right pr-1 shrink-0">${row}</div>
+        <div class="flex gap-1">${L_COLS.map(c => seatCell(`${row}${c}`, lookup[`${row}${c}`], grp)).join('')}</div>
+        <div class="flex-1 mx-1 flex items-center justify-center">
+          <div class="w-full rounded border border-dashed ${grp?'border-zinc-700':'border-zinc-800/50'} flex items-center justify-center gap-0.5 py-2.5">
+            ${[1,2,3,4].map(()=>`<span class="w-1.5 h-1.5 rounded-sm ${grp?'bg-zinc-700':'bg-zinc-800/60'}"></span>`).join('')}
+          </div>
+        </div>
+        <div class="flex gap-1">${R_COLS.map(c => seatCell(`${row}${c}`, lookup[`${row}${c}`], grp)).join('')}</div>
+      </div>`;
+
+      if (row === 26) {
+        h += `<div class="flex items-center gap-2 my-2">
+          <div class="w-5"></div>
+          <div class="flex-1 border-t border-dashed border-primary/30"></div>
+        </div>`;
+      }
+    });
+
+    /* Bottom window row */
+    h += `<div class="flex items-center mt-1">
+      <div class="w-5 shrink-0"></div>
+      <div class="flex gap-1">
+        <div class="w-10 text-center text-[10px]">🪟</div>
+        <div class="w-10"></div><div class="w-10"></div>
+      </div>
+      <div class="flex-1 mx-1"></div>
+      <div class="flex gap-1">
+        <div class="w-10"></div><div class="w-10"></div>
+        <div class="w-10 text-center text-[10px]">🪟</div>
+      </div>
+    </div>`;
+
+    const grid = document.getElementById('seat-grid');
+    grid.innerHTML = h;
+    grid.querySelectorAll('[data-pid]').forEach(el => {
+      el.addEventListener('click', () => {
+        const pid = parseInt(el.dataset.pid);
+        _hl = _hl === pid ? null : pid;
+        renderGrid();
+        renderCards();
+      });
+    });
+  }
+
+  function renderCards() {
+    const html = PAX.map(p => {
+      const seat = _flight === 'out' ? p.seatOut : p.seatRet;
+      const active = _hl === p.id;
+      const dimmed = _hl !== null && !active;
+      return `<div class="rounded-xl p-3 border cursor-pointer transition-all"
+        style="background:${p.color}${active?'18':'0a'};border-color:${p.color}${active?'55':'1a'};opacity:${dimmed?.35:1}"
+        onclick="highlightCard(${p.id})">
+        <div class="text-[7px] font-black tracking-widest mb-1" style="color:${p.color}">${p.abbr}</div>
+        <div class="text-[8px] text-zinc-500 truncate mb-1.5">${p.name.slice(0,9)}</div>
+        <div class="text-lg font-black font-['Inter'] leading-none" style="color:${active?p.color:'#e4e4e7'}">${seat}</div>
+        <div class="text-[8px] mt-1" style="color:${p.color}88">${_flight === 'out' ? '✈ BKK→NRT' : '✈ NRT→BKK'}</div>
+      </div>`;
+    }).join('');
+    document.getElementById('passenger-cards').innerHTML = html;
+  }
+
+  function highlightCard(pid) {
+    _hl = _hl === pid ? null : pid;
+    renderGrid();
+    renderCards();
+  }
 </script>
 </body>
 </html>
