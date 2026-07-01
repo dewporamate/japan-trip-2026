@@ -1192,70 +1192,7 @@ document.getElementById('modal-delete').onclick = async ()=>{
 /* ══════════════════════════════════════════
    PLACE PHOTOS
 ══════════════════════════════════════════ */
-const PHOTO_LS_KEY = 'japan2026_place_photos_v1';
-let _photoMem = null;
-
-function getPhotoMem() {
-  if (!_photoMem) {
-    try {
-      const raw = JSON.parse(localStorage.getItem(PHOTO_LS_KEY) || '{}');
-      const now = Date.now();
-      _photoMem = Object.fromEntries(
-        Object.entries(raw).filter(([, v]) => now - (v.ts || 0) < 864e5) // 1 day (Google URLs expire fast)
-      );
-    } catch (_) { _photoMem = {}; }
-  }
-  return _photoMem;
-}
-
-function setPhotoMem(cKey, url) {
-  const m = getPhotoMem();
-  m[cKey] = { url, ts: Date.now() };
-  try { localStorage.setItem(PHOTO_LS_KEY, JSON.stringify(m)); } catch (_) {}
-}
-
-function applyPhotoSlot(slot, url) {
-  const img  = slot.querySelector('img');
-  const icon = slot.querySelector('.material-symbols-outlined');
-  if (!img || !url) return;
-  img.onload = () => {
-    if (img.naturalWidth > 0) {
-      img.classList.remove('hidden');
-      if (icon) icon.style.display = 'none';
-    }
-  };
-  img.onerror = () => { img.classList.add('hidden'); if (icon) icon.style.display = ''; };
-  img.src = url;
-}
-
-const placePhotoObs = new IntersectionObserver(entries => {
-  entries.forEach(entry => {
-    if (!entry.isIntersecting) return;
-    placePhotoObs.unobserve(entry.target);
-    const slot = entry.target;
-    const q   = slot.dataset.q || '';
-    const lat = parseFloat(slot.dataset.lat);
-    const lng = parseFloat(slot.dataset.lng);
-    if (!q || !lat || !lng) return;
-    const cKey = `${lat.toFixed(3)}_${lng.toFixed(3)}`;
-    const hit  = getPhotoMem()[cKey];
-    if (hit !== undefined) { if (hit.url) applyPhotoSlot(slot, hit.url); return; }
-    if (!window.google?.maps?.places) return;
-    const svc = new google.maps.places.PlacesService(document.createElement('div'));
-    svc.textSearch(
-      { query: decodeURIComponent(q), location: new google.maps.LatLng(lat, lng), radius: 300 },
-      (results, st) => {
-        if (st !== 'OK' || !results.length) { setPhotoMem(cKey, ''); return; }
-        svc.getDetails({ placeId: results[0].place_id, fields: ['photos'] }, (place, ds) => {
-          if (ds !== 'OK' || !place?.photos?.length) { setPhotoMem(cKey, ''); return; }
-          const url = place.photos[0].getUrl({ maxWidth: 320 });
-          setPhotoMem(cKey, url);
-          applyPhotoSlot(slot, url);
-        });
-      }
-    );
-  });
-}, { rootMargin: '200px' });
+/* Place photo fetching removed — was billing under Google Places "Places Photo" SKU on every card view */
 
 /* ══════════════════════════════════════════
    BUILD TIMELINE
@@ -1406,10 +1343,6 @@ function buildTimeline(filter){
 
       el.appendChild(dotEl);
       el.appendChild(card);
-      if (d.lat) {
-        const photoSlot = card.querySelector('.place-photo-slot');
-        if (photoSlot) placePhotoObs.observe(photoSlot);
-      }
       wrapper.appendChild(el);
     });
 
