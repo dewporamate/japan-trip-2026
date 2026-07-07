@@ -200,9 +200,9 @@
     will-change: opacity;
   }
   .hero__scroll span {
-    font-size: 0.4rem;
+    font-size: 0.55rem;
     letter-spacing: 0.4em;
-    color: #333;
+    color: #888;
     text-transform: uppercase;
   }
   .hero__scroll-line {
@@ -261,9 +261,9 @@
   }
 
   .countdown__label {
-    font-size: 0.5rem;
+    font-size: 0.62rem;
     letter-spacing: 0.35em;
-    color: #333;
+    color: #888;
     text-transform: uppercase;
     font-weight: 600;
   }
@@ -291,9 +291,9 @@
     font-variant-numeric: tabular-nums;
   }
   .countdown__unit-label {
-    font-size: 0.4rem;
+    font-size: 0.58rem;
     letter-spacing: 0.2em;
-    color: #333;
+    color: #777;
     text-transform: uppercase;
   }
 
@@ -311,11 +311,11 @@
   }
 
   .countdown__date {
-    font-size: 0.48rem;
+    font-size: 0.62rem;
     letter-spacing: 0.3em;
-    color: #222;
+    color: #666;
     text-transform: uppercase;
-    border-top: 1px solid #0f0f0f;
+    border-top: 1px solid #1a1a1a;
     padding-top: 1.5rem;
     width: 100%;
     max-width: 360px;
@@ -331,13 +331,13 @@
   }
 
   .nav__header {
-    font-size: 0.42rem;
+    font-size: 0.6rem;
     letter-spacing: 0.35em;
-    color: #222;
+    color: #666;
     text-transform: uppercase;
     text-align: center;
     padding: 1.5rem 0;
-    border-bottom: 1px solid #0a0a0a;
+    border-bottom: 1px solid #1a1a1a;
     margin-bottom: 1.5rem;
   }
 
@@ -383,14 +383,14 @@
 
   .nav__card-icon { font-size: 1.8rem; line-height: 1; }
   .nav__card-label {
-    font-size: 0.48rem;
+    font-size: 0.62rem;
     letter-spacing: 0.15em;
-    color: #666;
+    color: #888;
     text-transform: uppercase;
     font-weight: 700;
     transition: color 0.25s;
   }
-  .nav__card:hover .nav__card-label { color: #999; }
+  .nav__card:hover .nav__card-label { color: #bbb; }
 
   /* ═══════════════════════════════════════
      FOOTER
@@ -423,7 +423,7 @@
 
 <!-- ══════════ HERO ══════════ -->
 <section class="hero">
-  <video class="hero__video" muted playsinline preload="auto">
+  <video class="hero__video" muted playsinline autoplay preload="auto" poster="hero-fuji-poster.jpg">
     <source src="hero-fuji.mp4" type="video/mp4">
   </video>
   <div class="hero__overlay" aria-hidden="true"></div>
@@ -555,7 +555,7 @@
   function lerpScrub() {
     const diff = targetTime - currentTime;
     if (Math.abs(diff) > 0.001) {
-      currentTime += diff * 0.18;          // lerp factor — higher = snappier
+      currentTime += diff * 0.28;          // lerp factor — higher = snappier
       if (video.readyState >= 2) video.currentTime = currentTime;
       rafId = requestAnimationFrame(lerpScrub);
     } else {
@@ -569,10 +569,18 @@
   function initScrub() {
     const dur = video.duration || 12;
 
+    // iOS Safari won't decode/paint a frame until playback has actually
+    // started at least once — play immediately then pause so the poster
+    // frame is replaced with real video instead of staying blank.
+    const playPromise = video.play();
+    if (playPromise && typeof playPromise.then === "function") {
+      playPromise.then(() => video.pause()).catch(() => {});
+    }
+
     ScrollTrigger.create({
       trigger: ".hero",
       start: "top top",
-      end: "+=2400",
+      end: "+=1000",
       pin: true,
       scrub: false,                        // we handle smoothing ourselves via lerp
       onUpdate: (self) => {
@@ -588,7 +596,7 @@
       scrollTrigger: {
         trigger: ".hero",
         start: "top top",
-        end: "+=2400",
+        end: "+=1000",
         scrub: 1,
       },
     });
@@ -598,7 +606,7 @@
       scrollTrigger: {
         trigger: ".hero",
         start: "top top",
-        end: "+=2400",
+        end: "+=1000",
         scrub: 1,
       },
     })
