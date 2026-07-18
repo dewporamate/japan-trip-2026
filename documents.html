@@ -1011,38 +1011,60 @@
   </div>
 </div>
 
-<script>
-  const STORE_KEY = 'japan2026_docs';
+<!-- Shared-field sync: same Firestore project the itinerary pages already use,
+     so edits here are visible to everyone instead of only the editing browser. -->
+<script type="module">
+  import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js';
+  import { getFirestore, doc, setDoc, onSnapshot } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
 
-  function loadData() {
-    try {
-      const saved = JSON.parse(localStorage.getItem(STORE_KEY) || '{}');
-      document.querySelectorAll('[data-key]').forEach(el => {
-        if (saved[el.dataset.key] !== undefined && saved[el.dataset.key] !== '') {
-          el.textContent = saved[el.dataset.key];
-        }
-      });
-    } catch(e) {}
-  }
+  const firebaseConfig = {
+    apiKey: "AIzaSyA48_2e-Ed3ss20V5yuTlLRb9vXx3V3OgY",
+    authDomain: "japan-trip-2026-b0275.firebaseapp.com",
+    projectId: "japan-trip-2026-b0275",
+    storageBucket: "japan-trip-2026-b0275.firebasestorage.app",
+    messagingSenderId: "551330402525",
+    appId: "1:551330402525:web:b1ccc22dbb76ac7c560b34"
+  };
+  const db = getFirestore(initializeApp(firebaseConfig));
+  const docRef = doc(db, 'shared_docs', 'documents_page');
+  const LS_FALLBACK_KEY = 'japan2026_docs'; // used only if the Firestore write is rejected
 
-  function saveData() {
-    const data = {};
+  onSnapshot(docRef, snap => {
+    const data = snap.data() || {};
     document.querySelectorAll('[data-key]').forEach(el => {
-      data[el.dataset.key] = el.textContent.trim();
+      if (el === document.activeElement) return; // don't clobber whoever is typing right now
+      const v = data[el.dataset.key];
+      if (v !== undefined && el.textContent !== v) el.textContent = v;
     });
-    localStorage.setItem(STORE_KEY, JSON.stringify(data));
-    const ind = document.getElementById('save-indicator');
-    ind.classList.remove('hidden');
-    ind.classList.add('save-pulse');
-    setTimeout(() => ind.classList.remove('save-pulse'), 600);
-  }
+  }, err => console.error('documents_page sync read failed:', err));
 
+  const saveTimers = {};
+  window.__syncField = function (key, value) {
+    clearTimeout(saveTimers[key]);
+    saveTimers[key] = setTimeout(async () => {
+      try {
+        await setDoc(docRef, { [key]: value }, { merge: true });
+        const ind = document.getElementById('save-indicator');
+        ind.classList.remove('hidden');
+        ind.classList.add('save-pulse');
+        setTimeout(() => ind.classList.remove('save-pulse'), 600);
+      } catch (e) {
+        console.error('documents_page sync write failed, saved locally only:', e);
+        const local = JSON.parse(localStorage.getItem(LS_FALLBACK_KEY) || '{}');
+        local[key] = value;
+        localStorage.setItem(LS_FALLBACK_KEY, JSON.stringify(local));
+      }
+    }, 500);
+  };
+</script>
+
+<script>
   document.querySelectorAll('[contenteditable]').forEach(el => {
     if (el.classList.contains('readonly')) {
       el.setAttribute('contenteditable', 'false');
       return;
     }
-    el.addEventListener('input', () => saveData());
+    el.addEventListener('input', () => window.__syncField(el.dataset.key, el.textContent.trim()));
     el.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); el.blur(); } });
   });
 
@@ -1067,8 +1089,6 @@
     document.getElementById('mobile-drawer').classList.remove('open');
     document.getElementById('mobile-overlay').classList.add('hidden');
   }
-
-  loadData();
 
   /* ══════════════════════════════════════════
      SEAT MAP
