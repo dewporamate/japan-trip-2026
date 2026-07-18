@@ -327,6 +327,59 @@
   </div>
 </main>
 
+<!-- Shared packing-state sync: Firestore doc (same project as the itinerary pages)
+     so everyone's checkmarks are visible to everyone, not just this browser -->
+<script type="module">
+  import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js';
+  import { getFirestore, doc, setDoc, onSnapshot } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyA48_2e-Ed3ss20V5yuTlLRb9vXx3V3OgY",
+    authDomain: "japan-trip-2026-b0275.firebaseapp.com",
+    projectId: "japan-trip-2026-b0275",
+    storageBucket: "japan-trip-2026-b0275.firebasestorage.app",
+    messagingSenderId: "551330402525",
+    appId: "1:551330402525:web:b1ccc22dbb76ac7c560b34"
+  };
+  const db = getFirestore(initializeApp(firebaseConfig));
+  const docRef = doc(db, 'shared_docs', 'packing_page');
+  const DEFAULT_CHECKED_IDS = [22, 41, 43];
+  const LS_FALLBACK_KEY = 'japan2026_packing';
+
+  let seeding = false;
+  onSnapshot(docRef, snap => {
+    const data = snap.data();
+    if (!data && !seeding) {
+      seeding = true;
+      setDoc(docRef, { items: Object.fromEntries(DEFAULT_CHECKED_IDS.map(id => [id, true])) })
+        .catch(e => console.error('packing seed failed:', e))
+        .finally(() => { seeding = false; });
+      return; // the write above re-triggers this listener with the seeded data
+    }
+    const items = (data && data.items) || {};
+    const ids = Object.keys(items).filter(k => items[k]).map(Number);
+    if (window.__onPackingSnapshot) window.__onPackingSnapshot(new Set(ids));
+  }, err => console.error('packing sync read failed:', err));
+
+  function writeItems(patch) {
+    return setDoc(docRef, { items: patch }, { merge: true }).catch(e => {
+      console.error('packing sync write failed, saved locally only:', e);
+      const local = JSON.parse(localStorage.getItem(LS_FALLBACK_KEY) || '[]');
+      const set = new Set(local);
+      Object.entries(patch).forEach(([id, checked]) => {
+        if (checked) set.add(Number(id)); else set.delete(Number(id));
+      });
+      localStorage.setItem(LS_FALLBACK_KEY, JSON.stringify([...set]));
+    });
+  }
+
+  window.__packingAPI = {
+    setChecked: (id, checked) => writeItems({ [id]: checked }),
+    setCheckedMany: (ids, checked) => writeItems(Object.fromEntries(ids.map(id => [id, checked]))),
+    resetToDefault: () => setDoc(docRef, { items: Object.fromEntries(DEFAULT_CHECKED_IDS.map(id => [id, true])) }),
+  };
+</script>
+
 <script>
 // ── Data ────────────────────────────────────────────────────────────────
 const CATEGORIES = [
@@ -425,23 +478,17 @@ const CATEGORIES = [
 
 // Default checked from spreadsheet
 const DEFAULT_CHECKED = new Set([22, 41, 43]);
-const LS_KEY = 'japan2026_packing';
+const LS_FALLBACK_KEY = 'japan2026_packing'; // used only if a Firestore write is rejected
 
-// ── State ────────────────────────────────────────────────────────────────
-function loadState() {
-  try {
-    const saved = JSON.parse(localStorage.getItem(LS_KEY) || 'null');
-    if (saved && typeof saved === 'object') return new Set(saved);
-  } catch(e) {}
-  return new Set(DEFAULT_CHECKED);
-}
-
-function saveState(checked) {
-  localStorage.setItem(LS_KEY, JSON.stringify([...checked]));
-}
-
-let checkedIds = loadState();
+let checkedIds = new Set(DEFAULT_CHECKED); // replaced once Firestore delivers the shared state
 let currentFilter = 'all';
+
+// ── Firestore sync hook (module script below owns the actual read/write) ──
+function __onPackingSnapshot(checked) {
+  checkedIds = checked;
+  renderCategories();
+  updateProgress();
+}
 
 // ── Render ────────────────────────────────────────────────────────────────
 function getTotalPacked() {
@@ -564,17 +611,14 @@ function renderCategories() {
 
 // ── Actions ────────────────────────────────────────────────────────────────
 function toggleItem(id) {
-  if (checkedIds.has(id)) {
-    checkedIds.delete(id);
-  } else {
-    checkedIds.add(id);
-  }
-  saveState(checkedIds);
+  const checked = !checkedIds.has(id);
+  if (checked) checkedIds.add(id); else checkedIds.delete(id); // optimistic, reconciled by snapshot
+  window.__packingAPI.setChecked(id, checked);
 
   const row = document.querySelector(`.item-row[data-id="${id}"]`);
   if (row) {
     const cb = row.querySelector('.packing-checkbox');
-    if (checkedIds.has(id)) {
+    if (checked) {
       row.classList.add('packed');
       cb.checked = true;
     } else {
@@ -591,11 +635,11 @@ function toggleCategory(catId) {
   const cat = CATEGORIES.find(c => c.id === catId);
   if (!cat) return;
   const allPacked = cat.items.every(i => checkedIds.has(i.id));
+  const next = !allPacked;
   cat.items.forEach(i => {
-    if (allPacked) checkedIds.delete(i.id);
-    else checkedIds.add(i.id);
+    if (next) checkedIds.add(i.id); else checkedIds.delete(i.id);
   });
-  saveState(checkedIds);
+  window.__packingAPI.setCheckedMany(cat.items.map(i => i.id), next);
   renderCategories();
   updateProgress();
 }
@@ -608,9 +652,9 @@ function setFilter(filter, btn) {
 }
 
 function resetAll() {
-  if (!confirm('รีเซ็ต packing list ทั้งหมดไหม?')) return;
+  if (!confirm('รีเซ็ต packing list ทั้งหมดไหม? (จะรีเซ็ตให้ทุกคนเห็นด้วย)')) return;
   checkedIds = new Set(DEFAULT_CHECKED);
-  saveState(checkedIds);
+  window.__packingAPI.resetToDefault();
   renderCategories();
   updateProgress();
 }

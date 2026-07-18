@@ -561,69 +561,64 @@
   }).join('');
 })();
 </script>
+<!-- Shared split-expense sync: Firestore collection (same project as the itinerary
+     pages) so every expense/settle/reset is visible to everyone, not just this browser -->
+<script type="module">
+  import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js';
+  import {
+    getFirestore, collection, addDoc, updateDoc, deleteDoc, doc,
+    onSnapshot, query, orderBy, getDocs
+  } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyA48_2e-Ed3ss20V5yuTlLRb9vXx3V3OgY",
+    authDomain: "japan-trip-2026-b0275.firebaseapp.com",
+    projectId: "japan-trip-2026-b0275",
+    storageBucket: "japan-trip-2026-b0275.firebasestorage.app",
+    messagingSenderId: "551330402525",
+    appId: "1:551330402525:web:b1ccc22dbb76ac7c560b34"
+  };
+  const db = getFirestore(initializeApp(firebaseConfig));
+  const expensesCol = collection(db, 'expenses');
+
+  const SEED_EXPENSES = [
+    { name: 'KETA House OKU (4 คืน)', amount: 44116, payer: 'DEW', splitWith: ['DEW','JACK','ALPHA','PIPE','KEANE','SORAWIT','PARIN','ANAWAT','KIDAKON'], category: '🏠 Lodging', settled: [], createdAt: 1741000001 },
+    { name: 'ตั๋วเครื่องบิน BKK↔NRT (ZIPAIR) — DEW', amount: 17619, payer: 'DEW', splitWith: ['DEW'], category: '✈️ Transport', settled: ['DEW'], createdAt: 1741000002 },
+    { name: 'ประกันการเดินทาง SOMPO — DEW', amount: 597, payer: 'DEW', splitWith: ['DEW'], category: '🛡️ Insurance', settled: ['DEW'], createdAt: 1741000003 },
+    { name: 'อินเทอร์เน็ต eSIM — DEW', amount: 641, payer: 'DEW', splitWith: ['DEW'], category: '📱 eSIM / Roaming', settled: ['DEW'], createdAt: 1741000004 },
+  ];
+
+  let seeding = false;
+  onSnapshot(query(expensesCol, orderBy('createdAt')), async snap => {
+    if (snap.empty && !seeding) {
+      seeding = true;
+      try { await Promise.all(SEED_EXPENSES.map(e => addDoc(expensesCol, e))); }
+      catch (e) { console.error('expenses seed failed:', e); }
+      seeding = false;
+      return; // the writes above re-trigger this listener with the seeded data
+    }
+    const list = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+    if (window.__onExpensesSnapshot) window.__onExpensesSnapshot(list);
+  }, err => console.error('expenses sync read failed:', err));
+
+  window.__expensesAPI = {
+    add: (expense) => addDoc(expensesCol, { ...expense, createdAt: Date.now() }),
+    settle: (id, settledWith) => updateDoc(doc(db, 'expenses', id), { settled: settledWith }),
+    resetToSeed: async () => {
+      const snap = await getDocs(expensesCol);
+      await Promise.all(snap.docs.map(d => deleteDoc(doc(db, 'expenses', d.id))));
+      await Promise.all(SEED_EXPENSES.map(e => addDoc(expensesCol, e)));
+    },
+  };
+</script>
+
 <script>
 (function(){
 'use strict';
 
 /* ── Constants ─────────────────────────────────── */
 const MEMBERS = ['DEW','JACK','ALPHA','PIPE','KEANE','SORAWIT','PARIN','ANAWAT','KIDAKON'];
-const LS_KEY  = 'japan2026_split';
-
-const SEED_EXPENSES = [
-  {
-    id: 'seed-1',
-    name: 'KETA House OKU (4 คืน)',
-    amount: 44116,
-    payer: 'DEW',
-    splitWith: [...MEMBERS],
-    category: '🏠 Lodging',
-    settled: [],
-    createdAt: 1741000001,
-  },
-  {
-    id: 'seed-2',
-    name: 'ตั๋วเครื่องบิน BKK↔NRT (ZIPAIR) — DEW',
-    amount: 17619,
-    payer: 'DEW',
-    splitWith: ['DEW'],
-    category: '✈️ Transport',
-    settled: ['DEW'],
-    createdAt: 1741000002,
-  },
-  {
-    id: 'seed-3',
-    name: 'ประกันการเดินทาง SOMPO — DEW',
-    amount: 597,
-    payer: 'DEW',
-    splitWith: ['DEW'],
-    category: '🛡️ Insurance',
-    settled: ['DEW'],
-    createdAt: 1741000003,
-  },
-  {
-    id: 'seed-4',
-    name: 'อินเทอร์เน็ต eSIM — DEW',
-    amount: 641,
-    payer: 'DEW',
-    splitWith: ['DEW'],
-    category: '📱 eSIM / Roaming',
-    settled: ['DEW'],
-    createdAt: 1741000004,
-  },
-];
-
-/* ── Storage ─────────────────────────────────── */
-function loadData() {
-  try {
-    const raw = localStorage.getItem(LS_KEY);
-    if (raw) return JSON.parse(raw);
-  } catch (_) {}
-  return { expenses: SEED_EXPENSES };
-}
-
-function saveData(data) {
-  localStorage.setItem(LS_KEY, JSON.stringify(data));
-}
+let expenses = []; // kept in sync with Firestore via __onExpensesSnapshot (set up below)
 
 /* ── Balance calculation ─────────────────────── */
 function computeBalances(expenses) {
@@ -751,7 +746,6 @@ function renderExpenseLog(expenses) {
 
 /* ── Main render ─────────────────────────────── */
 function render() {
-  const { expenses } = loadData();
   const balances  = computeBalances(expenses);
   const transfers = computeSettleUp(balances);
   const total     = expenses.reduce((s, e) => s + e.amount, 0);
@@ -823,18 +817,14 @@ function handleFormSubmit(e) {
   const category = document.getElementById('split-category').value || '📦 Other';
   if (!name || !amount || !payer || selectedSplitWith.size === 0) return;
 
-  const data = loadData();
-  data.expenses.push({
-    id: crypto.randomUUID(),
+  window.__expensesAPI.add({
     name,
     amount,
     payer,
     splitWith: [...selectedSplitWith],
     category,
     settled: [],
-    createdAt: Date.now(),
-  });
-  saveData(data);
+  }).catch(err => console.error('add expense failed:', err));
 
   e.target.reset();
   selectedSplitWith = new Set(MEMBERS);
@@ -847,19 +837,22 @@ function handleFormSubmit(e) {
 
 /* ── Actions ─────────────────────────────────── */
 window.settleExpense = function(id) {
-  const data = loadData();
-  const exp  = data.expenses.find(e => e.id === id);
-  if (exp) exp.settled = [...exp.splitWith];
-  saveData(data);
-  render();
+  const exp = expenses.find(e => e.id === id);
+  if (!exp) return;
+  window.__expensesAPI.settle(id, [...exp.splitWith]).catch(err => console.error('settle expense failed:', err));
 };
 
 window.resetSplitData = function() {
-  if (!confirm('รีเซ็ต split data ทั้งหมดไหม?')) return;
-  localStorage.removeItem(LS_KEY);
+  if (!confirm('รีเซ็ต split data ทั้งหมดไหม? (จะรีเซ็ตให้ทุกคนเห็นด้วย)')) return;
+  window.__expensesAPI.resetToSeed().catch(err => console.error('reset expenses failed:', err));
   formInited = false;
   selectedSplitWith = new Set(MEMBERS);
   initForm();
+};
+
+/* ── Firestore sync hook ──────────────────────── */
+window.__onExpensesSnapshot = function(list) {
+  expenses = list;
   render();
 };
 
