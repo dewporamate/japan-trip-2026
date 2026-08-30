@@ -479,19 +479,24 @@
     {emoji:'🚅', name:'ค่าเดินทาง (Skyliner, รถไฟ, บัสฟูจิ, Suica)', amount:2074, status:'ON PROCESS', category:'transport'},
     {emoji:'💰', name:'Pocket Money', amount:10000, status:'ON PROCESS', category:'dining'},
     {emoji:'🎫', name:'ค่าเข้าสถานที่ (Shibuya Sky ฯลฯ)', amount:1000, status:'ON PROCESS', category:'dining'},
-    {emoji:'🛡️', name:'ประกันการเดินทาง (SOMPO)', amount:597, status:'ON PROCESS', category:'dining'},
+    {emoji:'🛡️', name:'ประกันการเดินทาง (SOMPO)', amount:596.68, status:'DONE', category:'dining'},
     {emoji:'📱', name:'อินเทอร์เน็ต eSIM', amount:641, status:'ON PROCESS', category:'dining'},
   ];
 
-  const total = BUDGET_ITEMS.reduce((a,x) => a + x.amount, 0);
+  // "Total Budget Progress" reflects money actually paid (status DONE) so far —
+  // ON PROCESS items are still planned/estimated, not yet spent, and must not
+  // count toward the spent total or it looks like the trip is over budget
+  // before anything is actually due.
+  const total = BUDGET_ITEMS.filter(x => x.status === 'DONE').reduce((a,x) => a + x.amount, 0);
   const dailyAvg = Math.round(total / 5);
   const overBudget = total > BUDGET;
   const diff = Math.abs(total - BUDGET);
   const pct = Math.round(total / BUDGET * 100);
 
-  const transportTotal = BUDGET_ITEMS.filter(x => x.category === 'transport').reduce((a,x) => a + x.amount, 0);
-  const lodgingTotal   = BUDGET_ITEMS.filter(x => x.category === 'lodging').reduce((a,x) => a + x.amount, 0);
-  const diningTotal    = BUDGET_ITEMS.filter(x => x.category === 'dining').reduce((a,x) => a + x.amount, 0);
+  const DONE_ITEMS = BUDGET_ITEMS.filter(x => x.status === 'DONE');
+  const transportTotal = DONE_ITEMS.filter(x => x.category === 'transport').reduce((a,x) => a + x.amount, 0);
+  const lodgingTotal   = DONE_ITEMS.filter(x => x.category === 'lodging').reduce((a,x) => a + x.amount, 0);
+  const diningTotal    = DONE_ITEMS.filter(x => x.category === 'dining').reduce((a,x) => a + x.amount, 0);
 
   // Hero
   const totalEl = document.getElementById('total-spent');
