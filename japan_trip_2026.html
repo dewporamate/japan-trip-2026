@@ -83,6 +83,9 @@
   ::-webkit-scrollbar-track { background:#09090b; }
   ::-webkit-scrollbar-thumb { background:#2a2a2a; border-radius:3px; }
 
+  /* ── Accessible focus indicator (WCAG 1.4.11 / 2.4.7) ── */
+  :focus-visible { outline:2px solid #ff6b9d; outline-offset:2px; border-radius:2px; }
+
   /* ── Sidebar collapse ── */
   #sidebar { transition:width 0.3s cubic-bezier(0.4,0,0.2,1); }
   .sidebar-collapsed { width:76px !important; }
@@ -98,7 +101,7 @@
   #mobile-overlay.open { opacity:1; pointer-events:auto; }
 
   /* ── Day tab active state ── */
-  .day-tab { transition:all .2s; }
+  .day-tab { transition:all .2s; background:none; }
   .day-tab.active { color:#ff6b9d !important; border-bottom:2px solid #ff6b9d; }
 
   /* ── Google Maps ── */
@@ -125,14 +128,15 @@
   .modal-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
   .modal-grid.full { grid-template-columns:1fr; }
   .form-group { display:flex; flex-direction:column; gap:5px; }
-  .form-group label { font-size:.62rem; color:#52525b; text-transform:uppercase; letter-spacing:.08em; font-weight:700; font-family:'Inter',sans-serif; }
+  .form-group label { font-size:.62rem; color:#a1a1aa; text-transform:uppercase; letter-spacing:.08em; font-weight:700; font-family:'Inter',sans-serif; }
   .form-group input,.form-group select,.form-group textarea { background:rgba(255,255,255,.05); border:none; border-radius:10px; padding:9px 12px; color:#f1f1f1; font-size:.82rem; font-family:'Public Sans','Noto Sans Thai',sans-serif; transition:background .2s,box-shadow .2s; outline:none; }
   .form-group input:focus,.form-group select:focus,.form-group textarea:focus { background:rgba(255,255,255,.09); box-shadow:0 0 0 2px rgba(255,107,157,.35); }
   .form-group textarea { resize:vertical; min-height:60px; }
   .form-group select option { background:#1a1a1a; color:#f1f1f1; }
   .emoji-row { display:flex; flex-wrap:wrap; gap:6px; margin-top:4px; }
-  .emoji-opt { width:34px; height:34px; border-radius:10px; border:none; background:rgba(255,255,255,.05); cursor:pointer; font-size:1.1rem; display:flex; align-items:center; justify-content:center; transition:all .15s; }
+  .emoji-opt { position:relative; width:34px; height:34px; border-radius:10px; border:none; background:rgba(255,255,255,.05); cursor:pointer; font-size:1.1rem; display:flex; align-items:center; justify-content:center; transition:all .15s; }
   .emoji-opt:hover,.emoji-opt.selected { background:rgba(255,107,157,.2); box-shadow:0 0 0 2px rgba(255,107,157,.4); }
+  .emoji-opt.selected::after { content:'✓'; position:absolute; bottom:-3px; right:-3px; width:14px; height:14px; border-radius:50%; background:#ff6b9d; color:#fff; font-size:9px; font-weight:900; line-height:14px; text-align:center; }
   .modal-sep { height:1px; background:rgba(255,255,255,.06); margin:14px 0; }
 
   /* ── Place Search Section ── */
@@ -155,7 +159,7 @@
   .btn-search:hover{background:rgba(255,107,157,.3)}
   .btn-search:disabled{opacity:.4;cursor:default}
   .place-label{
-    font-size:.62rem;color:#52525b;text-transform:uppercase;
+    font-size:.62rem;color:#a1a1aa;text-transform:uppercase;
     letter-spacing:.08em;font-weight:700;font-family:'Inter',sans-serif;
     margin-bottom:5px;display:block;
   }
@@ -220,19 +224,19 @@
   .pac-logo:after{display:none!important;}
   .modal-actions { display:flex; gap:10px; justify-content:flex-end; margin-top:20px; }
   .btn { padding:10px 22px; border-radius:12px; border:none; cursor:pointer; font-size:.8rem; font-family:'Inter',sans-serif; font-weight:700; transition:all .2s; }
-  .btn-primary { background:linear-gradient(135deg,#ac2a5d,#ff6b9d); color:#fff; }
-  .btn-primary:hover { transform:translateY(-1px); box-shadow:0 6px 20px rgba(255,107,157,.4); }
+  .btn-primary { background:linear-gradient(135deg,#7a1440,#a12454); color:#fff; }
+  .btn-primary:hover { transform:translateY(-1px); box-shadow:0 6px 20px rgba(161,36,84,.5); }
   .btn-secondary { background:rgba(255,255,255,.07); color:#71717a; }
   .btn-secondary:hover { background:rgba(255,255,255,.12); color:#f1f1f1; }
   .btn-danger { background:rgba(255,107,107,.12); color:#ff6b6b; }
   .btn-danger:hover { background:rgba(255,107,107,.28); }
-  .alert-toggle { display:flex; align-items:center; gap:8px; cursor:pointer; font-size:.76rem; color:#52525b; margin-top:8px; font-family:'Inter',sans-serif; }
-  .alert-toggle input[type=checkbox] { accent-color:#ff6b9d; width:15px; height:15px; cursor:pointer; }
+  .alert-toggle { display:flex; align-items:center; gap:8px; cursor:pointer; font-size:.76rem; color:#a1a1aa; margin-top:8px; font-family:'Inter',sans-serif; }
+  .alert-toggle input[type=checkbox] { accent-color:#ff6b9d; width:24px; height:24px; cursor:pointer; }
 
   /* ── Timeline ── */
   .timeline-card:hover { transform:translateX(4px); }
   .timeline-card.active-card { box-shadow:0 8px 32px rgba(255,107,157,.15) !important; outline:1px solid rgba(255,107,157,.25); }
-  .btn-drag { background:rgba(255,255,255,0.05); color:#52525b; cursor:grab; transition:color .15s,background .15s; }
+  .btn-drag { background:rgba(255,255,255,0.05); color:#a1a1aa; cursor:grab; transition:color .15s,background .15s; }
   .btn-drag:hover { background:rgba(255,255,255,0.1); color:#e4e4e7; }
   .sortable-ghost { opacity:.35; }
   .sortable-chosen .timeline-card { outline:1px dashed rgba(255,107,157,.4); background:rgba(255,107,157,.04)!important; }
@@ -253,9 +257,7 @@
   html.light .hover\:bg-white\/5:hover{background:rgba(0,0,0,0.05)!important}
   html.light .hover\:bg-\[\#242424\]:hover{background:#e4e4e7!important}
   html.light .text-on-surface{color:#18181b!important}
-  html.light .text-zinc-400{color:#71717a!important}
-  html.light .text-zinc-500{color:#52525b!important}
-  html.light .text-zinc-600{color:#3f3f46!important}
+  html.light .text-zinc-400{color:#52525b!important}
   html.light [class*="shadow-\[0_8px"]{box-shadow:0 2px 16px rgba(0,0,0,0.09)!important}
   html.light .bg-primary\/5{background:rgba(255,107,157,0.07)!important}
   html.light .bg-primary\/10{background:rgba(255,107,157,0.12)!important}
@@ -319,7 +321,7 @@
 <div id="mobile-overlay" class="fixed inset-0 bg-black/60 z-[60] hidden" onclick="closeMobileDrawer()"></div>
 
 <!-- Mobile Drawer -->
-<div id="mobile-drawer" class="fixed top-0 left-0 h-full w-72 bg-[#09090b] border-r border-white/5 z-[70] md:hidden flex flex-col py-10 px-5">
+<div id="mobile-drawer" class="fixed top-0 left-0 h-full w-72 bg-[#09090b] border-r border-white/5 z-[70] md:hidden flex flex-col py-10 px-5" inert aria-hidden="true">
   <div class="mb-8 px-2 flex items-center justify-between">
     <div class="flex items-center gap-3">
       <div class="w-10 h-10 rounded-xl bg-primary/15 flex items-center justify-center shrink-0 border border-primary/25">
@@ -327,66 +329,66 @@
       </div>
       <div>
         <div class="text-base font-black font-['Manrope'] text-primary italic tracking-tight">Japan 2026</div>
-        <div class="text-[9px] text-zinc-600 font-['Inter'] uppercase tracking-widest font-bold">Friend Group Trip</div>
+        <div class="text-[9px] text-zinc-400 font-['Inter'] uppercase tracking-widest font-bold">Friend Group Trip</div>
       </div>
     </div>
-    <button onclick="closeMobileDrawer()" class="w-8 h-8 flex items-center justify-center rounded-full hover:bg-white/5 text-zinc-500 hover:text-primary transition-colors">
-      <span class="material-symbols-outlined" style="font-size:20px">close</span>
+    <button onclick="closeMobileDrawer()" aria-label="ปิดเมนู" class="w-8 h-8 flex items-center justify-center rounded-full hover:bg-white/5 text-zinc-400 hover:text-primary transition-colors">
+      <span class="material-symbols-outlined" aria-hidden="true" style="font-size:20px">close</span>
     </button>
   </div>
-  <nav class="flex-1 space-y-1">
-    <a class="group flex items-center text-zinc-500 pl-5 py-2.5 hover:text-on-surface hover:bg-white/5 rounded-xl transition-all duration-200" href="index.html">
-      <span class="material-symbols-outlined mr-3 shrink-0" style="font-size:20px">home</span>
-      <span class="text-sm font-['Public_Sans']">Home</span>
+  <nav class="flex-1 space-y-1" aria-label="เมนูหลัก">
+    <a class="group flex items-center text-zinc-400 pl-5 py-2.5 hover:text-on-surface hover:bg-white/5 rounded-xl transition-all duration-200" href="index.html">
+      <span class="material-symbols-outlined mr-3 shrink-0" aria-hidden="true" style="font-size:20px">home</span>
+      <span class="text-sm font-['Public_Sans']" lang="en">Home</span>
     </a>
 
     <a class="group flex items-center text-primary font-bold border-l-4 border-primary pl-4 py-2.5 rounded-r-xl bg-primary/5 transition-all duration-200" href="#">
-      <span class="material-symbols-outlined mr-3 shrink-0" style="font-size:20px">schedule</span>
-      <span class="text-sm font-['Public_Sans']">Itinerary</span>
+      <span class="material-symbols-outlined mr-3 shrink-0" aria-hidden="true" style="font-size:20px">schedule</span>
+      <span class="text-sm font-['Public_Sans']" lang="en">Itinerary</span>
     </a>
-    <a class="group flex items-center text-zinc-500 pl-5 py-2.5 hover:text-on-surface hover:bg-white/5 rounded-xl transition-all duration-200" href="transportation.html">
-      <span class="material-symbols-outlined mr-3 shrink-0" style="font-size:20px">train</span>
-      <span class="text-sm font-['Public_Sans']">Transportation</span>
+    <a class="group flex items-center text-zinc-400 pl-5 py-2.5 hover:text-on-surface hover:bg-white/5 rounded-xl transition-all duration-200" href="transportation.html">
+      <span class="material-symbols-outlined mr-3 shrink-0" aria-hidden="true" style="font-size:20px">train</span>
+      <span class="text-sm font-['Public_Sans']" lang="en">Transportation</span>
     </a>
-    <a class="group flex items-center text-zinc-500 pl-5 py-2.5 hover:text-on-surface hover:bg-white/5 rounded-xl transition-all duration-200" href="dining.html">
-      <span class="material-symbols-outlined mr-3 shrink-0" style="font-size:20px">restaurant</span>
-      <span class="text-sm font-['Public_Sans']">Dining</span>
+    <a class="group flex items-center text-zinc-400 pl-5 py-2.5 hover:text-on-surface hover:bg-white/5 rounded-xl transition-all duration-200" href="dining.html">
+      <span class="material-symbols-outlined mr-3 shrink-0" aria-hidden="true" style="font-size:20px">restaurant</span>
+      <span class="text-sm font-['Public_Sans']" lang="en">Dining</span>
     </a>
-    <a class="group flex items-center text-zinc-500 pl-5 py-2.5 hover:text-on-surface hover:bg-white/5 rounded-xl transition-all duration-200" href="activities.html">
-      <span class="material-symbols-outlined mr-3 shrink-0" style="font-size:20px">museum</span>
-      <span class="text-sm font-['Public_Sans']">Activities</span>
+    <a class="group flex items-center text-zinc-400 pl-5 py-2.5 hover:text-on-surface hover:bg-white/5 rounded-xl transition-all duration-200" href="activities.html">
+      <span class="material-symbols-outlined mr-3 shrink-0" aria-hidden="true" style="font-size:20px">museum</span>
+      <span class="text-sm font-['Public_Sans']" lang="en">Activities</span>
     </a>
-    <a class="group flex items-center text-zinc-500 pl-5 py-2.5 hover:text-on-surface hover:bg-white/5 rounded-xl transition-all duration-200" href="lodging.html">
-      <span class="material-symbols-outlined mr-3 shrink-0" style="font-size:20px">hotel</span>
-      <span class="text-sm font-['Public_Sans']">Lodging</span>
+    <a class="group flex items-center text-zinc-400 pl-5 py-2.5 hover:text-on-surface hover:bg-white/5 rounded-xl transition-all duration-200" href="lodging.html">
+      <span class="material-symbols-outlined mr-3 shrink-0" aria-hidden="true" style="font-size:20px">hotel</span>
+      <span class="text-sm font-['Public_Sans']" lang="en">Lodging</span>
     </a>
-    <a class="group flex items-center text-zinc-500 pl-5 py-2.5 hover:text-on-surface hover:bg-white/5 rounded-xl transition-all duration-200" href="japan_trip_2026_map.html">
-      <span class="material-symbols-outlined mr-3 shrink-0" style="font-size:20px">map</span>
-      <span class="text-sm font-['Public_Sans']">Map</span>
+    <a class="group flex items-center text-zinc-400 pl-5 py-2.5 hover:text-on-surface hover:bg-white/5 rounded-xl transition-all duration-200" href="japan_trip_2026_map.html">
+      <span class="material-symbols-outlined mr-3 shrink-0" aria-hidden="true" style="font-size:20px">map</span>
+      <span class="text-sm font-['Public_Sans']" lang="en">Map</span>
     </a>
-    <a class="group flex items-center text-zinc-500 pl-5 py-2.5 hover:text-on-surface hover:bg-white/5 rounded-xl transition-all duration-200" href="budget.html">
-      <span class="material-symbols-outlined mr-3 shrink-0" style="font-size:20px">payments</span>
-      <span class="text-sm font-['Public_Sans']">Budget</span>
+    <a class="group flex items-center text-zinc-400 pl-5 py-2.5 hover:text-on-surface hover:bg-white/5 rounded-xl transition-all duration-200" href="budget.html">
+      <span class="material-symbols-outlined mr-3 shrink-0" aria-hidden="true" style="font-size:20px">payments</span>
+      <span class="text-sm font-['Public_Sans']" lang="en">Budget</span>
     </a>
-    <a class="group flex items-center text-zinc-500 pl-5 py-2.5 hover:text-on-surface hover:bg-white/5 rounded-xl transition-all duration-200" href="packing.html">
-      <span class="material-symbols-outlined mr-3 shrink-0" style="font-size:20px">checklist</span>
-      <span class="text-sm font-['Public_Sans']">Packing</span>
+    <a class="group flex items-center text-zinc-400 pl-5 py-2.5 hover:text-on-surface hover:bg-white/5 rounded-xl transition-all duration-200" href="packing.html">
+      <span class="material-symbols-outlined mr-3 shrink-0" aria-hidden="true" style="font-size:20px">checklist</span>
+      <span class="text-sm font-['Public_Sans']" lang="en">Packing</span>
     </a>
-    <a class="group flex items-center text-zinc-500 pl-5 py-2.5 hover:text-on-surface hover:bg-white/5 rounded-xl transition-all duration-200" href="documents.html">
-      <span class="material-symbols-outlined mr-3 shrink-0" style="font-size:20px">description</span>
-      <span class="text-sm font-['Public_Sans']">Documents</span>
+    <a class="group flex items-center text-zinc-400 pl-5 py-2.5 hover:text-on-surface hover:bg-white/5 rounded-xl transition-all duration-200" href="documents.html">
+      <span class="material-symbols-outlined mr-3 shrink-0" aria-hidden="true" style="font-size:20px">description</span>
+      <span class="text-sm font-['Public_Sans']" lang="en">Documents</span>
     </a>
   </nav>
-  <button class="mt-auto bg-primary text-white rounded-full px-5 py-3 font-bold font-['Public_Sans'] text-sm hover:shadow-[0_0_24px_rgba(255,107,157,0.35)] transition-all active:scale-95 flex items-center justify-center gap-2" onclick="closeMobileDrawer();openModal(null,1)">
-    <span class="material-symbols-outlined" style="font-size:20px">add</span>
-    <span>Add New Stop</span>
+  <button class="mt-auto bg-primary text-primary-container rounded-full px-5 py-3 font-bold font-['Public_Sans'] text-sm hover:shadow-[0_0_24px_rgba(255,107,157,0.35)] transition-all active:scale-95 flex items-center justify-center gap-2" onclick="closeMobileDrawer();openModal(null,1)">
+    <span class="material-symbols-outlined" aria-hidden="true" style="font-size:20px">add</span>
+    <span lang="en">Add New Stop</span>
   </button>
 </div>
 
 <!-- ═══════════════ SIDEBAR ═══════════════ -->
 <aside class="hidden md:flex flex-col h-full py-10 px-5 bg-[#09090b] w-72 shrink-0 border-r border-white/5 relative" id="sidebar">
-  <button class="absolute -right-3 top-24 bg-surface-container-high border border-white/10 rounded-full w-6 h-6 flex items-center justify-center text-zinc-500 hover:text-primary transition-colors z-50" onclick="toggleSidebar()">
-    <span class="material-symbols-outlined" style="font-size:14px" id="toggleIcon">chevron_left</span>
+  <button class="absolute -right-4 top-24 bg-surface-container-high border border-white/10 rounded-full w-8 h-8 flex items-center justify-center text-zinc-400 hover:text-primary transition-colors z-50" onclick="toggleSidebar()" aria-label="ย่อ/ขยายเมนูด้านข้าง">
+    <span class="material-symbols-outlined" aria-hidden="true" style="font-size:14px" id="toggleIcon">chevron_left</span>
   </button>
 
   <!-- Logo -->
@@ -396,59 +398,59 @@
     </div>
     <div class="logo-text min-w-0">
       <div class="text-base font-black font-['Manrope'] text-primary italic tracking-tight">Japan 2026</div>
-      <div class="text-[9px] text-zinc-600 font-['Inter'] uppercase tracking-widest font-bold">Friend Group Trip</div>
+      <div class="text-[9px] text-zinc-400 font-['Inter'] uppercase tracking-widest font-bold">Friend Group Trip</div>
     </div>
   </div>
 
   <!-- Nav -->
-  <nav class="flex-1 space-y-1 overflow-y-auto">
-    <a class="nav-item group flex items-center text-zinc-500 pl-5 py-2.5 hover:text-on-surface hover:bg-white/5 rounded-xl transition-all duration-200" href="index.html">
-      <span class="material-symbols-outlined mr-3 shrink-0" style="font-size:20px">home</span>
-      <span class="nav-text text-sm font-['Public_Sans']">Home</span>
+  <nav class="flex-1 space-y-1 overflow-y-auto" aria-label="เมนูหลัก">
+    <a class="nav-item group flex items-center text-zinc-400 pl-5 py-2.5 hover:text-on-surface hover:bg-white/5 rounded-xl transition-all duration-200" href="index.html">
+      <span class="material-symbols-outlined mr-3 shrink-0" aria-hidden="true" style="font-size:20px">home</span>
+      <span class="nav-text text-sm font-['Public_Sans']" lang="en">Home</span>
     </a>
 
     <a class="nav-item nav-item-active group flex items-center text-primary font-bold border-l-4 border-primary pl-4 py-2.5 rounded-r-xl bg-primary/5 transition-all duration-200" href="#">
-      <span class="material-symbols-outlined mr-3 shrink-0" style="font-size:20px">schedule</span>
-      <span class="nav-text text-sm font-['Public_Sans']">Itinerary</span>
+      <span class="material-symbols-outlined mr-3 shrink-0" aria-hidden="true" style="font-size:20px">schedule</span>
+      <span class="nav-text text-sm font-['Public_Sans']" lang="en">Itinerary</span>
     </a>
-    <a class="nav-item group flex items-center text-zinc-500 pl-5 py-2.5 hover:text-on-surface hover:bg-white/5 rounded-xl transition-all duration-200" href="transportation.html">
-      <span class="material-symbols-outlined mr-3 shrink-0" style="font-size:20px">train</span>
-      <span class="nav-text text-sm font-['Public_Sans']">Transportation</span>
+    <a class="nav-item group flex items-center text-zinc-400 pl-5 py-2.5 hover:text-on-surface hover:bg-white/5 rounded-xl transition-all duration-200" href="transportation.html">
+      <span class="material-symbols-outlined mr-3 shrink-0" aria-hidden="true" style="font-size:20px">train</span>
+      <span class="nav-text text-sm font-['Public_Sans']" lang="en">Transportation</span>
     </a>
-    <a class="nav-item group flex items-center text-zinc-500 pl-5 py-2.5 hover:text-on-surface hover:bg-white/5 rounded-xl transition-all duration-200" href="dining.html">
-      <span class="material-symbols-outlined mr-3 shrink-0" style="font-size:20px">restaurant</span>
-      <span class="nav-text text-sm font-['Public_Sans']">Dining</span>
+    <a class="nav-item group flex items-center text-zinc-400 pl-5 py-2.5 hover:text-on-surface hover:bg-white/5 rounded-xl transition-all duration-200" href="dining.html">
+      <span class="material-symbols-outlined mr-3 shrink-0" aria-hidden="true" style="font-size:20px">restaurant</span>
+      <span class="nav-text text-sm font-['Public_Sans']" lang="en">Dining</span>
     </a>
-    <a class="nav-item group flex items-center text-zinc-500 pl-5 py-2.5 hover:text-on-surface hover:bg-white/5 rounded-xl transition-all duration-200" href="activities.html">
-      <span class="material-symbols-outlined mr-3 shrink-0" style="font-size:20px">museum</span>
-      <span class="nav-text text-sm font-['Public_Sans']">Activities</span>
+    <a class="nav-item group flex items-center text-zinc-400 pl-5 py-2.5 hover:text-on-surface hover:bg-white/5 rounded-xl transition-all duration-200" href="activities.html">
+      <span class="material-symbols-outlined mr-3 shrink-0" aria-hidden="true" style="font-size:20px">museum</span>
+      <span class="nav-text text-sm font-['Public_Sans']" lang="en">Activities</span>
     </a>
-    <a class="nav-item group flex items-center text-zinc-500 pl-5 py-2.5 hover:text-on-surface hover:bg-white/5 rounded-xl transition-all duration-200" href="lodging.html">
-      <span class="material-symbols-outlined mr-3 shrink-0" style="font-size:20px">hotel</span>
-      <span class="nav-text text-sm font-['Public_Sans']">Lodging</span>
+    <a class="nav-item group flex items-center text-zinc-400 pl-5 py-2.5 hover:text-on-surface hover:bg-white/5 rounded-xl transition-all duration-200" href="lodging.html">
+      <span class="material-symbols-outlined mr-3 shrink-0" aria-hidden="true" style="font-size:20px">hotel</span>
+      <span class="nav-text text-sm font-['Public_Sans']" lang="en">Lodging</span>
     </a>
-    <a class="nav-item group flex items-center text-zinc-500 pl-5 py-2.5 hover:text-on-surface hover:bg-white/5 rounded-xl transition-all duration-200 cursor-pointer" onclick="openMapView()">
-      <span class="material-symbols-outlined mr-3 shrink-0" style="font-size:20px">map</span>
-      <span class="nav-text text-sm font-['Public_Sans']">Map</span>
+    <a class="nav-item group flex items-center text-zinc-400 pl-5 py-2.5 hover:text-on-surface hover:bg-white/5 rounded-xl transition-all duration-200 cursor-pointer" onclick="openMapView()">
+      <span class="material-symbols-outlined mr-3 shrink-0" aria-hidden="true" style="font-size:20px">map</span>
+      <span class="nav-text text-sm font-['Public_Sans']" lang="en">Map</span>
     </a>
-    <a class="nav-item group flex items-center text-zinc-500 pl-5 py-2.5 hover:text-on-surface hover:bg-white/5 rounded-xl transition-all duration-200" href="budget.html">
-      <span class="material-symbols-outlined mr-3 shrink-0" style="font-size:20px">payments</span>
-      <span class="nav-text text-sm font-['Public_Sans']">Budget</span>
+    <a class="nav-item group flex items-center text-zinc-400 pl-5 py-2.5 hover:text-on-surface hover:bg-white/5 rounded-xl transition-all duration-200" href="budget.html">
+      <span class="material-symbols-outlined mr-3 shrink-0" aria-hidden="true" style="font-size:20px">payments</span>
+      <span class="nav-text text-sm font-['Public_Sans']" lang="en">Budget</span>
     </a>
-    <a class="nav-item group flex items-center text-zinc-500 pl-5 py-2.5 hover:text-on-surface hover:bg-white/5 rounded-xl transition-all duration-200" href="packing.html">
-      <span class="material-symbols-outlined mr-3 shrink-0" style="font-size:20px">checklist</span>
-      <span class="nav-text text-sm font-['Public_Sans']">Packing</span>
+    <a class="nav-item group flex items-center text-zinc-400 pl-5 py-2.5 hover:text-on-surface hover:bg-white/5 rounded-xl transition-all duration-200" href="packing.html">
+      <span class="material-symbols-outlined mr-3 shrink-0" aria-hidden="true" style="font-size:20px">checklist</span>
+      <span class="nav-text text-sm font-['Public_Sans']" lang="en">Packing</span>
     </a>
-    <a class="nav-item group flex items-center text-zinc-500 pl-5 py-2.5 hover:text-on-surface hover:bg-white/5 rounded-xl transition-all duration-200" href="documents.html">
-      <span class="material-symbols-outlined mr-3 shrink-0" style="font-size:20px">description</span>
-      <span class="nav-text text-sm font-['Public_Sans']">Documents</span>
+    <a class="nav-item group flex items-center text-zinc-400 pl-5 py-2.5 hover:text-on-surface hover:bg-white/5 rounded-xl transition-all duration-200" href="documents.html">
+      <span class="material-symbols-outlined mr-3 shrink-0" aria-hidden="true" style="font-size:20px">description</span>
+      <span class="nav-text text-sm font-['Public_Sans']" lang="en">Documents</span>
     </a>
   </nav>
 
   <!-- Add New Stop CTA -->
-  <button class="add-btn mt-auto bg-primary text-white rounded-full px-5 py-3 font-bold font-['Public_Sans'] text-sm hover:shadow-[0_0_24px_rgba(255,107,157,0.35)] transition-all active:scale-95 flex items-center justify-center gap-2" onclick="openModal(null,1)">
-    <span class="material-symbols-outlined" style="font-size:20px">add</span>
-    <span class="btn-text">Add New Stop</span>
+  <button class="add-btn mt-auto bg-primary text-primary-container rounded-full px-5 py-3 font-bold font-['Public_Sans'] text-sm hover:shadow-[0_0_24px_rgba(255,107,157,0.35)] transition-all active:scale-95 flex items-center justify-center gap-2" onclick="openModal(null,1)">
+    <span class="material-symbols-outlined" aria-hidden="true" style="font-size:20px">add</span>
+    <span class="btn-text" lang="en">Add New Stop</span>
   </button>
 </aside>
 
@@ -458,32 +460,32 @@
   <!-- TOP APP BAR -->
   <header class="flex justify-between items-center px-5 md:px-8 h-16 w-full bg-[#09090b]/85 backdrop-blur-xl z-50 sticky top-0 border-b border-white/5 shrink-0">
     <div class="flex items-center gap-4 md:gap-6">
-      <button onclick="openMobileDrawer()" class="md:hidden w-8 h-8 flex items-center justify-center rounded-full hover:bg-white/5 transition-colors text-zinc-400 hover:text-primary">
-        <span class="material-symbols-outlined" style="font-size:22px">menu</span>
+      <button onclick="openMobileDrawer()" aria-label="เปิดเมนู" class="md:hidden w-8 h-8 flex items-center justify-center rounded-full hover:bg-white/5 transition-colors text-zinc-400 hover:text-primary">
+        <span class="material-symbols-outlined" aria-hidden="true" style="font-size:22px">menu</span>
       </button>
-      <h1 class="text-lg font-black text-on-surface italic font-['Manrope'] hidden lg:block tracking-tight">Japan 2026</h1>
+      <h1 class="text-lg font-black text-on-surface italic font-['Manrope'] sr-only lg:not-sr-only tracking-tight">Japan 2026</h1>
       <!-- Desktop Day Tabs -->
-      <nav class="hidden md:flex items-center gap-1">
-        <div class="day-tab active text-zinc-500 border-b-2 border-transparent pb-0.5 px-3 py-2 font-['Manrope'] font-bold text-sm cursor-pointer" data-day="0" style="color:#ff6b9d;border-bottom-color:#ff6b9d">🗺️ All</div>
-        <div class="day-tab text-zinc-500 hover:text-on-surface border-b-2 border-transparent pb-0.5 px-3 py-2 font-['Manrope'] font-bold text-sm cursor-pointer" data-day="1">01</div>
-        <div class="day-tab text-zinc-500 hover:text-on-surface border-b-2 border-transparent pb-0.5 px-3 py-2 font-['Manrope'] font-bold text-sm cursor-pointer" data-day="2">02</div>
-        <div class="day-tab text-zinc-500 hover:text-on-surface border-b-2 border-transparent pb-0.5 px-3 py-2 font-['Manrope'] font-bold text-sm cursor-pointer" data-day="3">03</div>
-        <div class="day-tab text-zinc-500 hover:text-on-surface border-b-2 border-transparent pb-0.5 px-3 py-2 font-['Manrope'] font-bold text-sm cursor-pointer" data-day="4">04</div>
-        <div class="day-tab text-zinc-500 hover:text-on-surface border-b-2 border-transparent pb-0.5 px-3 py-2 font-['Manrope'] font-bold text-sm cursor-pointer" data-day="5">05</div>
+      <nav class="hidden md:flex items-center gap-1" role="tablist" aria-label="กรองกิจกรรมตามวัน">
+        <button type="button" role="tab" id="day-tab-desktop-0" aria-selected="true" aria-controls="timeline" class="day-tab active text-zinc-400 border-b-2 border-transparent pb-0.5 px-3 py-2 font-['Manrope'] font-bold text-sm cursor-pointer" data-day="0" style="color:#ff6b9d;border-bottom-color:#ff6b9d">🗺️ All</button>
+        <button type="button" role="tab" id="day-tab-desktop-1" aria-selected="false" aria-controls="timeline" class="day-tab text-zinc-400 hover:text-on-surface border-b-2 border-transparent pb-0.5 px-3 py-2 font-['Manrope'] font-bold text-sm cursor-pointer" data-day="1">01</button>
+        <button type="button" role="tab" id="day-tab-desktop-2" aria-selected="false" aria-controls="timeline" class="day-tab text-zinc-400 hover:text-on-surface border-b-2 border-transparent pb-0.5 px-3 py-2 font-['Manrope'] font-bold text-sm cursor-pointer" data-day="2">02</button>
+        <button type="button" role="tab" id="day-tab-desktop-3" aria-selected="false" aria-controls="timeline" class="day-tab text-zinc-400 hover:text-on-surface border-b-2 border-transparent pb-0.5 px-3 py-2 font-['Manrope'] font-bold text-sm cursor-pointer" data-day="3">03</button>
+        <button type="button" role="tab" id="day-tab-desktop-4" aria-selected="false" aria-controls="timeline" class="day-tab text-zinc-400 hover:text-on-surface border-b-2 border-transparent pb-0.5 px-3 py-2 font-['Manrope'] font-bold text-sm cursor-pointer" data-day="4">04</button>
+        <button type="button" role="tab" id="day-tab-desktop-5" aria-selected="false" aria-controls="timeline" class="day-tab text-zinc-400 hover:text-on-surface border-b-2 border-transparent pb-0.5 px-3 py-2 font-['Manrope'] font-bold text-sm cursor-pointer" data-day="5">05</button>
       </nav>
     </div>
     <div class="flex items-center gap-2 md:gap-3">
       <!-- Budget hidden anchors (used by JS only) -->
       <span id="total-jpy" style="display:none"></span>
       <span id="total-thb" style="display:none"></span>
-      <button id="theme-toggle" onclick="toggleTheme()" class="w-8 h-8 flex items-center justify-center rounded-full hover:bg-white/5 transition-colors text-zinc-500 hover:text-primary" title="Toggle Light/Dark mode">
-        <span class="material-symbols-outlined" style="font-size:20px">light_mode</span>
+      <button id="theme-toggle" onclick="toggleTheme()" aria-label="สลับโหมดสว่าง/มืด" class="w-8 h-8 flex items-center justify-center rounded-full hover:bg-white/5 transition-colors text-zinc-400 hover:text-primary" title="Toggle Light/Dark mode">
+        <span class="material-symbols-outlined" aria-hidden="true" style="font-size:20px">light_mode</span>
       </button>
-      <button class="w-8 h-8 flex items-center justify-center rounded-full hover:bg-white/5 transition-colors text-zinc-500 hover:text-primary">
-        <span class="material-symbols-outlined" style="font-size:20px">notifications</span>
+      <button aria-label="การแจ้งเตือน" class="w-8 h-8 flex items-center justify-center rounded-full hover:bg-white/5 transition-colors text-zinc-400 hover:text-primary">
+        <span class="material-symbols-outlined" aria-hidden="true" style="font-size:20px">notifications</span>
       </button>
-      <button onclick="manualReset()" title="Reset ข้อมูลกลับ Default" class="w-8 h-8 flex items-center justify-center rounded-full hover:bg-white/5 transition-colors text-zinc-500 hover:text-primary">
-        <span class="material-symbols-outlined" style="font-size:20px">settings</span>
+      <button onclick="manualReset()" aria-label="รีเซ็ตข้อมูลกลับ Default" title="Reset ข้อมูลกลับ Default" class="w-8 h-8 flex items-center justify-center rounded-full hover:bg-white/5 transition-colors text-zinc-400 hover:text-primary">
+        <span class="material-symbols-outlined" aria-hidden="true" style="font-size:20px">settings</span>
       </button>
       <div class="w-8 h-8 rounded-full bg-primary/15 flex items-center justify-center border border-primary/25 cursor-pointer text-base">🧳</div>
     </div>
@@ -521,7 +523,7 @@
         <p class="font-['Manrope'] text-2xl font-black text-white">5 วัน 4 คืน</p>
         <p class="font-['Inter'] text-[0.6rem] text-primary mt-1.5 font-bold uppercase tracking-wide">✈️ BKK → NRT → BKK</p>
         <div class="mt-3 pt-3 border-t border-white/10">
-          <p class="font-['Inter'] text-[0.6rem] text-zinc-500 uppercase tracking-widest mb-0.5">เหลืออีก</p>
+          <p class="font-['Inter'] text-[0.6rem] text-zinc-400 uppercase tracking-widest mb-0.5">เหลืออีก</p>
           <p class="font-['Manrope'] text-lg font-black text-primary" id="hero-countdown">—</p>
         </div>
       </div>
@@ -530,47 +532,37 @@
     <!-- ── CONTENT GRID ── -->
     <div class="max-w-[1400px] mx-auto px-5 md:px-10 py-10 grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 pb-24 md:pb-10">
 
-      <!-- ── TIMELINE COLUMN ── -->
-      <div class="lg:col-span-7 order-2 lg:order-1">
-        <h3 class="font-['Manrope'] text-lg font-bold mb-8 text-on-surface flex items-center gap-2">
-          <span class="material-symbols-outlined text-primary" style="font-size:20px">calendar_today</span>
-          Itinerary Flow
-        </h3>
-        <div id="timeline">
-          <!-- Rendered by JS -->
-        </div>
-      </div>
-
       <!-- ── RIGHT PANEL ── -->
-      <div class="lg:col-span-5 space-y-5 lg:sticky lg:top-20 lg:self-start order-1 lg:order-2 lg:max-h-[calc(100vh-6rem)] lg:overflow-y-auto lg:pr-1">
+      <!-- Placed first in the DOM so tab/reading order matches the visual order below the lg breakpoint, where this panel renders above the timeline (WCAG 1.3.2 / 2.4.3) -->
+      <div class="lg:col-span-5 space-y-5 lg:sticky lg:top-20 lg:self-start lg:order-2 lg:max-h-[calc(100vh-6rem)] lg:overflow-y-auto lg:pr-1">
         <!-- MAP -->
         <div class="rounded-3xl overflow-hidden relative border border-white/5" style="height:400px">
           <div id="map"></div>
           <div class="absolute bottom-4 left-4 pointer-events-none z-20">
-            <span class="bg-black/60 backdrop-blur-md text-white font-['Inter'] text-[0.58rem] font-bold px-3 py-1.5 rounded-full uppercase tracking-widest border border-white/10">Interactive Map</span>
+            <span class="bg-black/60 backdrop-blur-md text-white font-['Inter'] text-[0.58rem] font-bold px-3 py-1.5 rounded-full uppercase tracking-widest border border-white/10" lang="en">Interactive Map</span>
           </div>
         </div>
 
         <!-- BUDGET BENTO -->
         <div class="grid grid-cols-2 gap-3">
           <div class="bg-surface-container-low p-5 rounded-3xl border border-white/5">
-            <p class="text-[0.6rem] font-bold text-zinc-600 uppercase tracking-widest mb-1.5 font-['Inter']">Total Daily Budget</p>
+            <p class="text-[0.6rem] font-bold text-zinc-400 uppercase tracking-widest mb-1.5 font-['Inter']">Total Daily Budget</p>
             <p class="text-2xl font-black text-on-surface font-['Manrope']" id="bento-jpy">—</p>
             <div class="w-full bg-zinc-800 h-1 mt-3 rounded-full overflow-hidden">
               <div class="bg-primary h-full w-2/5 shadow-[0_0_8px_#ff6b9d] rounded-full"></div>
             </div>
           </div>
           <div class="bg-surface-container-low p-5 rounded-3xl border border-white/5">
-            <p class="text-[0.6rem] font-bold text-zinc-600 uppercase tracking-widest mb-1.5 font-['Inter']">In Thai Baht</p>
+            <p class="text-[0.6rem] font-bold text-zinc-400 uppercase tracking-widest mb-1.5 font-['Inter']">In Thai Baht</p>
             <p class="text-2xl font-black text-on-surface font-['Manrope']" id="bento-thb">—</p>
             <p class="text-[0.6rem] text-primary font-bold mt-3 uppercase font-['Inter'] tracking-wide" id="bento-note">ค่าเดินทาง</p>
           </div>
           <div class="col-span-2 bg-surface-container-low p-4 rounded-3xl border border-white/5">
             <div class="flex items-center justify-between mb-3">
-              <p class="text-[0.6rem] font-bold text-zinc-600 uppercase tracking-widest font-['Inter']">Budget per Day</p>
+              <p class="text-[0.6rem] font-bold text-zinc-400 uppercase tracking-widest font-['Inter']">Budget per Day</p>
               <button id="travel-tip-btn" class="flex items-center gap-1.5 px-2.5 py-1 rounded-full border border-primary/20 bg-primary/5 hover:bg-primary/10 transition-colors">
-                <span class="material-symbols-outlined text-primary" style="font-size:14px">lightbulb</span>
-                <span class="text-[0.6rem] font-bold text-primary uppercase tracking-widest font-['Inter']">Travel Tip</span>
+                <span class="material-symbols-outlined text-primary" aria-hidden="true" style="font-size:14px">lightbulb</span>
+                <span class="text-[0.6rem] font-bold text-primary uppercase tracking-widest font-['Inter']" lang="en">Travel Tip</span>
               </button>
             </div>
             <canvas id="budget-chart" height="90" style="touch-action:pan-y"></canvas>
@@ -580,26 +572,26 @@
         <!-- WEATHER CARD -->
         <div class="bg-surface-container-low p-5 rounded-3xl border border-white/5">
           <div class="flex items-center justify-between mb-3">
-            <p class="text-[0.6rem] font-bold text-zinc-600 uppercase tracking-widest font-['Inter']">Tokyo Weather · Oct</p>
+            <p class="text-[0.6rem] font-bold text-zinc-400 uppercase tracking-widest font-['Inter']">Tokyo Weather · Oct</p>
             <span class="material-symbols-outlined text-sky-400" style="font-size:20px">partly_cloudy_day</span>
           </div>
           <div class="flex items-end gap-3">
             <div>
               <p class="font-['Manrope'] text-2xl font-black text-white">16–22°C</p>
-              <p class="text-[0.6rem] text-zinc-500 font-['Inter'] mt-1 uppercase tracking-wide">เย็นสบาย · เตรียม Light Jacket</p>
+              <p class="text-[0.6rem] text-zinc-400 font-['Inter'] mt-1 uppercase tracking-wide">เย็นสบาย · เตรียม Light Jacket</p>
             </div>
             <div class="ml-auto flex gap-2">
               <div class="text-center">
                 <span class="text-base">☀️</span>
-                <p class="text-[0.55rem] text-zinc-600 font-['Inter']">D1–3</p>
+                <p class="text-[0.55rem] text-zinc-400 font-['Inter']">D1–3</p>
               </div>
               <div class="text-center">
                 <span class="text-base">🌤</span>
-                <p class="text-[0.55rem] text-zinc-600 font-['Inter']">D4</p>
+                <p class="text-[0.55rem] text-zinc-400 font-['Inter']">D4</p>
               </div>
               <div class="text-center">
                 <span class="text-base">🌂</span>
-                <p class="text-[0.55rem] text-zinc-600 font-['Inter']">เผื่อไว้</p>
+                <p class="text-[0.55rem] text-zinc-400 font-['Inter']">เผื่อไว้</p>
               </div>
             </div>
           </div>
@@ -608,12 +600,12 @@
         <!-- CURRENCY CARD -->
         <div class="bg-surface-container-low p-5 rounded-3xl border border-white/5">
           <div class="flex items-center justify-between mb-3">
-            <p class="text-[0.6rem] font-bold text-zinc-600 uppercase tracking-widest font-['Inter']">Currency</p>
+            <p class="text-[0.6rem] font-bold text-zinc-400 uppercase tracking-widest font-['Inter']">Currency</p>
             <span class="text-base">💴</span>
           </div>
           <div class="flex items-baseline gap-2">
             <p class="font-['Manrope'] text-2xl font-black text-white">฿1 ≈ ¥4.2</p>
-            <p class="text-[0.6rem] text-zinc-500 font-['Inter'] uppercase tracking-wide" id="fx-updated">approx</p>
+            <p class="text-[0.6rem] text-zinc-400 font-['Inter'] uppercase tracking-wide" id="fx-updated">approx</p>
           </div>
           <div class="mt-3 grid grid-cols-3 gap-2">
             <div class="bg-white/5 rounded-xl p-2 text-center">
@@ -634,29 +626,40 @@
 
       </div>
 
+      <!-- ── TIMELINE COLUMN ── -->
+      <div class="lg:col-span-7 lg:order-1">
+        <h3 class="font-['Manrope'] text-lg font-bold mb-8 text-on-surface flex items-center gap-2">
+          <span class="material-symbols-outlined text-primary" aria-hidden="true" style="font-size:20px">calendar_today</span>
+          Itinerary Flow
+        </h3>
+        <div id="timeline">
+          <!-- Rendered by JS -->
+        </div>
+      </div>
+
     </div><!-- /grid -->
   </div><!-- /page-content -->
 </main>
 
 <!-- ═══ MOBILE BOTTOM NAV ═══ -->
-<nav class="md:hidden fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-2 py-2 bg-[#09090b]/95 backdrop-blur-2xl border-t border-white/10 rounded-t-2xl">
-  <button class="day-tab active flex flex-col items-center justify-center px-2 py-1.5 rounded-xl text-[8px] font-['Inter'] uppercase tracking-widest font-bold text-primary bg-primary/10 transition-all" data-day="0">
-    <span class="material-symbols-outlined mb-0.5" style="font-size:18px">map</span>All
+<nav class="md:hidden fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-2 py-2 bg-[#09090b]/95 backdrop-blur-2xl border-t border-white/10 rounded-t-2xl" role="tablist" aria-label="กรองกิจกรรมตามวัน">
+  <button type="button" role="tab" aria-selected="true" aria-controls="timeline" class="day-tab active flex flex-col items-center justify-center px-2 py-1.5 rounded-xl text-[8px] font-['Inter'] uppercase tracking-widest font-bold text-primary bg-primary/10 transition-all" data-day="0">
+    <span class="material-symbols-outlined mb-0.5" aria-hidden="true" style="font-size:18px">map</span>All
   </button>
-  <button class="day-tab flex flex-col items-center justify-center px-2 py-1.5 rounded-xl text-[8px] font-['Inter'] uppercase tracking-widest font-bold text-zinc-600 transition-all" data-day="1">
-    <span class="material-symbols-outlined mb-0.5" style="font-size:18px">calendar_today</span>D1
+  <button type="button" role="tab" aria-selected="false" aria-controls="timeline" class="day-tab flex flex-col items-center justify-center px-2 py-1.5 rounded-xl text-[8px] font-['Inter'] uppercase tracking-widest font-bold text-zinc-400 transition-all" data-day="1">
+    <span class="material-symbols-outlined mb-0.5" aria-hidden="true" style="font-size:18px">calendar_today</span>D1
   </button>
-  <button class="day-tab flex flex-col items-center justify-center px-2 py-1.5 rounded-xl text-[8px] font-['Inter'] uppercase tracking-widest font-bold text-zinc-600 transition-all" data-day="2">
-    <span class="material-symbols-outlined mb-0.5" style="font-size:18px">calendar_today</span>D2
+  <button type="button" role="tab" aria-selected="false" aria-controls="timeline" class="day-tab flex flex-col items-center justify-center px-2 py-1.5 rounded-xl text-[8px] font-['Inter'] uppercase tracking-widest font-bold text-zinc-400 transition-all" data-day="2">
+    <span class="material-symbols-outlined mb-0.5" aria-hidden="true" style="font-size:18px">calendar_today</span>D2
   </button>
-  <button class="day-tab flex flex-col items-center justify-center px-2 py-1.5 rounded-xl text-[8px] font-['Inter'] uppercase tracking-widest font-bold text-zinc-600 transition-all" data-day="3">
-    <span class="material-symbols-outlined mb-0.5" style="font-size:18px">calendar_today</span>D3
+  <button type="button" role="tab" aria-selected="false" aria-controls="timeline" class="day-tab flex flex-col items-center justify-center px-2 py-1.5 rounded-xl text-[8px] font-['Inter'] uppercase tracking-widest font-bold text-zinc-400 transition-all" data-day="3">
+    <span class="material-symbols-outlined mb-0.5" aria-hidden="true" style="font-size:18px">calendar_today</span>D3
   </button>
-  <button class="day-tab flex flex-col items-center justify-center px-2 py-1.5 rounded-xl text-[8px] font-['Inter'] uppercase tracking-widest font-bold text-zinc-600 transition-all" data-day="4">
-    <span class="material-symbols-outlined mb-0.5" style="font-size:18px">calendar_today</span>D4
+  <button type="button" role="tab" aria-selected="false" aria-controls="timeline" class="day-tab flex flex-col items-center justify-center px-2 py-1.5 rounded-xl text-[8px] font-['Inter'] uppercase tracking-widest font-bold text-zinc-400 transition-all" data-day="4">
+    <span class="material-symbols-outlined mb-0.5" aria-hidden="true" style="font-size:18px">calendar_today</span>D4
   </button>
-  <button class="day-tab flex flex-col items-center justify-center px-2 py-1.5 rounded-xl text-[8px] font-['Inter'] uppercase tracking-widest font-bold text-zinc-600 transition-all" data-day="5">
-    <span class="material-symbols-outlined mb-0.5" style="font-size:18px">payments</span>D5
+  <button type="button" role="tab" aria-selected="false" aria-controls="timeline" class="day-tab flex flex-col items-center justify-center px-2 py-1.5 rounded-xl text-[8px] font-['Inter'] uppercase tracking-widest font-bold text-zinc-400 transition-all" data-day="5">
+    <span class="material-symbols-outlined mb-0.5" aria-hidden="true" style="font-size:18px">payments</span>D5
   </button>
 </nav>
 
@@ -669,7 +672,7 @@
         <div class="ai-rec-title">🤖 AI แนะนำกิจกรรม</div>
         <div class="ai-rec-day" id="ai-rec-day-label"></div>
       </div>
-      <button class="ai-rec-close" id="ai-rec-close">✕</button>
+      <button class="ai-rec-close" id="ai-rec-close" aria-label="ปิดแผงคำแนะนำ">✕</button>
     </div>
     <div class="ai-rec-body" id="ai-rec-body">
       <div class="ai-rec-loading"><div class="ai-spin"></div><span>กำลังวิเคราะห์...</span></div>
@@ -683,20 +686,20 @@
 
 <!-- ═══════════════ EDIT MODAL ═══════════════ -->
 <div id="modal-overlay">
-  <div id="modal">
+  <div id="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
     <div class="flex items-center justify-between mb-0" style="margin-bottom:0">
       <div class="modal-title" id="modal-title" style="margin-bottom:0">แก้ไขกิจกรรม</div>
-      <button id="modal-close-btn" onclick="closeModal()" style="width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,0.06);border:none;cursor:pointer;color:#71717a;font-size:16px;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:background .15s,color .15s" onmouseover="this.style.background='rgba(255,255,255,0.12)';this.style.color='#f1f1f1'" onmouseout="this.style.background='rgba(255,255,255,0.06)';this.style.color='#71717a'">✕</button>
+      <button id="modal-close-btn" onclick="closeModal()" aria-label="ปิด" style="width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,0.06);border:none;cursor:pointer;color:#71717a;font-size:16px;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:background .15s,color .15s" onmouseover="this.style.background='rgba(255,255,255,0.12)';this.style.color='#f1f1f1'" onmouseout="this.style.background='rgba(255,255,255,0.06)';this.style.color='#71717a'"><span aria-hidden="true">✕</span></button>
     </div>
 
     <div class="form-group modal-grid full" style="margin-bottom:4px">
-      <label>ไอคอน</label>
-      <div class="emoji-row" id="emoji-picker"></div>
+      <label id="emoji-picker-label">ไอคอน</label>
+      <div class="emoji-row" id="emoji-picker" role="group" aria-labelledby="emoji-picker-label"></div>
     </div>
     <div class="modal-sep"></div>
     <div class="modal-grid full" style="margin-bottom:4px">
       <div class="form-group">
-        <label>วันที่</label>
+        <label for="f-date">วันที่</label>
         <select id="f-date">
           <option value="9 ต.ค.">9 ต.ค. 2569 (Day 1 — บิน + เดินทาง)</option>
           <option value="10 ต.ค.">10 ต.ค. 2569 (Day 1 — ถึงญี่ปุ่น)</option>
@@ -709,41 +712,41 @@
     </div>
     <div class="modal-grid">
       <div class="form-group">
-        <label>รายละเอียด *</label>
-        <input type="text" id="f-detail" placeholder="ชื่อกิจกรรม...">
+        <label for="f-detail">รายละเอียด *</label>
+        <input type="text" id="f-detail" placeholder="ชื่อกิจกรรม..." required aria-required="true">
       </div>
       <div class="form-group">
-        <label>เมือง / ย่าน</label>
+        <label for="f-city">เมือง / ย่าน</label>
         <input type="text" id="f-city" placeholder="เช่น Tokyo, Ueno">
       </div>
       <div class="form-group">
-        <label>เวลาเริ่ม</label>
+        <label for="f-start">เวลาเริ่ม</label>
         <input type="time" id="f-start">
       </div>
       <div class="form-group">
-        <label>เวลาสิ้นสุด</label>
+        <label for="f-end">เวลาสิ้นสุด</label>
         <input type="time" id="f-end">
       </div>
       <div class="form-group">
-        <label>จาก (From)</label>
+        <label for="f-from">จาก (From)</label>
         <input type="text" id="f-from" placeholder="จุดเริ่มต้น">
       </div>
       <div class="form-group">
-        <label>ถึง (To)</label>
+        <label for="f-to">ถึง (To)</label>
         <input type="text" id="f-to" placeholder="จุดปลายทาง">
       </div>
       <div class="form-group">
-        <label>ค่าใช้จ่าย (JPY)</label>
+        <label for="f-cost">ค่าใช้จ่าย (JPY)</label>
         <input type="text" id="f-cost" placeholder="เช่น 2,310¥ / Free">
       </div>
       <div class="form-group">
-        <label>เวลาเปิด-ปิด</label>
+        <label for="f-open">เวลาเปิด-ปิด</label>
         <input type="text" id="f-open" placeholder="เช่น 09:00-17:00">
       </div>
     </div>
     <div class="modal-grid full" style="margin-top:12px">
       <div class="form-group">
-        <label>หมายเหตุ</label>
+        <label for="f-note">หมายเหตุ</label>
         <textarea id="f-note" placeholder="ข้อมูลเพิ่มเติม..."></textarea>
       </div>
     </div>
@@ -755,51 +758,51 @@
 
     <!-- AI IMAGE IMPORT -->
     <div class="place-search-wrap">
-      <span class="place-label">🤖 AI อ่านรูปภาพ — Screenshot จาก Google Maps / IG / Blog</span>
+      <span class="place-label" id="ai-image-import-label">🤖 AI อ่านรูปภาพ — Screenshot จาก Google Maps / IG / Blog</span>
       <div class="ai-drop-zone" id="ai-drop-zone">
-        <span class="ai-drop-icon">📷</span>
+        <span class="ai-drop-icon" aria-hidden="true">📷</span>
         <span class="ai-drop-text">วางรูปที่นี่ หรือคลิกเพื่อเลือกไฟล์</span>
-        <input type="file" id="ai-image-input" accept="image/*" style="display:none">
+        <input type="file" id="ai-image-input" accept="image/*" style="display:none" aria-labelledby="ai-image-import-label">
       </div>
       <div class="ai-image-preview" id="ai-image-preview" style="display:none">
         <img id="ai-preview-img" alt="">
         <div class="ai-preview-actions">
           <button class="btn-search" id="ai-analyze-btn">🤖 วิเคราะห์</button>
-          <button class="btn-search" id="ai-clear-btn" style="background:rgba(248,113,113,.15);color:#f87171">✕</button>
+          <button class="btn-search" id="ai-clear-btn" aria-label="ล้างรูปภาพ" style="background:rgba(248,113,113,.15);color:#f87171"><span aria-hidden="true">✕</span></button>
         </div>
       </div>
-      <div class="place-status" id="ai-img-status"></div>
+      <div class="place-status" id="ai-img-status" role="status"></div>
     </div>
     <div class="modal-sep"></div>
 
     <!-- GOOGLE MAPS URL IMPORT -->
     <div class="place-search-wrap">
-      <span class="place-label">🗺️ Import จาก Google Maps URL</span>
+      <label class="place-label" for="f-gmaps-url">🗺️ Import จาก Google Maps URL</label>
       <div class="place-search-row">
         <input type="text" id="f-gmaps-url" placeholder="วาง Google Maps URL ที่นี่…" autocomplete="off">
         <button class="btn-search" id="btn-gmaps-import">Import</button>
       </div>
-      <div class="place-status" id="gmaps-status"></div>
+      <div class="place-status" id="gmaps-status" role="status"></div>
     </div>
     <div class="modal-sep"></div>
 
     <!-- PLACE SEARCH → auto-fill lat/lng -->
     <div class="place-search-wrap">
-      <span class="place-label">🔍 ค้นหาสถานที่ (กรอกชื่อแล้วกดค้นหา)</span>
+      <label class="place-label" for="f-place-search">🔍 ค้นหาสถานที่ (กรอกชื่อแล้วกดค้นหา)</label>
       <div class="place-search-row">
         <input type="text" id="f-place-search" placeholder="เช่น Sensoji Temple, Shibuya Crossing…" autocomplete="off">
         <button class="btn-search" id="btn-place-search">ค้นหา</button>
       </div>
-      <div class="place-status" id="place-status"></div>
+      <div class="place-status" id="place-status" role="status"></div>
     </div>
 
     <div class="modal-grid">
       <div class="form-group">
-        <label>Latitude</label>
+        <label for="f-lat">Latitude</label>
         <input type="number" id="f-lat" step="0.0001" placeholder="เช่น 35.7131">
       </div>
       <div class="form-group">
-        <label>Longitude</label>
+        <label for="f-lng">Longitude</label>
         <input type="number" id="f-lng" step="0.0001" placeholder="เช่น 139.7778">
       </div>
     </div>
@@ -1105,23 +1108,46 @@ function calcDur(start,end){
 /* ══════════════════════════════════════════
    MODAL
 ══════════════════════════════════════════ */
-let editingId=null, editingDay=null;
+let editingId=null, editingDay=null, modalOpenerEl=null;
 const overlay=document.getElementById('modal-overlay');
+const modalEl=document.getElementById('modal');
+
+function getModalFocusable(){
+  return [...modalEl.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])')]
+    .filter(el => !el.disabled && el.offsetParent !== null);
+}
+
+function modalKeydownHandler(e){
+  if(e.key === 'Escape'){ e.preventDefault(); closeModal(); return; }
+  if(e.key === 'Tab'){
+    const list = getModalFocusable();
+    if(!list.length) return;
+    const first = list[0], last = list[list.length-1];
+    if(e.shiftKey && document.activeElement === first){ e.preventDefault(); last.focus(); }
+    else if(!e.shiftKey && document.activeElement === last){ e.preventDefault(); first.focus(); }
+  }
+}
 
 const picker=document.getElementById('emoji-picker');
 EMOJI_LIST.forEach(em=>{
   const b=document.createElement('button');
   b.className='emoji-opt'; b.textContent=em; b.type='button';
-  b.onclick=()=>{picker.querySelectorAll('.emoji-opt').forEach(x=>x.classList.remove('selected'));b.classList.add('selected');};
+  b.setAttribute('aria-pressed','false');
+  b.setAttribute('aria-label', `เลือกไอคอน ${em}`);
+  b.onclick=()=>{
+    picker.querySelectorAll('.emoji-opt').forEach(x=>{x.classList.remove('selected');x.setAttribute('aria-pressed','false');});
+    b.classList.add('selected'); b.setAttribute('aria-pressed','true');
+  };
   picker.appendChild(b);
 });
 
 function getSelectedEmoji(){ const sel=picker.querySelector('.emoji-opt.selected'); return sel?sel.textContent:'📍'; }
-function setSelectedEmoji(em){ picker.querySelectorAll('.emoji-opt').forEach(b=>{b.classList.toggle('selected',b.textContent===em);}); }
+function setSelectedEmoji(em){ picker.querySelectorAll('.emoji-opt').forEach(b=>{const isSel=b.textContent===em; b.classList.toggle('selected',isSel); b.setAttribute('aria-pressed', String(isSel));}); }
 
 const DAY_DEFAULT_DATE = {1:'9 ต.ค.',2:'11 ต.ค.',3:'12 ต.ค.',4:'13 ต.ค.',5:'14 ต.ค.'};
 
 function openModal(item=null, dayNum=1){
+  modalOpenerEl = document.activeElement;
   editingId = item?item.id:null;
   editingDay = dayNum;
   document.getElementById('modal-title').textContent = item?'แก้ไขกิจกรรม':'เพิ่มกิจกรรมใหม่';
@@ -1142,9 +1168,15 @@ function openModal(item=null, dayNum=1){
   document.getElementById('modal-delete').style.display = item?'':'none';
   overlay.classList.add('open');
   document.getElementById('f-detail').focus();
+  document.addEventListener('keydown', modalKeydownHandler);
 }
 
-function closeModal(){ overlay.classList.remove('open'); }
+function closeModal(){
+  overlay.classList.remove('open');
+  document.removeEventListener('keydown', modalKeydownHandler);
+  if(modalOpenerEl && typeof modalOpenerEl.focus === 'function') modalOpenerEl.focus();
+  modalOpenerEl = null;
+}
 document.getElementById('modal-cancel').onclick = closeModal;
 
 document.getElementById('modal-save').onclick = async ()=>{
@@ -1214,12 +1246,12 @@ function buildTimeline(filter){
     header.className = 'flex items-center gap-5 mb-8 ' + (day===days[0]?'mt-0':'mt-14');
     header.innerHTML = `
       <div class="w-14 h-14 rounded-full flex flex-col items-center justify-center shrink-0 border-2 day-circle" style="background:var(--day-circle-bg,#09090b);border-color:${col}33">
-        <span class="text-[8px] tracking-widest uppercase font-['Inter'] font-bold" style="color:${col}99">Day</span>
+        <span class="text-[8px] tracking-widest uppercase font-['Inter'] font-bold" style="color:${col}">Day</span>
         <span class="font-['Manrope'] font-black text-lg leading-none" style="color:${col}">${String(day).padStart(2,'0')}</span>
       </div>
       <div class="flex-1">
-        <h2 class="text-base font-['Manrope'] font-bold text-on-surface leading-tight">${DAY_NAMES[day]}</h2>
-        <p class="text-[10px] text-zinc-600 uppercase tracking-widest font-['Inter'] font-bold mt-0.5">${DAY_DATES[day]} · ${items.length} กิจกรรม</p>
+        <h4 class="text-base font-['Manrope'] font-bold text-on-surface leading-tight">${DAY_NAMES[day]}</h4>
+        <p class="text-[10px] text-zinc-400 uppercase tracking-widest font-['Inter'] font-bold mt-0.5">${DAY_DATES[day]} · ${items.length} กิจกรรม</p>
       </div>
       <button class="btn-ai-rec" onclick="openAIRecommend(${day})">🤖 แนะนำ</button>
     `;
@@ -1288,39 +1320,41 @@ function buildTimeline(filter){
         <div class="p-5">
           <div class="flex justify-between items-start mb-2.5">
             <div class="flex items-center gap-2">
-              <span class="font-['Inter'] text-[0.65rem] uppercase tracking-widest text-zinc-600 font-bold">${d.start||''}${d.end?' — '+d.end:''}</span>
+              <span class="font-['Inter'] text-[0.65rem] uppercase tracking-widest text-zinc-400 font-bold">${d.start||''}${d.end?' — '+d.end:''}</span>
               ${d.actDate?`<span class="px-1.5 py-0.5 rounded text-[0.6rem] font-bold font-['Inter'] uppercase tracking-wide" style="background:rgba(255,107,157,0.12);color:#ff6b9d">${d.actDate}</span>`:''}
             </div>
             <div class="flex items-center gap-1.5">
-              <button class="btn-drag w-6 h-6 flex items-center justify-center rounded text-base leading-none select-none" data-tippy-content="ลากเพื่อเรียง" onclick="event.stopPropagation()">⠿</button>
+              <button class="w-7 h-7 flex items-center justify-center rounded text-zinc-400 hover:text-on-surface hover:bg-white/10 transition-colors" aria-label="ย้ายกิจกรรมนี้ขึ้น" onclick="event.stopPropagation();moveActivity('${d.id}',${day},-1)"><span class="material-symbols-outlined" aria-hidden="true" style="font-size:16px">arrow_upward</span></button>
+              <button class="w-7 h-7 flex items-center justify-center rounded text-zinc-400 hover:text-on-surface hover:bg-white/10 transition-colors" aria-label="ย้ายกิจกรรมนี้ลง" onclick="event.stopPropagation();moveActivity('${d.id}',${day},1)"><span class="material-symbols-outlined" aria-hidden="true" style="font-size:16px">arrow_downward</span></button>
+              <button class="btn-drag w-6 h-6 flex items-center justify-center rounded text-base leading-none select-none" data-tippy-content="ลากเพื่อเรียง (หรือใช้ปุ่มลูกศร)" aria-hidden="true" tabindex="-1" onclick="event.stopPropagation()">⠿</button>
               ${!d.lat?`<span class="text-lg">${d.emoji||'📍'}</span>`:''}
             </div>
           </div>
-          <h4 class="font-['Manrope'] font-bold text-base text-on-surface leading-snug mb-2">${d.detail}</h4>
-          ${d.from&&d.to&&d.from!==d.to?`<p class="text-zinc-600 text-xs mb-3 font-['Inter']">📍 ${d.from} → ${d.to}</p>`:''}
-          ${d.note?`<p class="text-zinc-600 text-xs italic mb-3">${d.note}</p>`:''}
+          <h5 class="font-['Manrope'] font-bold text-base text-on-surface leading-snug mb-2">${d.detail}</h5>
+          ${d.from&&d.to&&d.from!==d.to?`<p class="text-zinc-400 text-xs mb-3 font-['Inter']">📍 ${d.from} → ${d.to}</p>`:''}
+          ${d.note?`<p class="text-zinc-400 text-xs italic mb-3">${d.note}</p>`:''}
           <div class="media-slots flex gap-1.5 mt-3 mb-3" data-id="${d.id}">
             <div class="media-thumb w-12 h-12 rounded-lg flex items-center justify-center bg-zinc-800/60 border border-white/5 overflow-hidden flex-shrink-0 cursor-pointer hover:border-primary/40 transition-colors relative media-preview-slot" style="min-width:3rem"></div>
             <div class="media-thumb w-12 h-12 rounded-lg flex items-center justify-center bg-zinc-800/60 border border-white/5 overflow-hidden flex-shrink-0 cursor-pointer hover:border-primary/40 transition-colors relative media-preview-slot" style="min-width:3rem"></div>
-            <button class="media-add w-12 h-12 rounded-lg flex items-center justify-center bg-zinc-800/40 border border-dashed border-white/10 flex-shrink-0 hover:border-primary/50 hover:bg-zinc-800/70 transition-colors text-zinc-600 hover:text-primary" style="min-width:3rem" onclick="triggerMediaUpload(event,'${d.id}')">
-              <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/></svg>
+            <button class="media-add w-12 h-12 rounded-lg flex items-center justify-center bg-zinc-800/40 border border-dashed border-white/10 flex-shrink-0 hover:border-primary/50 hover:bg-zinc-800/70 transition-colors text-zinc-400 hover:text-primary" style="min-width:3rem" aria-label="เพิ่มรูปภาพหรือวิดีโอ" onclick="triggerMediaUpload(event,'${d.id}')">
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/></svg>
             </button>
             <input type="file" accept="image/*,video/*" multiple class="media-input hidden" data-id="${d.id}" onchange="handleMediaFiles(event,'${d.id}')">
           </div>
           <div class="flex flex-wrap gap-1.5 mt-0 items-center justify-between">
             <div class="flex flex-wrap gap-1.5">
-              ${d.dur?`<span class="px-2 py-0.5 bg-zinc-800 text-zinc-500 text-[10px] rounded-full font-['Inter'] uppercase tracking-wide font-bold">⏱ ${d.dur}</span>`:''}
-              ${d.openClose?`<span class="px-2 py-0.5 bg-zinc-800 text-zinc-500 text-[10px] rounded-full font-['Inter'] uppercase tracking-wide font-bold">🕐 ${String(d.openClose).substring(0,22)}</span>`:''}
+              ${d.dur?`<span class="px-2 py-0.5 bg-zinc-800 text-zinc-400 text-[10px] rounded-full font-['Inter'] uppercase tracking-wide font-bold">⏱ ${d.dur}</span>`:''}
+              ${d.openClose?`<span class="px-2 py-0.5 bg-zinc-800 text-zinc-400 text-[10px] rounded-full font-['Inter'] uppercase tracking-wide font-bold">🕐 ${String(d.openClose).substring(0,22)}</span>`:''}
               ${d.cost?(isFree
                 ?`<span class="px-2 py-0.5 text-[10px] rounded-full font-['Inter'] uppercase tracking-wide font-bold" style="background:rgba(52,211,153,0.15);color:#34d399">✅ Free</span>`
                 :`<span class="px-2 py-0.5 text-[10px] rounded-full font-['Inter'] uppercase tracking-wide font-bold" style="background:${col}1a;color:${col}">💴 ${costStr.substring(0,32)}</span>`)
                 :''}
               ${d.alert?`<span class="px-2 py-0.5 text-[10px] rounded-full font-['Inter'] uppercase tracking-wide font-bold" style="background:rgba(251,191,36,0.15);color:#fbbf24">⚠️ จองล่วงหน้า</span>`:''}
             </div>
-            <div class="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-              ${d.lat?`<a href="https://www.google.com/maps/search/${encodeURIComponent(d.to||d.detail||'')}/@${d.lat},${d.lng},17z" target="_blank" rel="noopener" class="btn-navigate w-7 h-7 flex items-center justify-center rounded-lg text-xs transition-colors" style="background:rgba(52,211,153,0.12);color:#34d399" title="Navigate" onclick="event.stopPropagation()"><span class="material-symbols-outlined" style="font-size:14px">navigation</span></a>`:''}
-              <button class="btn-edit w-7 h-7 flex items-center justify-center rounded-lg text-xs transition-colors" data-tippy-content="แก้ไข" style="background:rgba(77,150,255,0.12);color:#60a5fa">✏️</button>
-              <button class="btn-delete w-7 h-7 flex items-center justify-center rounded-lg text-xs transition-colors" data-tippy-content="ลบ" style="background:rgba(255,107,107,0.12);color:#f87171">🗑️</button>
+            <div class="flex gap-1 opacity-0 group-hover:opacity-100 group-focus-within:opacity-100 transition-opacity">
+              ${d.lat?`<a href="https://www.google.com/maps/search/${encodeURIComponent(d.to||d.detail||'')}/@${d.lat},${d.lng},17z" target="_blank" rel="noopener" class="btn-navigate w-7 h-7 flex items-center justify-center rounded-lg text-xs transition-colors" style="background:rgba(52,211,153,0.12);color:#34d399" aria-label="เปิดใน Google Maps" onclick="event.stopPropagation()"><span class="material-symbols-outlined" aria-hidden="true" style="font-size:14px">navigation</span></a>`:''}
+              <button class="btn-edit w-7 h-7 flex items-center justify-center rounded-lg text-xs transition-colors" aria-label="แก้ไขกิจกรรม" data-tippy-content="แก้ไข" style="background:rgba(77,150,255,0.12);color:#60a5fa"><span aria-hidden="true">✏️</span></button>
+              <button class="btn-delete w-7 h-7 flex items-center justify-center rounded-lg text-xs transition-colors" aria-label="ลบกิจกรรม" data-tippy-content="ลบ" style="background:rgba(255,107,107,0.12);color:#f87171"><span aria-hidden="true">🗑️</span></button>
             </div>
           </div>
         </div>
@@ -1384,6 +1418,21 @@ function buildTimeline(filter){
   });
 }
 
+/* ── Keyboard-operable reorder (alternative to pointer-only drag, WCAG 2.1.1) ── */
+async function moveActivity(id, day, direction){
+  const dayItems = itinerary.filter(x => x.day === day);
+  const idx = dayItems.findIndex(x => x.id === id);
+  const newIdx = idx + direction;
+  if(idx === -1 || newIdx < 0 || newIdx >= dayItems.length) return;
+  [dayItems[idx], dayItems[newIdx]] = [dayItems[newIdx], dayItems[idx]];
+  const others = itinerary.filter(x => x.day !== day);
+  const allReordered = [...others, ...dayItems];
+  const batch = writeBatch(db);
+  allReordered.forEach((item, i) => { batch.update(doc(db, 'itinerary', item.id), { order: i }); });
+  await batch.commit();
+}
+window.moveActivity = moveActivity;
+
 /* ── MEDIA UPLOAD ── */
 const mediaStore = JSON.parse(localStorage.getItem('mediaStore')||'{}');
 
@@ -1433,7 +1482,7 @@ function renderMediaSlots(id){
         ((idx)=>{ slot.onclick=(e)=>{e.stopPropagation();openPhotoSwipe(id,idx);}; })(i);
       }
     } else {
-      slot.innerHTML=`<svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-zinc-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">${i===0?'<rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline>':'<polygon points="23 7 16 12 23 17 23 7"></polygon><rect x="1" y="5" width="15" height="14" rx="2" ry="2"></rect>'}</svg>`;
+      slot.innerHTML=`<svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-zinc-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">${i===0?'<rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline>':'<polygon points="23 7 16 12 23 17 23 7"></polygon><rect x="1" y="5" width="15" height="14" rx="2" ry="2"></rect>'}</svg>`;
     }
   });
   // if more than 2, show count badge on last preview
@@ -1606,10 +1655,12 @@ document.querySelectorAll('.day-tab').forEach(tab=>{
     document.querySelectorAll('.day-tab').forEach(t=>{
       t.classList.remove('active');
       t.style.color=''; t.style.borderBottomColor='';
+      t.setAttribute('aria-selected', 'false');
     });
     this.classList.add('active');
     this.style.color='#ff6b9d';
     this.style.borderBottomColor='#ff6b9d';
+    this.setAttribute('aria-selected', 'true');
     currentFilter = parseInt(this.dataset.day);
     activeCardEl = null;
     refresh();
@@ -1844,6 +1895,8 @@ function updateBudgetChart(){
     });
     return jpy;
   });
+  ctx.setAttribute('role', 'img');
+  ctx.setAttribute('aria-label', 'กราฟงบประมาณรายวัน: ' + labels.map((l,i)=>`${l} ¥${data[i].toLocaleString()}`).join(', '));
   if(budgetChart) budgetChart.destroy();
   budgetChart = new Chart(ctx,{
     type:'bar',
@@ -1949,13 +2002,19 @@ window.fireConfetti = ()=>confetti({ particleCount:180, spread:70, origin:{y:0.6
 </script>
 <script>
 function openMobileDrawer() {
-  if (document.getElementById('mobile-drawer').classList.contains('open')) { closeMobileDrawer(); return; }
-  document.getElementById('mobile-drawer').classList.add('open');
+  const drawer = document.getElementById('mobile-drawer');
+  if (drawer.classList.contains('open')) { closeMobileDrawer(); return; }
+  drawer.classList.add('open');
+  drawer.removeAttribute('inert');
+  drawer.setAttribute('aria-hidden', 'false');
   document.getElementById('mobile-overlay').classList.add('open');
   document.body.style.overflow = 'hidden';
 }
 function closeMobileDrawer() {
-  document.getElementById('mobile-drawer').classList.remove('open');
+  const drawer = document.getElementById('mobile-drawer');
+  drawer.classList.remove('open');
+  drawer.setAttribute('inert', '');
+  drawer.setAttribute('aria-hidden', 'true');
   document.getElementById('mobile-overlay').classList.remove('open');
   document.body.style.overflow = '';
 }
