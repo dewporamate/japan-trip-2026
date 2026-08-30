@@ -84,7 +84,9 @@
   ::-webkit-scrollbar-thumb { background:#2a2a2a; border-radius:3px; }
 
   /* ── Accessible focus indicator (WCAG 1.4.11 / 2.4.7) ── */
-  :focus-visible { outline:2px solid #ff6b9d; outline-offset:2px; border-radius:2px; }
+  :root { --focus-ring-color:#ff6b9d; }
+  html.light { --focus-ring-color:#ac2a5d; }
+  :focus-visible { outline:2px solid var(--focus-ring-color); outline-offset:2px; border-radius:2px; }
 
   /* ── Sidebar collapse ── */
   #sidebar { transition:width 0.3s cubic-bezier(0.4,0,0.2,1); }
@@ -113,7 +115,7 @@
   button.gm-ui-hover-effect{filter:invert(1)!important;}
   .gm-popup{padding:12px 16px;font-family:'Public Sans','Noto Sans Thai',sans-serif;font-size:.78rem;line-height:1.6;color:#f1f1f1;min-width:190px;max-width:270px;}
   .popup-title { font-weight:800; font-size:.88rem; margin-bottom:4px; font-family:'Manrope',sans-serif; }
-  .popup-row { color:#71717a; font-size:.72rem; }
+  .popup-row { color:#a1a1aa; font-size:.72rem; }
   .popup-cost { color:#ff6b9d; font-weight:700; margin-top:4px; font-size:.7rem; text-transform:uppercase; letter-spacing:.05em; }
   .custom-marker { width:32px; height:32px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:15px; border:2px solid rgba(255,255,255,.2); box-shadow:0 4px 12px rgba(0,0,0,.6); cursor:pointer; }
 
@@ -149,7 +151,7 @@
     transition:background .2s,box-shadow .2s;outline:none;
   }
   .place-search-row input:focus{background:rgba(255,255,255,.09);box-shadow:0 0 0 2px rgba(255,107,157,.35)}
-  .place-search-row input::placeholder{color:#52525b}
+  .place-search-row input::placeholder{color:#a1a1aa}
   .btn-search{
     padding:9px 14px;border-radius:10px;border:none;cursor:pointer;
     background:rgba(255,107,157,.15);color:#ff6b9d;
@@ -163,7 +165,7 @@
     letter-spacing:.08em;font-weight:700;font-family:'Inter',sans-serif;
     margin-bottom:5px;display:block;
   }
-  .place-status{font-size:.7rem;color:#71717a;padding:4px 0;margin-top:4px;font-family:'Inter',sans-serif;min-height:18px}
+  .place-status{font-size:.7rem;color:#a1a1aa;padding:4px 0;margin-top:4px;font-family:'Inter',sans-serif;min-height:18px}
   .place-status.ok{color:#4ade80}
   .place-status.err{color:#f87171}
 
@@ -171,7 +173,7 @@
   .ai-drop-zone{border:2px dashed rgba(255,107,157,.25);border-radius:12px;padding:22px 16px;text-align:center;cursor:pointer;transition:all .2s;background:rgba(255,107,157,.03)}
   .ai-drop-zone:hover,.ai-drop-zone.drag-over{border-color:rgba(255,107,157,.65);background:rgba(255,107,157,.07)}
   .ai-drop-icon{font-size:1.7rem;display:block;margin-bottom:5px}
-  .ai-drop-text{font-size:.7rem;color:#52525b;font-family:'Inter',sans-serif}
+  .ai-drop-text{font-size:.7rem;color:#a1a1aa;font-family:'Inter',sans-serif}
   .ai-image-preview{display:flex;align-items:center;gap:10px;background:rgba(255,255,255,.04);border-radius:10px;padding:8px;margin-top:8px}
   .ai-image-preview img{width:80px;height:56px;object-fit:cover;border-radius:8px;flex-shrink:0}
   .ai-preview-actions{display:flex;gap:6px;flex-wrap:wrap;flex:1}
@@ -185,22 +187,22 @@
   .ai-rec-header{display:flex;align-items:center;justify-content:space-between;padding:18px 20px;border-bottom:1px solid rgba(255,255,255,.06)}
   .ai-rec-title{font-family:'Manrope',sans-serif;font-weight:700;font-size:.95rem;color:#f1f1f1}
   .ai-rec-day{font-size:.65rem;color:#a78bfa;font-family:'Inter',sans-serif;font-weight:700;text-transform:uppercase;letter-spacing:.08em}
-  .ai-rec-close{width:28px;height:28px;border-radius:50%;background:rgba(255,255,255,.06);border:none;cursor:pointer;color:#71717a;font-size:14px;display:flex;align-items:center;justify-content:center}
+  .ai-rec-close{width:28px;height:28px;border-radius:50%;background:rgba(255,255,255,.06);border:none;cursor:pointer;color:#a1a1aa;font-size:14px;display:flex;align-items:center;justify-content:center}
   .ai-rec-close:hover{background:rgba(255,255,255,.12);color:#f1f1f1}
   .ai-rec-body{flex:1;overflow-y:auto;padding:16px}
-  .ai-rec-hint{font-size:.68rem;color:#52525b;font-family:'Inter',sans-serif;margin-bottom:12px;padding:8px 10px;background:rgba(167,139,250,.06);border-radius:8px;border-left:2px solid rgba(167,139,250,.3)}
+  .ai-rec-hint{font-size:.68rem;color:#a1a1aa;font-family:'Inter',sans-serif;margin-bottom:12px;padding:8px 10px;background:rgba(167,139,250,.06);border-radius:8px;border-left:2px solid rgba(167,139,250,.3)}
   .ai-suggest-card{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);border-radius:14px;padding:14px;display:flex;gap:10px;align-items:flex-start;margin-bottom:10px;transition:border-color .2s}
   .ai-suggest-card:hover{border-color:rgba(167,139,250,.3)}
   .ai-suggest-emoji{font-size:1.6rem;flex-shrink:0;width:40px;text-align:center}
   .ai-suggest-content{flex:1;min-width:0}
   .ai-suggest-title{font-family:'Manrope',sans-serif;font-weight:700;font-size:.85rem;color:#f1f1f1;line-height:1.3;margin-bottom:5px}
   .ai-suggest-meta{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:5px}
-  .ai-suggest-meta span{font-size:.65rem;color:#71717a;font-family:'Inter',sans-serif;background:rgba(255,255,255,.05);padding:2px 7px;border-radius:20px}
+  .ai-suggest-meta span{font-size:.65rem;color:#a1a1aa;font-family:'Inter',sans-serif;background:rgba(255,255,255,.05);padding:2px 7px;border-radius:20px}
   .ai-suggest-why{font-size:.68rem;color:#a78bfa;font-family:'Inter',sans-serif;font-style:italic}
   .ai-suggest-add{width:32px;height:32px;border-radius:50%;border:none;background:rgba(167,139,250,.15);color:#a78bfa;font-size:1.1rem;font-weight:700;cursor:pointer;flex-shrink:0;transition:all .2s;display:flex;align-items:center;justify-content:center}
   .ai-suggest-add:hover{background:rgba(167,139,250,.35)}
   .ai-suggest-add:disabled{background:rgba(52,211,153,.15);color:#34d399;cursor:default}
-  .ai-rec-loading{display:flex;flex-direction:column;align-items:center;justify-content:center;height:200px;gap:14px;color:#52525b;font-family:'Inter',sans-serif;font-size:.8rem}
+  .ai-rec-loading{display:flex;flex-direction:column;align-items:center;justify-content:center;height:200px;gap:14px;color:#a1a1aa;font-family:'Inter',sans-serif;font-size:.8rem}
   @keyframes spin{to{transform:rotate(360deg)}}
   .ai-spin{width:30px;height:30px;border:3px solid rgba(167,139,250,.15);border-top-color:#a78bfa;border-radius:50%;animation:spin .7s linear infinite}
   .ai-rec-error{padding:20px;text-align:center;color:#f87171;font-family:'Inter',sans-serif;font-size:.8rem}
@@ -226,7 +228,7 @@
   .btn { padding:10px 22px; border-radius:12px; border:none; cursor:pointer; font-size:.8rem; font-family:'Inter',sans-serif; font-weight:700; transition:all .2s; }
   .btn-primary { background:linear-gradient(135deg,#7a1440,#a12454); color:#fff; }
   .btn-primary:hover { transform:translateY(-1px); box-shadow:0 6px 20px rgba(161,36,84,.5); }
-  .btn-secondary { background:rgba(255,255,255,.07); color:#71717a; }
+  .btn-secondary { background:rgba(255,255,255,.07); color:#a1a1aa; }
   .btn-secondary:hover { background:rgba(255,255,255,.12); color:#f1f1f1; }
   .btn-danger { background:rgba(255,107,107,.12); color:#ff6b6b; }
   .btn-danger:hover { background:rgba(255,107,107,.28); }
@@ -289,7 +291,7 @@
   /* ── Flatpickr dark ── */
   .flatpickr-calendar{background:#1a1a1a!important;border:1px solid rgba(255,255,255,0.08)!important;border-radius:12px!important;box-shadow:0 20px 60px rgba(0,0,0,0.6)!important}
   .flatpickr-time input,.flatpickr-time .flatpickr-am-pm{background:transparent!important;color:#f1f1f1!important}
-  .flatpickr-time .flatpickr-time-separator{color:#71717a!important}
+  .flatpickr-time .flatpickr-time-separator{color:#a1a1aa!important}
   .flatpickr-time input:hover,.flatpickr-time input:focus{background:rgba(255,255,255,0.06)!important}
   .numInputWrapper span{border-color:rgba(255,255,255,0.06)!important}
   .numInputWrapper span svg path{fill:rgba(255,255,255,0.4)!important}
@@ -460,7 +462,7 @@
   <!-- TOP APP BAR -->
   <header class="flex justify-between items-center px-5 md:px-8 h-16 w-full bg-[#09090b]/85 backdrop-blur-xl z-50 sticky top-0 border-b border-white/5 shrink-0">
     <div class="flex items-center gap-4 md:gap-6">
-      <button onclick="openMobileDrawer()" aria-label="เปิดเมนู" class="md:hidden w-8 h-8 flex items-center justify-center rounded-full hover:bg-white/5 transition-colors text-zinc-400 hover:text-primary">
+      <button id="mobile-menu-btn" onclick="openMobileDrawer()" aria-label="เปิดเมนู" aria-expanded="false" aria-controls="mobile-drawer" class="md:hidden w-8 h-8 flex items-center justify-center rounded-full hover:bg-white/5 transition-colors text-zinc-400 hover:text-primary">
         <span class="material-symbols-outlined" aria-hidden="true" style="font-size:22px">menu</span>
       </button>
       <h1 class="text-lg font-black text-on-surface italic font-['Manrope'] sr-only lg:not-sr-only tracking-tight">Japan 2026</h1>
@@ -517,7 +519,7 @@
           Japan 🇯🇵 ครั้งที่1 !!!
         </h2>
       </div>
-      <button onclick="fireConfetti()" class="absolute top-5 right-5 bg-black/30 backdrop-blur-xl px-3 py-1.5 rounded-full border border-white/10 text-xs font-bold font-['Inter'] text-white hover:bg-white/10 transition-all" data-tippy-content="🎉 Celebrate!">🎊</button>
+      <button onclick="fireConfetti()" aria-label="เฉลิมฉลอง" class="absolute top-5 right-5 bg-black/30 backdrop-blur-xl px-3 py-1.5 rounded-full border border-white/10 text-xs font-bold font-['Inter'] text-white hover:bg-white/10 transition-all" data-tippy-content="🎉 Celebrate!"><span aria-hidden="true">🎊</span></button>
       <div class="absolute bottom-10 right-8 md:right-14 bg-black/30 backdrop-blur-2xl p-5 rounded-2xl border border-white/15 shadow-2xl hidden sm:block">
         <p class="font-['Inter'] text-[0.6rem] text-zinc-400 uppercase tracking-widest mb-1">Friend Group · 9 คน</p>
         <p class="font-['Manrope'] text-2xl font-black text-white">5 วัน 4 คืน</p>
@@ -573,7 +575,7 @@
         <div class="bg-surface-container-low p-5 rounded-3xl border border-white/5">
           <div class="flex items-center justify-between mb-3">
             <p class="text-[0.6rem] font-bold text-zinc-400 uppercase tracking-widest font-['Inter']">Tokyo Weather · Oct</p>
-            <span class="material-symbols-outlined text-sky-400" style="font-size:20px">partly_cloudy_day</span>
+            <span class="material-symbols-outlined text-sky-400" aria-hidden="true" style="font-size:20px">partly_cloudy_day</span>
           </div>
           <div class="flex items-end gap-3">
             <div>
@@ -621,7 +623,7 @@
               <p class="text-xs font-bold text-on-surface font-['Manrope']">¥42,000</p>
             </div>
           </div>
-          <p class="text-[0.55rem] text-zinc-700 font-['Inter'] mt-3">อัตราโดยประมาณ — ตรวจสอบก่อนแลก</p>
+          <p class="text-[0.55rem] text-zinc-400 font-['Inter'] mt-3">อัตราโดยประมาณ — ตรวจสอบก่อนแลก</p>
         </div>
 
       </div>
@@ -632,7 +634,8 @@
           <span class="material-symbols-outlined text-primary" aria-hidden="true" style="font-size:20px">calendar_today</span>
           Itinerary Flow
         </h3>
-        <div id="timeline">
+        <div id="timeline-status" class="sr-only" role="status" aria-live="polite"></div>
+        <div id="timeline" role="tabpanel" tabindex="0" aria-label="รายการกิจกรรมตามวันที่เลือก">
           <!-- Rendered by JS -->
         </div>
       </div>
@@ -666,10 +669,10 @@
 <!-- ═══════════════ MAP VIEW OVERLAY ═══════════════ -->
 <!-- ═══════════════ AI RECOMMEND PANEL ═══════════════ -->
 <div id="ai-rec-overlay">
-  <div class="ai-rec-panel">
+  <div class="ai-rec-panel" role="dialog" aria-modal="true" aria-labelledby="ai-rec-title">
     <div class="ai-rec-header">
       <div>
-        <div class="ai-rec-title">🤖 AI แนะนำกิจกรรม</div>
+        <div class="ai-rec-title" id="ai-rec-title">🤖 AI แนะนำกิจกรรม</div>
         <div class="ai-rec-day" id="ai-rec-day-label"></div>
       </div>
       <button class="ai-rec-close" id="ai-rec-close" aria-label="ปิดแผงคำแนะนำ">✕</button>
@@ -689,7 +692,7 @@
   <div id="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
     <div class="flex items-center justify-between mb-0" style="margin-bottom:0">
       <div class="modal-title" id="modal-title" style="margin-bottom:0">แก้ไขกิจกรรม</div>
-      <button id="modal-close-btn" onclick="closeModal()" aria-label="ปิด" style="width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,0.06);border:none;cursor:pointer;color:#71717a;font-size:16px;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:background .15s,color .15s" onmouseover="this.style.background='rgba(255,255,255,0.12)';this.style.color='#f1f1f1'" onmouseout="this.style.background='rgba(255,255,255,0.06)';this.style.color='#71717a'"><span aria-hidden="true">✕</span></button>
+      <button id="modal-close-btn" onclick="closeModal()" aria-label="ปิด" style="width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,0.06);border:none;cursor:pointer;color:#a1a1aa;font-size:16px;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:background .15s,color .15s" onmouseover="this.style.background='rgba(255,255,255,0.12)';this.style.color='#f1f1f1'" onmouseout="this.style.background='rgba(255,255,255,0.06)';this.style.color='#a1a1aa'"><span aria-hidden="true">✕</span></button>
     </div>
 
     <div class="form-group modal-grid full" style="margin-bottom:4px">
@@ -1050,7 +1053,7 @@ function drawMap(filter){
     const openHtml=d.openClose?`<div class="popup-row">🕐 ${String(d.openClose).replace(/\r\n/g,' ')}</div>`:'';
     const mapsName=encodeURIComponent(d.to||d.detail||'');
     const mapsLink=`<a href="https://www.google.com/maps/search/${mapsName}/@${d.lat},${d.lng},17z" target="_blank" rel="noopener" style="display:inline-block;margin-top:8px;color:#4285f4;font-size:0.68rem;font-weight:700;text-decoration:none;font-family:'Inter',sans-serif;letter-spacing:0.03em">📍 เปิดใน Google Maps →</a>`;
-    const iw=new google.maps.InfoWindow({content:`<div class="gm-popup"><div style="display:flex;align-items:flex-start;justify-content:space-between;gap:8px;margin-bottom:2px"><div class="popup-title" style="color:${col}">Day ${d.day} — ${d.city}</div><button onclick="window.closeInfoWindow()" style="flex-shrink:0;width:20px;height:20px;border-radius:50%;background:rgba(255,255,255,0.1);border:none;cursor:pointer;color:#71717a;font-size:12px;display:flex;align-items:center;justify-content:center;line-height:1;margin-top:1px">✕</button></div><div style="font-weight:700;margin-bottom:5px">${d.detail}</div>${d.start?`<div class="popup-row">⏱️ ${d.start} – ${d.end} (${d.dur||''})</div>`:''}${d.from&&d.to&&d.from!==d.to?`<div class="popup-row">📍 ${d.from} → ${d.to}</div>`:''}${openHtml}${costHtml}${mapsLink}</div>`});
+    const iw=new google.maps.InfoWindow({content:`<div class="gm-popup"><div style="display:flex;align-items:flex-start;justify-content:space-between;gap:8px;margin-bottom:2px"><div class="popup-title" style="color:${col}">Day ${d.day} — ${d.city}</div><button onclick="window.closeInfoWindow()" aria-label="ปิด" style="flex-shrink:0;width:20px;height:20px;border-radius:50%;background:rgba(255,255,255,0.1);border:none;cursor:pointer;color:#a1a1aa;font-size:12px;display:flex;align-items:center;justify-content:center;line-height:1;margin-top:1px">✕</button></div><div style="font-weight:700;margin-bottom:5px">${d.detail}</div>${d.start?`<div class="popup-row">⏱️ ${d.start} – ${d.end} (${d.dur||''})</div>`:''}${d.from&&d.to&&d.from!==d.to?`<div class="popup-row">📍 ${d.from} → ${d.to}</div>`:''}${openHtml}${costHtml}${mapsLink}</div>`});
     mk.addListener('click',()=>{if(openInfoWindow)openInfoWindow.close();iw.open({anchor:mk,map});openInfoWindow=iw;});
     mk._itemId=d.id; mk._infoWindow=iw; mapLayers.push(mk);
   });
@@ -1308,7 +1311,7 @@ function buildTimeline(filter){
       card.innerHTML = `
         ${d.lat ? `
         <div class="place-photo-slot relative w-full h-[130px] bg-zinc-900 flex items-center justify-center overflow-hidden" data-q="${encodeURIComponent((d.to||d.detail).substring(0,60))}" data-lat="${d.lat}" data-lng="${d.lng}">
-          <span class="material-symbols-outlined text-zinc-800" style="font-size:36px">image</span>
+          <span class="material-symbols-outlined text-zinc-800" aria-hidden="true" style="font-size:36px">image</span>
           <img class="w-full h-full object-cover absolute inset-0 hidden" alt="">
           <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent"></div>
           <div class="absolute bottom-2.5 left-4 right-4 flex items-end justify-between">
@@ -1385,7 +1388,7 @@ function buildTimeline(filter){
     addRow.className = 'relative';
     addRow.innerHTML = `
       <div class="absolute -left-10 top-3 w-8 h-8 rounded-full flex items-center justify-center border-2 border-dashed border-white/20" style="background:transparent"></div>
-      <button class="w-full text-left px-4 py-3 text-zinc-700 text-xs font-['Inter'] uppercase tracking-widest hover:text-primary transition-colors font-bold add-activity-btn" data-day="${day}">+ เพิ่มกิจกรรม Day ${day}</button>
+      <button class="w-full text-left px-4 py-3 text-zinc-400 text-xs font-['Inter'] uppercase tracking-widest hover:text-primary transition-colors font-bold add-activity-btn" data-day="${day}">+ เพิ่มกิจกรรม Day ${day}</button>
     `;
     addRow.querySelector('.add-activity-btn').addEventListener('click', ()=>openModal(null, day));
     wrapper.appendChild(addRow);
@@ -1416,6 +1419,14 @@ function buildTimeline(filter){
 
     container.appendChild(wrapper);
   });
+
+  const statusEl = document.getElementById('timeline-status');
+  if(statusEl){
+    const totalItems = days.reduce((sum, day) => sum + itinerary.filter(d => d.day === day).length, 0);
+    statusEl.textContent = filter === 0
+      ? `แสดงทุกวัน · ${totalItems} กิจกรรม`
+      : `แสดง ${DAY_NAMES[filter] || 'Day '+filter} · ${totalItems} กิจกรรม`;
+  }
 }
 
 /* ── Keyboard-operable reorder (alternative to pointer-only drag, WCAG 2.1.1) ── */
@@ -1772,13 +1783,40 @@ function fileToBase64(file) {
 /* ══════════════════════════════════════════
    AI FEATURE 6 — RECOMMEND ACTIVITIES
 ══════════════════════════════════════════ */
+let aiRecOpenerEl = null;
+
+function getAIRecFocusable(){
+  const panel = document.querySelector('.ai-rec-panel');
+  return [...panel.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])')]
+    .filter(el => !el.disabled && el.offsetParent !== null);
+}
+
+function aiRecKeydownHandler(e){
+  if(e.key === 'Escape'){ e.preventDefault(); closeAIRecommend(); return; }
+  if(e.key === 'Tab'){
+    const list = getAIRecFocusable();
+    if(!list.length) return;
+    const first = list[0], last = list[list.length-1];
+    if(e.shiftKey && document.activeElement === first){ e.preventDefault(); last.focus(); }
+    else if(!e.shiftKey && document.activeElement === last){ e.preventDefault(); first.focus(); }
+  }
+}
+
+function closeAIRecommend(){
+  document.getElementById('ai-rec-overlay').style.display = 'none';
+  document.removeEventListener('keydown', aiRecKeydownHandler);
+  if(aiRecOpenerEl && typeof aiRecOpenerEl.focus === 'function') aiRecOpenerEl.focus();
+  aiRecOpenerEl = null;
+}
+
 function initAIRecommend() {
   const overlay = document.getElementById('ai-rec-overlay');
-  document.getElementById('ai-rec-close').addEventListener('click', () => { overlay.style.display = 'none'; });
-  overlay.addEventListener('click', e => { if (e.target === overlay) overlay.style.display = 'none'; });
+  document.getElementById('ai-rec-close').addEventListener('click', closeAIRecommend);
+  overlay.addEventListener('click', e => { if (e.target === overlay) closeAIRecommend(); });
 }
 
 async function openAIRecommend(day) {
+  aiRecOpenerEl = document.activeElement;
   const overlay   = document.getElementById('ai-rec-overlay');
   const dayLabel  = document.getElementById('ai-rec-day-label');
   const body      = document.getElementById('ai-rec-body');
@@ -1786,6 +1824,8 @@ async function openAIRecommend(day) {
   dayLabel.textContent = `${DAY_NAMES[day] || 'Day '+day} · ${DAY_DATES[day] || ''}`;
   body.innerHTML = `<div class="ai-rec-loading"><div class="ai-spin"></div><span>AI กำลังวิเคราะห์ itinerary วันที่ ${day}...</span></div>`;
   overlay.style.display = 'block';
+  document.addEventListener('keydown', aiRecKeydownHandler);
+  document.getElementById('ai-rec-close').focus();
 
   const acts = itinerary.filter(d => d.day === day).map(a => ({
     start: a.start, detail: a.detail, city: a.city, to: a.to, lat: a.lat, lng: a.lng
@@ -1816,14 +1856,14 @@ async function openAIRecommend(day) {
               </div>
               ${s.why ? `<div class="ai-suggest-why">${s.why}</div>` : ''}
             </div>
-            <button class="ai-suggest-add" data-idx="${i}">+</button>
+            <button class="ai-suggest-add" data-idx="${i}" aria-label="เพิ่มกิจกรรมนี้ลง Day ${day}">+</button>
           </div>`).join('')}
       </div>`;
 
     body.querySelectorAll('.ai-suggest-add').forEach(btn => {
       btn.addEventListener('click', async () => {
         const s = suggestions[parseInt(btn.dataset.idx)];
-        btn.disabled = true; btn.textContent = '✓';
+        btn.disabled = true; btn.textContent = '✓'; btn.setAttribute('aria-label', 'เพิ่มแล้ว');
         const maxOrder = Math.max(0, ...itinerary.filter(d => d.day === day).map(d => d.order || 0));
         await addDoc(itineraryCol, {
           day, date: DAY_DATES[day] || '', actDate: null,
@@ -1839,7 +1879,7 @@ async function openAIRecommend(day) {
       });
     });
   } catch (err) {
-    body.innerHTML = `<div class="ai-rec-error"><p>❌ ${err.message}</p><p style="font-size:.7rem;color:#52525b;margin-top:6px">ตรวจสอบว่าตั้งค่า ANTHROPIC_API_KEY ใน Vercel แล้ว</p></div>`;
+    body.innerHTML = `<div class="ai-rec-error"><p>❌ ${err.message}</p><p style="font-size:.7rem;color:#a1a1aa;margin-top:6px">ตรวจสอบว่าตั้งค่า ANTHROPIC_API_KEY ใน Vercel แล้ว</p></div>`;
   }
 }
 
@@ -1908,8 +1948,8 @@ function updateBudgetChart(){
     options:{
       responsive:true, plugins:{legend:{display:false},tooltip:{callbacks:{label:v=>`¥${v.raw.toLocaleString()}`}}},
       scales:{
-        x:{grid:{display:false}, ticks:{color:'#71717a',font:{family:'Inter',size:10}}},
-        y:{grid:{color:'rgba(255,255,255,0.05)'}, ticks:{color:'#71717a',font:{family:'Inter',size:9},
+        x:{grid:{display:false}, ticks:{color:'#a1a1aa',font:{family:'Inter',size:10}}},
+        y:{grid:{color:'rgba(255,255,255,0.05)'}, ticks:{color:'#a1a1aa',font:{family:'Inter',size:9},
             callback:v=>v>=1000?`¥${Math.round(v/1000)}k`:`¥${v}`}}
       }
     }
@@ -2009,6 +2049,9 @@ function openMobileDrawer() {
   drawer.setAttribute('aria-hidden', 'false');
   document.getElementById('mobile-overlay').classList.add('open');
   document.body.style.overflow = 'hidden';
+  const menuBtn = document.getElementById('mobile-menu-btn');
+  menuBtn.setAttribute('aria-expanded', 'true');
+  menuBtn.setAttribute('aria-label', 'ปิดเมนู');
 }
 function closeMobileDrawer() {
   const drawer = document.getElementById('mobile-drawer');
@@ -2017,6 +2060,9 @@ function closeMobileDrawer() {
   drawer.setAttribute('aria-hidden', 'true');
   document.getElementById('mobile-overlay').classList.remove('open');
   document.body.style.overflow = '';
+  const menuBtn = document.getElementById('mobile-menu-btn');
+  menuBtn.setAttribute('aria-expanded', 'false');
+  menuBtn.setAttribute('aria-label', 'เปิดเมนู');
 }
 </script>
 </body>
